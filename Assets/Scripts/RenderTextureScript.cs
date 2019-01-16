@@ -8,7 +8,7 @@ public class RenderTextureScript : MonoBehaviour {
     GameObject displayObject;
 
     [SerializeField]
-    RenderTexture renderTexture;
+    private RenderTexture _renderTexture;
 
     MeshCreator meshCreator = new MeshCreator();
 
@@ -20,7 +20,7 @@ public class RenderTextureScript : MonoBehaviour {
     }
 
     void Update () {
-        Texture2D tex = ToTexture2D(renderTexture);
+        Texture2D tex = ToTexture2D(_renderTexture);
         //Texture2D tex = renderToTexture(depthCamera, 256, 256);
         Debug.Log(tex.GetPixel(128, 128));
 	}
