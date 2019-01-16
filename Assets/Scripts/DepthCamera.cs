@@ -48,6 +48,10 @@ public class DepthCamera : MonoBehaviour {
             //timer.Stop();
             UnityEngine.Debug.Log(timer.Elapsed);
             CreateGameObject(m);
+            int[] grid = OccupancyGrid.GenerateGrid(pointSet, 32);
+            //int[] grid = new int[3];
+            GameObject structure = OccupancyGrid.GenerateOccupancyStructure(grid, 32);
+            UnityEngine.Debug.Log(structure.transform.childCount);
 
 
         }
@@ -117,6 +121,8 @@ public class DepthCamera : MonoBehaviour {
 
         HashSet<Vector3> pointSet = new HashSet<Vector3>();
 
+        Vector3 min = Vector3.zero;
+        Vector3 max = Vector3.zero;
         for (int j = 0; j < w; j++)
         {
             for (int i = 0; i < h; i++)
@@ -130,11 +136,16 @@ public class DepthCamera : MonoBehaviour {
                 if (depth > 0.6f)
                 {
                     pointSet.Add(p);
+                    min = Vector3.Min(p, min);
+                    max = Vector3.Max(p, max);
                 }
 
 
             }
+
         }
+        UnityEngine.Debug.Log(min);
+        UnityEngine.Debug.Log(max);
         return pointSet;
     }
 
