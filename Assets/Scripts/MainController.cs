@@ -58,6 +58,11 @@ public class MainController : MonoBehaviour
             UnityEngine.Debug.Log(tex.GetPixel(256, 256));
         }
 
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            GenerateViewSphere();
+        }
+
     }
 
     private void RenderView(Texture2D tex)
@@ -104,6 +109,12 @@ public class MainController : MonoBehaviour
         go.GetComponent<MeshFilter>().mesh = m;
         go.transform.position = Vector3.zero;
         go.transform.position = new Vector3(5, 0, 0);
+    }
+
+    private void GenerateViewSphere()
+    {
+        HashSet<Vector3> views = ViewSphereGenerator.GenerateViewSphere();
+        ViewSphereGenerator.BuildSphere(views);
     }
 
 }

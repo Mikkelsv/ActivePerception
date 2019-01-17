@@ -5,13 +5,12 @@ using UnityEngine;
 public class RenderTextureScript : MonoBehaviour {
 
     [SerializeField]
-    GameObject displayObject;
+    private GameObject _displayObject;
 
     [SerializeField]
     private RenderTexture _renderTexture;
 
-    MeshCreator meshCreator = new MeshCreator();
-
+ 
     Camera depthCamera;
 
     private void Start()
@@ -39,7 +38,7 @@ public class RenderTextureScript : MonoBehaviour {
     }
 
 
-    Texture2D renderToTexture(Camera camera, int w, int h)
+    Texture2D RenderToTexture(Camera camera, int w, int h)
     {
         //var tempRt = new RenderTexture(w, h, 32, RenderTextureFormat.Depth);
         //var tempRt = new RenderTexture(w, h, 0);
