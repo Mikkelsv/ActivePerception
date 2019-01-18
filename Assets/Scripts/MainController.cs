@@ -14,6 +14,9 @@ public class MainController : MonoBehaviour
     [SerializeField]
     int _gridSize = 32;
 
+    [SerializeField]
+    GameObject _studyObject;
+
     private RenderTexture _rTex;
 
     private Stopwatch _timer;
@@ -22,13 +25,23 @@ public class MainController : MonoBehaviour
 
     private HashSet<Vector3> _pc = new HashSet<Vector3>();
 
+    private OccupancyGridManager _ogm;
+
     private void Start()
     {
         _rTex = _cam.targetTexture;
         _timer = new Stopwatch();
         _pcm = new PointCloudManager(_rTex);
+        _ogm = new OccupancyGridManager(32);
         
         _cam.SetReplacementShader(_shader, null);
+
+        Vector3 boundaries = _studyObject.GetComponent<MeshFilter>().mesh.bounds.size;
+        UnityEngine.Debug.Log(boundaries);
+        float s = Mathf.Max(boundaries.x, boundaries.y, boundaries.z);
+        _studyObject.transform.localScale = Vector3.one / s;
+
+
 
     }
 
@@ -76,10 +89,7 @@ public class MainController : MonoBehaviour
         UnityEngine.Debug.Log(_timer.Elapsed);
 
         CreateGameObject(m);
-        int[] grid = OccupancyGrid.GenerateGrid(pointSet, _gridSize);
-
-        GameObject structure = OccupancyGrid.GenerateOccupancyStructure(grid, _gridSize);
-        UnityEngine.Debug.Log(structure.transform.childCount);
+        
     }
 
     private void BuildView(Texture2D tex)
@@ -93,10 +103,10 @@ public class MainController : MonoBehaviour
         UnityEngine.Debug.Log(_timer.Elapsed);
 
         CreateGameObject(m);
-        int[] grid = OccupancyGrid.GenerateGrid(pointSet, _gridSize);
 
-        GameObject structure = OccupancyGrid.GenerateOccupancyStructure(grid, _gridSize);
-        UnityEngine.Debug.Log(structure.transform.childCount);
+
+        _ogm.AddPoints(pointSet);
+        _ogm.BuildGridObject();
     }
 
 

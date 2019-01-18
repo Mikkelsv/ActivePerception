@@ -11,7 +11,7 @@ public class ViewSphereGenerator
      * D Roşca. “New uniform grids on the sphere”. In: Astronomy & Astrophysics 520 (2010), A63.
      */
 
-    public static HashSet<Vector3> GenerateViewSphere(int gridNumber=3, float radius=1)
+    public static HashSet<Vector3> GenerateViewSphere(int gridNumber=5, float radius=3)
     {
         int g = gridNumber;
         float pi = Mathf.PI;
@@ -37,12 +37,12 @@ public class ViewSphereGenerator
                     {
                         if (z <= -0.01f)
                         {
-                            views.Add(new Vector3(x, y, z));
-                            views.Add(new Vector3(x, y, -z));
+                            views.Add(new Vector3(x, -z, y));
+                            
                         }
                         else if (z <= 0f)
                         {
-                            views.Add(new Vector3(x, y, 0));
+                            views.Add(new Vector3(x, 0, z));
                         }
                     }
                 }
@@ -57,20 +57,19 @@ public class ViewSphereGenerator
                     {
                         if (z <= -0.01f)
                         {
-                            views.Add(new Vector3(x, y, z));
-                            views.Add(new Vector3(x, y, -z));
+                            views.Add(new Vector3(x, -z, y));
+                           
                         }
                         else if (z <= 0f)
                         {
-                            views.Add(new Vector3(x, y, 0));
+                            views.Add(new Vector3(x, 0, y));
                         }
                     }
 
                 }
             }
         }
-        views.Add(new Vector3(0, 0, r));
-        views.Add(new Vector3(0, 0, -r));
+        views.Add(new Vector3(0, r, 0));
         Debug.Log(views.Count);
         return views;
     }
