@@ -6,18 +6,19 @@ public class MainController : MonoBehaviour
 {
 
     [SerializeField]
-    private Camera _cam;
+    private Camera _depthCamera;
 
     [SerializeField]
     Shader _shader;
 
     [SerializeField]
-    int _gridSize = 32;
+    private int _gridSize = 5;
+
+    [SerializeField]
+    private float _sphereRadius = 3f;
 
     [SerializeField]
     GameObject _studyObject;
-
-    private RenderTexture _rTex;
 
     private Stopwatch _timer;
 
@@ -27,33 +28,33 @@ public class MainController : MonoBehaviour
 
     private OccupancyGridManager _ogm;
 
+    private DepthRenderingManager _drm;
+
+    private List<Vector3> _views;
+
     private void Start()
     {
-        _rTex = _cam.targetTexture;
+        RenderTexture rTex = _depthCamera.targetTexture;
+        _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
-        _pcm = new PointCloudManager(_rTex);
+        _drm = new DepthRenderingManager(_depthCamera);
+        _pcm = new PointCloudManager(rTex);
         _ogm = new OccupancyGridManager(32);
         
-        _cam.SetReplacementShader(_shader, null);
-
         Vector3 boundaries = _studyObject.GetComponent<MeshFilter>().mesh.bounds.size;
         UnityEngine.Debug.Log(boundaries);
         float s = Mathf.Max(boundaries.x, boundaries.y, boundaries.z);
         _studyObject.transform.localScale = Vector3.one / s;
 
-
-
+        _views = ViewSphereGenerator.GenerateViews(_gridSize, _sphereRadius);
     }
 
     void Update()
     {
-
-        Texture2D tex = new Texture2D(_rTex.width, _rTex.height, TextureFormat.RGB24, false);
-
-        RenderTexture.active = _cam.targetTexture;
-        _cam.Render();
-        tex.ReadPixels(new Rect(0, 0, 512, 512), 0, 0);
-        tex.Apply();
+        
+        Texture2D tex = _drm.GetDepthRendering();
+       
+        UnityEngine.Debug.Log(_timer.Elapsed);
 
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -73,7 +74,7 @@ public class MainController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.V))
         {
-            GenerateViewSphere();
+            BuildViewSphere();
         }
 
     }
@@ -82,7 +83,7 @@ public class MainController : MonoBehaviour
     {
         _timer.Reset();
         _timer.Start();
-        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex, _cam);
+        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex, _depthCamera);
         _timer.Stop();
         Mesh m = MeshCreator.GenerateMeshFromSet(pointSet, Vector3.zero, Vector3.zero, Color.green, 0.005f);
         //timer.Stop();
@@ -96,7 +97,7 @@ public class MainController : MonoBehaviour
     {
         _timer.Reset();
         _timer.Start();
-        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex, _cam);
+        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex, _depthCamera);
         _timer.Stop();
         Mesh m = MeshCreator.GenerateMeshFromSet(pointSet, Vector3.zero, Vector3.zero, Color.green, 0.005f);
         //timer.Stop();
@@ -110,7 +111,7 @@ public class MainController : MonoBehaviour
     }
 
 
-    void CreateGameObject(Mesh m)
+    private void CreateGameObject(Mesh m)
     {
         var go = new GameObject("Empty");
 
@@ -121,10 +122,9 @@ public class MainController : MonoBehaviour
         go.transform.position = new Vector3(5, 0, 0);
     }
 
-    private void GenerateViewSphere()
+    private void BuildViewSphere()
     {
-        HashSet<Vector3> views = ViewSphereGenerator.GenerateViewSphere();
-        ViewSphereGenerator.BuildSphere(views);
+         ViewSphereGenerator.BuildSphere(_views);
     }
 
 }

@@ -105,7 +105,7 @@ public class PointCloudManager
 
 
 
-    Matrix4x4 GetCameraRotationMatrix(Camera cam)
+    private Matrix4x4 GetCameraRotationMatrix(Camera cam)
     {
         GameObject tempGO = new GameObject();
         Transform pointTranform = tempGO.transform;

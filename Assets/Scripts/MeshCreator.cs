@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-public class MeshCreator{
-
+public class MeshCreator
+{
     public static Mesh GenerateMesh(Vector3[] points, Vector3 origin, Vector3 orientation, Color color, float length)
     {
         Mesh mesh = new Mesh();
@@ -75,5 +75,14 @@ public class MeshCreator{
         mesh.SetTriangles(indices, 0);
         mesh.colors = colors;
         return mesh;
+    }
+
+    public static void BuildMeshObject(Mesh m, Vector3 position)
+    {
+        var go = new GameObject("Empty");
+        go.AddComponent<MeshFilter>();
+        go.AddComponent<MeshRenderer>();
+        go.GetComponent<MeshFilter>().mesh = m;
+        go.transform.position = position;
     }
 }

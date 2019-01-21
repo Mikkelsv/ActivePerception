@@ -2,6 +2,7 @@
 using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class ViewSphereGenerator
 {
@@ -10,15 +11,42 @@ public class ViewSphereGenerator
      * Based on paper:
      * D Roşca. “New uniform grids on the sphere”. In: Astronomy & Astrophysics 520 (2010), A63.
      */
-
-    public static HashSet<Vector3> GenerateViewSphere(int gridNumber=5, float radius=3)
+    public static List<Vector3> GenerateViews(int gridNumber, float radius)
     {
+        HashSet<Vector3> viewsUnsorted = GenerateViewSphere(gridNumber, radius);
+        List<Vector3> viewsSorted = SortViews(viewsUnsorted);
+        Debug.Log(viewsSorted.Count.ToString() + " views created");
+        return viewsSorted;
+    }
+
+
+    public static GameObject BuildSphere(List<Vector3> views)
+    {
+        float s = 0.05f;
+        GameObject viewSphere = new GameObject();
+        viewSphere.transform.position = new Vector3(-2, 0, 0);
+        Vector3 scale = new Vector3(s, s, s);
+        int i = 0;
+        foreach (Vector3 view in views)
+        {
+
+            GameObject v = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            v.transform.parent = viewSphere.transform;
+            v.transform.localPosition = view;
+            v.transform.localScale = scale;
+            v.name = "Sphere_" + i.ToString();
+            i++;
+        }
+        return viewSphere;
+    }
+
+    private static HashSet<Vector3> GenerateViewSphere(int gridNumber, float radius)
+    {   
         int g = gridNumber;
         float pi = Mathf.PI;
         float r = radius;
         float a, b;
     
-        
         HashSet<Vector3> views = new HashSet<Vector3>();
 
         for(int B=-2*g; B <= 2*g; B++)
@@ -74,30 +102,13 @@ public class ViewSphereGenerator
         return views;
     }
 
-    public static GameObject BuildSphere(HashSet<Vector3> views)
-    {
-        float s = 0.05f;
-        GameObject viewSphere = new GameObject();
-        viewSphere.transform.position = new Vector3(-2, 0, 0);
-        Vector3 scale = new Vector3(s, s, s);
-        foreach(Vector3 view in views)
-        {
-            
-            GameObject v = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            v.transform.parent = viewSphere.transform;
-            v.transform.localPosition = view;
-            v.transform.localScale = scale;
-            
-          
-        }
-        return viewSphere;
-    }
-
-    public static List<Vector3> SortViews(HashSet<Vector3> views)
+    private static List<Vector3> SortViews(HashSet<Vector3> views)
     {
         List<Vector3> sortedViews = views.ToList();
-        sortedViews = sortedViews.OrderBy(v => v.x).ThenBy(v => v.y).ThenBy(v => v.z).ToList();
+        sortedViews = sortedViews.OrderBy(v => -v.y).ThenBy(v => v.x).ThenBy(v => -v.z).ToList();
         return sortedViews;
-
     }
+
+
+   
 }
