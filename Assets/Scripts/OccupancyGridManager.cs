@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class OccupancyGridManager {
 
-    private int _gridSize;
+    private int _gridCount;
     private int[] _grid;
+    private float _gridSize;
 
-    public OccupancyGridManager(int g)
+    public OccupancyGridManager(int g, float gridSize = 1f)
     {
-        _gridSize = g;
+        _gridCount = g;
         _grid = new int[g * g * g];
+        _gridSize = gridSize;
+        
     }
 
 
@@ -29,17 +32,16 @@ public class OccupancyGridManager {
 
     private int[] GenerateGrid(HashSet<Vector3> points)
     {
-        int[] grid = new int[_gridSize*_gridSize*_gridSize];
-        int x_s = 1;
-        int y_s = _gridSize ;
-        int z_s = _gridSize * _gridSize;
-        Vector3 alignVector = new Vector3(3f, 3f, 3f);
+        int[] grid = new int[_gridCount*_gridCount*_gridCount];
+        int y_s = _gridCount ;
+        int z_s = _gridCount * _gridCount;
+        Vector3 alignVector = Vector3.one * _gridSize / 2;
         foreach(Vector3 p0 in points)
         {
             Vector3 p = p0 + alignVector;
-            int x = Mathf.FloorToInt(p.x /6f * _gridSize);
-            int y = Mathf.FloorToInt(p.y /6f * _gridSize) * y_s;
-            int z = Mathf.FloorToInt(p.z /6f * _gridSize) * z_s;
+            int x = Mathf.FloorToInt(p.x / _gridSize * _gridCount);
+            int y = Mathf.FloorToInt(p.y / _gridSize * _gridCount) * y_s;
+            int z = Mathf.FloorToInt(p.z / _gridSize* _gridCount) * z_s;
             grid[x + y + z] = 1;
         }
         return grid;
@@ -47,26 +49,24 @@ public class OccupancyGridManager {
 
     
 
-    public GameObject BuildGridObject()
+    public GameObject BuildGridObject(Vector3 position)
     {
-        Vector3 scale = new Vector3(1f / _gridSize, 1f / _gridSize, 1f / _gridSize);
-        Vector3 scale2 = new Vector3(1 / 4f, 1 / 4f, 1 / 4f);
-        Vector3 scale3 = new Vector3(6f / 32f, 6f/32f, 6f/32f);
+        Vector3 scale = new Vector3(1f / _gridCount, 1f / _gridCount, 1f / _gridCount);
         GameObject structure = new GameObject();
-     
-        for (int z = 0; z<_gridSize; z++)
+        for (int z = 0; z<_gridCount; z++)
         {
-            for(int y = 0; y < _gridSize; y++)
+            for(int y = 0; y < _gridCount; y++)
             {
-                for(int x = 0; x<_gridSize; x++)
+                for(int x = 0; x<_gridCount; x++)
                 {
-                    int i = z * _gridSize * _gridSize + y * _gridSize + x;
+                    int i = z * _gridCount * _gridCount + y * _gridCount + x;
                     if (_grid[i] > 0)
                     {
                         GameObject c = GameObject.CreatePrimitive(PrimitiveType.Cube);
 
-                        c.transform.position = Vector3.Scale(new Vector3(x, y, z), scale3);
-                        c.transform.localScale = scale3;
+                        Vector3 pointPosition = new Vector3(x - _gridSize / 2f, y - _gridSize / 2f, z - _gridSize);
+                        c.transform.position = Vector3.Scale(pointPosition, scale);
+                        c.transform.localScale = scale;
                         c.transform.parent = structure.transform;
                         c.name = z.ToString();
                     }
@@ -74,6 +74,7 @@ public class OccupancyGridManager {
                 }
             }
         }
+        structure.transform.position = position;
 
         return structure;
         

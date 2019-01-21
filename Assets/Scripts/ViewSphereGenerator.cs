@@ -20,11 +20,11 @@ public class ViewSphereGenerator
     }
 
 
-    public static GameObject BuildSphere(List<Vector3> views)
+    public static GameObject BuildSphere(List<Vector3> views, Vector3 position)
     {
         float s = 0.05f;
         GameObject viewSphere = new GameObject();
-        viewSphere.transform.position = new Vector3(-2, 0, 0);
+        viewSphere.transform.position = position;
         Vector3 scale = new Vector3(s, s, s);
         int i = 0;
         foreach (Vector3 view in views)

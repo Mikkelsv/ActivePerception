@@ -12,13 +12,21 @@ public class MainController : MonoBehaviour
     Shader _shader;
 
     [SerializeField]
-    private int _gridSize = 5;
-
-    [SerializeField]
-    private float _sphereRadius = 3f;
-
-    [SerializeField]
     GameObject _studyObject;
+
+
+    //Depth Camera Settings
+    private float _nearClipPlane = 0.3f;
+    private float _farClipPlane = 10f;
+    private float _depthSawOff = 0.75f;
+
+    //View Grid Settings
+    private int _gridSize = 5;
+    private float _sphereRadius = 1.5f;
+
+
+
+
 
     private Stopwatch _timer;
 
@@ -32,13 +40,15 @@ public class MainController : MonoBehaviour
 
     private List<Vector3> _views;
 
+    private int _viewIndex = 0;
+
     private void Start()
     {
         RenderTexture rTex = _depthCamera.targetTexture;
         _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
-        _drm = new DepthRenderingManager(_depthCamera);
-        _pcm = new PointCloudManager(rTex);
+        _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
+        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(32);
         
         Vector3 boundaries = _studyObject.GetComponent<MeshFilter>().mesh.bounds.size;
@@ -47,6 +57,7 @@ public class MainController : MonoBehaviour
         _studyObject.transform.localScale = Vector3.one / s;
 
         _views = ViewSphereGenerator.GenerateViews(_gridSize, _sphereRadius);
+        _drm.SetCameraView(_views[_viewIndex]);
     }
 
     void Update()
@@ -76,6 +87,16 @@ public class MainController : MonoBehaviour
         {
             BuildViewSphere();
         }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            _viewIndex = (_viewIndex + 1) % _views.Count;
+            _drm.SetCameraView(_views[_viewIndex]);
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            _viewIndex = (_viewIndex + 10) % _views.Count;
+            _drm.SetCameraView(_views[_viewIndex]);
+        }
 
     }
 
@@ -83,7 +104,7 @@ public class MainController : MonoBehaviour
     {
         _timer.Reset();
         _timer.Start();
-        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex, _depthCamera);
+        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex);
         _timer.Stop();
         Mesh m = MeshCreator.GenerateMeshFromSet(pointSet, Vector3.zero, Vector3.zero, Color.green, 0.005f);
         //timer.Stop();
@@ -97,7 +118,7 @@ public class MainController : MonoBehaviour
     {
         _timer.Reset();
         _timer.Start();
-        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex, _depthCamera);
+        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex);
         _timer.Stop();
         Mesh m = MeshCreator.GenerateMeshFromSet(pointSet, Vector3.zero, Vector3.zero, Color.green, 0.005f);
         //timer.Stop();
@@ -107,7 +128,7 @@ public class MainController : MonoBehaviour
 
 
         _ogm.AddPoints(pointSet);
-        _ogm.BuildGridObject();
+        _ogm.BuildGridObject(new Vector3(1,0,0));
     }
 
 
@@ -124,7 +145,7 @@ public class MainController : MonoBehaviour
 
     private void BuildViewSphere()
     {
-         ViewSphereGenerator.BuildSphere(_views);
+         ViewSphereGenerator.BuildSphere(_views, Vector3.zero);
     }
 
 }

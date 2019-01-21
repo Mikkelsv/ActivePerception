@@ -420,8 +420,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.01
-  far clip plane: 20
+  near clip plane: 0.1
+  far clip plane: 2
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -447,7 +447,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 830364729}
   m_LocalRotation: {x: 0.17364816, y: 0, z: 0, w: 0.9848078}
-  m_LocalPosition: {x: 0.11, y: 2.803, z: -4.553}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -623,6 +623,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _depthCamera: {fileID: 830364732}
   _shader: {fileID: 4800000, guid: 9d5a65707c9f1ae49a6220f1fe6c3a47, type: 3}
-  _gridSize: 5
-  _sphereRadius: 3
   _studyObject: {fileID: 1073011378}
