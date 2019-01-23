@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-public class PointCloudManager
+public class PointCloudManager: MonoBehaviour
 {
     private Vector3[] _viewportArray;
 
@@ -9,13 +10,16 @@ public class PointCloudManager
 
     private Camera _depthCamera;
 
+    private GameObject _representationPrefab;
+
     private HashSet<Vector3> _pointCloud = new HashSet<Vector3>();
 
-    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera)
+    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera, GameObject representationPrefab)
     {
         _viewportArray = CreateViewPortArray(rTex);
         _depthSawOff = depthSawOff;
         _depthCamera = depthCamera;
+        _representationPrefab = representationPrefab;
     }
 
     private Vector3[] CreateViewPortArray(RenderTexture rTex)
@@ -87,7 +91,20 @@ public class PointCloudManager
         return _pointCloud;
     }
 
+    public void BuildPointCloudObject(Vector3 position)
+    {
+        GameObject pointCloudObject = new GameObject();
+        pointCloudObject.name = "PointCloudRepresentation";
+        pointCloudObject.transform.position = position;
 
+        foreach(Vector3 p in _pointCloud)
+        {
+            GameObject point = Instantiate(_representationPrefab, pointCloudObject.transform);
+            point.transform.localPosition = p;
+        }
+    }
+
+   
 
     private Matrix4x4 GetCameraRotationMatrix(Camera cam)
     {
@@ -95,9 +112,11 @@ public class PointCloudManager
         Transform pointTranform = tempGO.transform;
         pointTranform.rotation = cam.transform.rotation;
         Matrix4x4 transMatrix = pointTranform.localToWorldMatrix;
-        Object.Destroy(tempGO);
+        UnityEngine.Object.Destroy(tempGO);
         return transMatrix;
     }
+
+    
 
 
     /*

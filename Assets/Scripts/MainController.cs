@@ -14,6 +14,9 @@ public class MainController : MonoBehaviour
     [SerializeField]
     GameObject _studyObject;
 
+    [SerializeField]
+    GameObject _pointCloudVisualizer;
+
 
     //Depth Camera Settings
     private float _nearClipPlane = 0.3f;
@@ -27,7 +30,7 @@ public class MainController : MonoBehaviour
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
-    private float _gridSize = 1f;
+    private float _gridSize = 1.5f;
     private Vector3 _gridPosition = new Vector3(12, 0, 0);
 
     //Mesh Creatonr
@@ -55,7 +58,7 @@ public class MainController : MonoBehaviour
         _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
-        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
+        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _gridSize, _gridPosition);
         SetupScene();
       
@@ -96,6 +99,10 @@ public class MainController : MonoBehaviour
         {
             _viewIndex = (_viewIndex + 10) % _views.Count;
             _drm.SetCameraView(_views[_viewIndex]);
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            _pcm.BuildPointCloudObject(_meshPosition);
         }
 
     }
