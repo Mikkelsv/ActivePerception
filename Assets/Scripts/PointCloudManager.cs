@@ -9,6 +9,8 @@ public class PointCloudManager
 
     private Camera _depthCamera;
 
+    private HashSet<Vector3> _pointCloud = new HashSet<Vector3>();
+
     public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera)
     {
         _viewportArray = CreateViewPortArray(rTex);
@@ -32,40 +34,6 @@ public class PointCloudManager
             }
         }
         return array;
-    }
-
-    public Vector3[] CreatePointCloud(Texture2D tex, Camera cam)
-    {
-        int w = tex.width;
-        int h = tex.height;
-        Debug.Log(w);
-        Debug.Log(h);
-        float near = cam.nearClipPlane;
-        float far = cam.farClipPlane;
-        float frustum_dist = far - near;
-        Color[] colors = tex.GetPixels();
-
-        Matrix4x4 rotMatrix = GetCameraRotationMatrix(cam);
-
-        Vector3[] points = new Vector3[w * h];
-
-        for (int j = 0; j < w; j++)
-        {
-            for (int i = 0; i < h; i++)
-            {
-                float depth = colors[i * h + j].r;
-                if (depth == 0f)
-                {
-                    points[i * h + j] = Vector3.zero;
-                }
-
-                float z = frustum_dist * (1f - depth);
-                Vector3 p = rotMatrix.MultiplyVector(_viewportArray[i * h + j] * z) + cam.transform.position;
-                points[i * h + j] = p;
-            }
-        }
-
-        return points;
     }
 
     public HashSet<Vector3> CreatePointSet(Texture2D tex)
@@ -104,9 +72,19 @@ public class PointCloudManager
             }
 
         }
-        Debug.Log(min);
-        Debug.Log(max);
+        Debug.Log(min.ToString("F4"));
+        Debug.Log(max.ToString("F4"));
         return pointSet;
+    }
+
+    public void AddToCloud(HashSet<Vector3> points)
+    {
+        _pointCloud.UnionWith(points);
+    }
+
+    public HashSet<Vector3> GetPointCloud()
+    {
+        return _pointCloud;
     }
 
 
@@ -120,4 +98,42 @@ public class PointCloudManager
         Object.Destroy(tempGO);
         return transMatrix;
     }
+
+
+    /*
+    public Vector3[] CreatePointCloud(Texture2D tex, Camera cam)
+    {
+        int w = tex.width;
+        int h = tex.height;
+        Debug.Log(w);
+        Debug.Log(h);
+        float near = cam.nearClipPlane;
+        float far = cam.farClipPlane;
+        float frustum_dist = far - near;
+        Color[] colors = tex.GetPixels();
+
+        Matrix4x4 rotMatrix = GetCameraRotationMatrix(cam);
+
+        Vector3[] points = new Vector3[w * h];
+
+        for (int j = 0; j < w; j++)
+        {
+            for (int i = 0; i < h; i++)
+            {
+                float depth = colors[i * h + j].r;
+                if (depth == 0f)
+                {
+                    points[i * h + j] = Vector3.zero;
+                }
+
+                float z = frustum_dist * (1f - depth);
+                Vector3 p = rotMatrix.MultiplyVector(_viewportArray[i * h + j] * z) + cam.transform.position;
+                points[i * h + j] = p;
+            }
+        }
+
+        return points;
+      
+    }
+      */
 }

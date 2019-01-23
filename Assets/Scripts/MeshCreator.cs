@@ -84,5 +84,6 @@ public class MeshCreator
         go.AddComponent<MeshRenderer>();
         go.GetComponent<MeshFilter>().mesh = m;
         go.transform.position = position;
+        go.name = "PointCloud";
     }
 }

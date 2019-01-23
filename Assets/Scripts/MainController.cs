@@ -20,14 +20,21 @@ public class MainController : MonoBehaviour
     private float _farClipPlane = 10f;
     private float _depthSawOff = 0.75f;
 
-    //View Grid Settings
-    private int _gridSize = 5;
+  
+    //View Sphere Settings
+    private int _viewGridLayers = 6;
     private float _sphereRadius = 1.5f;
 
+    //Occupancy Grid Settings
+    private int _occupancyGridCount = 32;
+    private float _gridSize = 1f;
+    private Vector3 _gridPosition = new Vector3(12, 0, 0);
 
+    //Mesh Creatonr
+    private Vector3 _meshPosition = new Vector3(13,0,0);
+    
 
-
-
+    
     private Stopwatch _timer;
 
     private PointCloudManager _pcm;
@@ -49,15 +56,9 @@ public class MainController : MonoBehaviour
         _timer = new Stopwatch();
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
-        _ogm = new OccupancyGridManager(32);
-        
-        Vector3 boundaries = _studyObject.GetComponent<MeshFilter>().mesh.bounds.size;
-        UnityEngine.Debug.Log(boundaries);
-        float s = Mathf.Max(boundaries.x, boundaries.y, boundaries.z);
-        _studyObject.transform.localScale = Vector3.one / s;
-
-        _views = ViewSphereGenerator.GenerateViews(_gridSize, _sphereRadius);
-        _drm.SetCameraView(_views[_viewIndex]);
+        _ogm = new OccupancyGridManager(_occupancyGridCount, _gridSize, _gridPosition);
+        SetupScene();
+      
     }
 
     void Update()
@@ -65,7 +66,7 @@ public class MainController : MonoBehaviour
         
         Texture2D tex = _drm.GetDepthRendering();
        
-        UnityEngine.Debug.Log(_timer.Elapsed);
+        //UnityEngine.Debug.Log(_timer.Elapsed);
 
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -74,9 +75,8 @@ public class MainController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            BuildView(tex);
+            AddView(tex);
         }
-
         
         if (Input.GetKeyDown(KeyCode.X))
         {
@@ -100,35 +100,40 @@ public class MainController : MonoBehaviour
 
     }
 
+    private void SetupScene()
+    {
+        //Setup object
+        Vector3 boundaries = _studyObject.GetComponent<MeshFilter>().mesh.bounds.size;
+        _studyObject.transform.localScale = Vector3.one / (boundaries.magnitude);
+        _studyObject.transform.position = Vector3.zero;
+        UnityEngine.Debug.Log("Object size:" + _studyObject.GetComponent<MeshFilter>().mesh.bounds.size);
+
+        //Setup views
+        _views = ViewSphereGenerator.GenerateViews(_viewGridLayers, _sphereRadius);
+        _drm.SetCameraView(_views[_viewIndex]);
+    }
+
     private void RenderView(Texture2D tex)
     {
-        _timer.Reset();
-        _timer.Start();
-        HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex);
-        _timer.Stop();
-        Mesh m = MeshCreator.GenerateMeshFromSet(pointSet, Vector3.zero, Vector3.zero, Color.green, 0.005f);
-        //timer.Stop();
-        UnityEngine.Debug.Log(_timer.Elapsed);
 
+        Mesh m = MeshCreator.GenerateMeshFromSet(_pcm.GetPointCloud(), Vector3.zero, Vector3.zero, Color.green, 0.005f);
+    
         CreateGameObject(m);
         
     }
 
-    private void BuildView(Texture2D tex)
+    private void AddView(Texture2D tex)
     {
         _timer.Reset();
         _timer.Start();
         HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex);
+        _pcm.AddToCloud(pointSet);
+        _ogm.AddPoints(pointSet);
+        _ogm.UpdateGridObject();
+
         _timer.Stop();
-        Mesh m = MeshCreator.GenerateMeshFromSet(pointSet, Vector3.zero, Vector3.zero, Color.green, 0.005f);
         //timer.Stop();
         UnityEngine.Debug.Log(_timer.Elapsed);
-
-        CreateGameObject(m);
-
-
-        _ogm.AddPoints(pointSet);
-        _ogm.BuildGridObject(new Vector3(1,0,0));
     }
 
 
@@ -139,8 +144,7 @@ public class MainController : MonoBehaviour
         go.AddComponent<MeshFilter>();
         go.AddComponent<MeshRenderer>();
         go.GetComponent<MeshFilter>().mesh = m;
-        go.transform.position = Vector3.zero;
-        go.transform.position = new Vector3(5, 0, 0);
+        go.transform.position = _meshPosition;
     }
 
     private void BuildViewSphere()
