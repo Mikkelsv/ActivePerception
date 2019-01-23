@@ -61,7 +61,7 @@ public class PointCloudManager: MonoBehaviour
         {
             for (int i = 0; i < h; i++)
             {
-                float depth = colors[i * h + j].r;
+                float depth = colors[i * h + j].r + colors[i * h + j].g / 256f;
 
 
                 float z = frustum_dist * (1f - depth);

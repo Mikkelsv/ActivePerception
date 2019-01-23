@@ -20,6 +20,7 @@ Shader "Custom/DepthShader"
 			uniform sampler2D_float _CameraDepthTexture;
 			uniform fixed _DepthLevel;
 			uniform half4 _MainTex_TexelSize;
+			float bitsize = 256.0 * 256.0 * 256.0;
 
 			struct appdata
 			{
@@ -51,8 +52,17 @@ Shader "Custom/DepthShader"
 				float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos));
 
 				depth = Linear01Depth(i.d);
+				float c = depth * 256.0;
+				int r = int(c);
+				float g = int((c*256.0)%256);
+				float b = int((c*256.0*256.0)%256);
+				float rC = 1.0 - r / 256.0;
+				float gC = 1.0 - g / 256.0;
+				float bC = 1.0 - b / 256.0;
 
-				return fixed4(1-depth, 1-depth, 1-depth, 1.0);
+				return fixed4(rC, gC, rC, 1.0);
+
+				//return fixed4(1 - depth, 1 - depth, 1 - depth, 1.0);
 				//return i.color;
 			}
 
