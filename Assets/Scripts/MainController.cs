@@ -19,19 +19,19 @@ public class MainController : MonoBehaviour
 
 
     //Depth Camera Settings
-    private float _nearClipPlane = 0.3f;
-    private float _farClipPlane = 3f;
-    private float _depthSawOff = 0.6f;
+    private float _nearClipPlane = 0.2f;
+    private float _farClipPlane = 2f;
+    private float _depthSawOff = 0.01f;
     private int _textureResolution = 256;
 
   
     //View Sphere Settings
     private int _viewGridLayers = 6;
-    private float _sphereRadius = 1.2f;
+    private float _sphereRadius = 2f;   
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
-    private float _gridSize = 1.5f;
+    private float _gridSize = 1f;
     private Vector3 _gridPosition = new Vector3(12, 0, 0);
 
     //Mesh Creatonr
