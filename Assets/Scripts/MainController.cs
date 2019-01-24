@@ -20,13 +20,14 @@ public class MainController : MonoBehaviour
 
     //Depth Camera Settings
     private float _nearClipPlane = 0.3f;
-    private float _farClipPlane = 10f;
-    private float _depthSawOff = 0.75f;
+    private float _farClipPlane = 3f;
+    private float _depthSawOff = 0.6f;
+    private int _textureResolution = 256;
 
   
     //View Sphere Settings
     private int _viewGridLayers = 6;
-    private float _sphereRadius = 1.5f;
+    private float _sphereRadius = 1.2f;
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
@@ -55,6 +56,8 @@ public class MainController : MonoBehaviour
     private void Start()
     {
         RenderTexture rTex = _depthCamera.targetTexture;
+        rTex.width = _textureResolution;
+        rTex.height = _textureResolution;
         _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);

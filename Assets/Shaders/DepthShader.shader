@@ -60,7 +60,7 @@ Shader "Custom/DepthShader"
 				float gC = 1.0 - g / 256.0;
 				float bC = 1.0 - b / 256.0;
 
-				return fixed4(rC, gC, rC, 1.0);
+				return fixed4(rC, gC, bC, 1.0);
 
 				//return fixed4(1 - depth, 1 - depth, 1 - depth, 1.0);
 				//return i.color;

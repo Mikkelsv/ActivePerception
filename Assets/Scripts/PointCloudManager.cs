@@ -61,8 +61,9 @@ public class PointCloudManager: MonoBehaviour
         {
             for (int i = 0; i < h; i++)
             {
-                float depth = colors[i * h + j].r + colors[i * h + j].g / 256f;
-
+                Color c = colors[i * h + j];
+                //float depth = colors[i * h + j].r + colors[i * h + j].g / 256f;
+                float depth = c.r + c.g / 256f + c.b / 256f / 256f;
 
                 float z = frustum_dist * (1f - depth);
                 Vector3 p = rotMatrix.MultiplyVector(_viewportArray[i * h + j] * z) + _depthCamera.transform.position;
@@ -96,6 +97,7 @@ public class PointCloudManager: MonoBehaviour
         GameObject pointCloudObject = new GameObject();
         pointCloudObject.name = "PointCloudRepresentation";
         pointCloudObject.transform.position = position;
+        pointCloudObject.transform.localScale = new Vector3(10f, 10f, 10f);
 
         foreach(Vector3 p in _pointCloud)
         {
