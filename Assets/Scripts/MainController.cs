@@ -19,7 +19,7 @@ public class MainController : MonoBehaviour
 
 
     //Depth Camera Settings
-    private float _nearClipPlane = 0.2f;
+    private float _nearClipPlane = 0.4f;
     private float _farClipPlane = 2f;
     private float _depthSawOff = 0.01f;
     private int _textureResolution = 256;
@@ -27,10 +27,10 @@ public class MainController : MonoBehaviour
   
     //View Sphere Settings
     private int _viewGridLayers = 6;
-    private float _sphereRadius = 2f;   
+    private float _sphereRadius = 2.0f;   
 
     //Occupancy Grid Settings
-    private int _occupancyGridCount = 32;
+    private int _occupancyGridCount = 64;
     private float _gridSize = 1f;
     private Vector3 _gridPosition = new Vector3(12, 0, 0);
 
@@ -71,8 +71,6 @@ public class MainController : MonoBehaviour
     {
         
         Texture2D tex = _drm.GetDepthRendering();
-       
-        //UnityEngine.Debug.Log(_timer.Elapsed);
 
         if (Input.GetKeyDown(KeyCode.C))
         {
@@ -137,13 +135,14 @@ public class MainController : MonoBehaviour
         _timer.Reset();
         _timer.Start();
         HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex);
+        UnityEngine.Debug.Log("Creating point set -" + _timer.Elapsed);
         _pcm.AddToCloud(pointSet);
+        UnityEngine.Debug.Log("Add To Cloud -" + _timer.Elapsed);
         _ogm.AddPoints(pointSet);
+        UnityEngine.Debug.Log("Add to occupancy grid - " + _timer.Elapsed);
         _ogm.UpdateGridObject();
-
+        UnityEngine.Debug.Log("Update Grid - " + _timer.Elapsed);
         _timer.Stop();
-        //timer.Stop();
-        UnityEngine.Debug.Log(_timer.Elapsed);
     }
 
 

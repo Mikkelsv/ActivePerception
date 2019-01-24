@@ -98,7 +98,6 @@ public class ViewSphereGenerator
             }
         }
         views.Add(new Vector3(0, r, 0));
-        Debug.Log(views.Count);
         return views;
     }
 
