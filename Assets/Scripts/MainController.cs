@@ -12,26 +12,28 @@ public class MainController : MonoBehaviour
     Shader _shader;
 
     [SerializeField]
-    GameObject _studyObject;
+    GameObject _prefabStudyObject;
 
     [SerializeField]
     GameObject _pointCloudVisualizer;
 
+    private GameObject _studyObject;
 
     //Depth Camera Settings
-    private float _nearClipPlane = 0.4f;
-    private float _farClipPlane = 2f;
-    private float _depthSawOff = 0.01f;
+    private float _nearClipPlane = 0.001f;
+    private float _farClipPlane = 4f;
+    private float _depthSawOff = 0.1f;
     private int _textureResolution = 256;
+    private float _studyGridSize = 2f;
 
-  
+
     //View Sphere Settings
     private int _viewGridLayers = 6;
-    private float _sphereRadius = 2.0f;   
+    private float _sphereRadius = 2f;   
 
     //Occupancy Grid Settings
-    private int _occupancyGridCount = 64;
-    private float _gridSize = 1f;
+    private int _occupancyGridCount = 32;
+    
     private Vector3 _gridPosition = new Vector3(12, 0, 0);
 
     //Mesh Creatonr
@@ -61,9 +63,9 @@ public class MainController : MonoBehaviour
         _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
-        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer);
-        _ogm = new OccupancyGridManager(_occupancyGridCount, _gridSize, _gridPosition);
-        SetupScene();
+        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer, _studyGridSize);
+        _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
+        SetupScene(_prefabStudyObject);
       
     }
 
@@ -108,9 +110,10 @@ public class MainController : MonoBehaviour
 
     }
 
-    private void SetupScene()
+    private void SetupScene(GameObject prefabObject)
     {
         //Setup object
+        _studyObject = Instantiate(prefabObject);
         Vector3 boundaries = _studyObject.GetComponent<MeshFilter>().mesh.bounds.size;
         _studyObject.transform.localScale = Vector3.one / (boundaries.magnitude);
         _studyObject.transform.position = Vector3.zero;

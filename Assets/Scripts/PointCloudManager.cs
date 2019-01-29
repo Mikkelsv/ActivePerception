@@ -14,16 +14,26 @@ public class PointCloudManager
 
     private HashSet<Vector3> _pointCloud = new HashSet<Vector3>();
 
-    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera, GameObject representationPrefab)
+    private float _nearPlane;
+    private float _farPlane;
+    private float _viewFrustumDistance;
+
+    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera, GameObject representationPrefab, float studyGridSize)
     {
-        _viewportArray = CreateViewPortArray(rTex);
+        float frustumAngle = depthCamera.fieldOfView / 2f;
+        _viewportArray = CreateViewPortArray(rTex, studyGridSize, frustumAngle);
         _depthSawOff = depthSawOff;
         _depthCamera = depthCamera;
         _representationPrefab = representationPrefab;
+
+        _nearPlane = _depthCamera.nearClipPlane;
+        _farPlane = _depthCamera.farClipPlane;
+        _viewFrustumDistance = _farPlane - _nearPlane;
     }
 
-    private Vector3[] CreateViewPortArray(RenderTexture rTex)
+    private Vector3[] CreateViewPortArray(RenderTexture rTex, float studyGridSize, float frustumAngle)
     {
+        float studyGridSizeHalved = studyGridSize / 2f;
         int h = rTex.height;
         int w = rTex.width;
         Vector3[] array = new Vector3[w * h];
@@ -31,10 +41,10 @@ public class PointCloudManager
         {
             for (int i = 0; i < h; i++)
             {
-                float x = Mathf.Tan((j * 2f / w - 1.0f) * 30f * Mathf.Deg2Rad);
-                float y = Mathf.Tan((i * 2f / h - 1.0f) * 30f * Mathf.Deg2Rad);
+                float y = Mathf.Tan((j * studyGridSize / w - studyGridSizeHalved) * frustumAngle * Mathf.Deg2Rad);
+                float x = Mathf.Tan((i * studyGridSize / h - studyGridSizeHalved) * frustumAngle * Mathf.Deg2Rad);
                 float z = 1.0f;
-                array[i * h + j] = new Vector3(x, y, z);
+                array[j * h + i] = new Vector3(x, y, z);
             }
         }
         return array;
@@ -44,14 +54,12 @@ public class PointCloudManager
     {
         int w = tex.width;
         int h = tex.height;
-        float near = _depthCamera.nearClipPlane;
-        float far = _depthCamera.farClipPlane;
-        float frustum_dist = far - near;
+      
         Color[] colors = tex.GetPixels();
 
         Matrix4x4 rotMatrix = GetCameraRotationMatrix(_depthCamera);
         Vector3 cameraOfsett = _depthCamera.transform.position;
-        cameraOfsett -= cameraOfsett.normalized * _depthCamera.nearClipPlane;
+        //cameraOfsett -= cameraOfsett.normalized * _depthCamera.nearClipPlane;
 
         HashSet<Vector3> pointSet = new HashSet<Vector3>();
 
@@ -61,11 +69,11 @@ public class PointCloudManager
         {
             for (int i = 0; i < h; i++)
             {
-                Color c = colors[i * h + j];
+                Color c = colors[j * h + i];
                 float depth = c.r + c.g / 256f + c.b / 256f / 256f;
 
-                float z = frustum_dist * (1f - depth);
-                Vector3 p = rotMatrix.MultiplyVector(_viewportArray[i * h + j] * z) + cameraOfsett;
+                float z = _viewFrustumDistance * (1f - depth) + _nearPlane;
+                Vector3 p = rotMatrix.MultiplyVector(_viewportArray[j * h + i] * z) + cameraOfsett;
 
                 if (depth > _depthSawOff)
                 {
