@@ -54,9 +54,9 @@ Shader "Custom/DepthShader"
 				depth = Linear01Depth(i.d);
 				float c = depth * 256.0;
 				int r = int(c);
-				float g = int((c*256.0)%256);
-				float b = int((c*256.0*256.0)%256);
-				float rC = 1.0 - r / 256.0;
+				float g = (c*256.0)%256;
+				float b = (c*256.0*256.0)%256;
+				float rC = 1.0 - c / 256.0;
 				float gC = 1.0 - g / 256.0;
 				float bC = 1.0 - b / 256.0;
 
