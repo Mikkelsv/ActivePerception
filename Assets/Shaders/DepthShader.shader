@@ -4,7 +4,7 @@ Shader "Custom/DepthShader"
 {
 	Properties
 	{
-		_DepthLevel("Depth Level", Range(1, 3)) = 2
+		_DepthLevel("Depth Level", Range(1, 3)) = 3
 	}
 		SubShader
 	{
@@ -19,8 +19,6 @@ Shader "Custom/DepthShader"
 
 			uniform sampler2D_float _CameraDepthTexture;
 			uniform fixed _DepthLevel;
-			uniform half4 _MainTex_TexelSize;
-			float bitsize = 256.0 * 256.0 * 256.0;
 
 			struct appdata
 			{
@@ -30,10 +28,7 @@ Shader "Custom/DepthShader"
 			struct v2f
 			{
 				float4 pos : SV_POSITION;
-				fixed4 color : COLOR;
 				float d : FLOAT;
-
-				float4 scrPos : TEXCOORD1;
 			};
 
 			v2f vert(appdata i)
@@ -41,29 +36,15 @@ Shader "Custom/DepthShader"
 				v2f o;
 				o.pos = UnityObjectToClipPos(i.pos);
 				float d = o.pos.z / o.pos.w;
-				o.d = d;
-				o.color = fixed4(d, d, d, 1.0);
-				o.scrPos = ComputeScreenPos(i.pos);
+				o.d = o.pos.z / o.pos.w;
 				return o;
 			}
 
-			fixed4 frag(v2f i) : COLOR
+			float4 frag(v2f i) : COLOR
 			{
-				float depth = SAMPLE_DEPTH_TEXTURE(_CameraDepthTexture, UNITY_PROJ_COORD(i.scrPos));
+				float depth = Linear01Depth(i.d);
 
-				depth = Linear01Depth(i.d);
-				float c = depth * 256.0;
-				int r = int(c);
-				float g = int((c*256.0)%256);
-				float b = int((c*256.0*256.0)%256);
-				float rC = 1.0 - r / 256.0;
-				float gC = 1.0 - g / 256.0;
-				float bC = 1.0 - b / 256.0;
-
-				return fixed4(rC, gC, bC, 1.0);
-
-				//return fixed4(1 - depth, 1 - depth, 1 - depth, 1.0);
-				//return i.color;
+				return float4(1.0 - depth, 1.0 - depth, 1.0 - depth, 1.0);
 			}
 
 			ENDCG

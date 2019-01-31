@@ -12,30 +12,37 @@ public class MainController : MonoBehaviour
     Shader _shader;
 
     [SerializeField]
-    GameObject _studyObject;
+    GameObject _prefabStudyObject;
 
     [SerializeField]
     GameObject _pointCloudVisualizer;
 
+    private GameObject _studyObject;
+
+    private float _objectSize = 2f;
+    private Vector3 _objectPosition = new Vector3(0, 0, 0);
 
     //Depth Camera Settings
-    private float _nearClipPlane = 0.4f;
-    private float _farClipPlane = 2f;
-    private float _depthSawOff = 0.01f;
-    private int _textureResolution = 256;
+    private float _nearClipPlane = 1f;
+    private float _farClipPlane = 10f;
+    private float _depthSawOff = 0.7f;
+    private int _textureResolution = 128;
+    private float _studyGridSize = 2f;
 
-  
+
     //View Sphere Settings
     private int _viewGridLayers = 6;
-    private float _sphereRadius = 2.0f;   
+    private float _sphereRadius = 2f;   
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 64;
-    private float _gridSize = 1f;
+    
     private Vector3 _gridPosition = new Vector3(12, 0, 0);
 
+    private Vector3 _referenceGridPosition = new Vector3(14, 0, 0);
     //Mesh Creatonr
-    private Vector3 _meshPosition = new Vector3(13,0,0);
+    private Vector3 _meshPosition = new Vector3(0,0,0);
+    private Vector3 _pointCloudScale = new Vector3(1, 1, 1);
     
 
     
@@ -61,10 +68,9 @@ public class MainController : MonoBehaviour
         _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
-        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer);
-        _ogm = new OccupancyGridManager(_occupancyGridCount, _gridSize, _gridPosition);
-        SetupScene();
-      
+        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer, _studyGridSize);
+        _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
+        SetupScene(_prefabStudyObject);
     }
 
     void Update()
@@ -103,31 +109,35 @@ public class MainController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            _pcm.BuildPointCloudObject(_meshPosition);
+            _pcm.BuildPointCloudObject(_meshPosition, _pointCloudScale);
         }
 
     }
 
-    private void SetupScene()
+    private void SetupScene(GameObject prefabObject)
     {
         //Setup object
-        Vector3 boundaries = _studyObject.GetComponent<MeshFilter>().mesh.bounds.size;
-        _studyObject.transform.localScale = Vector3.one / (boundaries.magnitude);
-        _studyObject.transform.position = Vector3.zero;
+        _studyObject = Instantiate(prefabObject);
+        Vector3 boundaries = _studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size;
+
+        //_studyObject.transform.localScale = Vector3.one / (boundaries.) * _objectSize;
+        _studyObject.transform.localScale = Vector3.one / GetMaxElement(boundaries);
+        _studyObject.transform.position = _objectPosition;
+        _studyObject.name = "StudyObject";
         UnityEngine.Debug.Log("Object size:" + _studyObject.GetComponent<MeshFilter>().mesh.bounds.size);
 
         //Setup views
         _views = ViewSphereGenerator.GenerateViews(_viewGridLayers, _sphereRadius);
         _drm.SetCameraView(_views[_viewIndex]);
+
+        //_ogm.GenerateExampleGrid(_referenceGridPosition);
     }
 
     private void RenderView(Texture2D tex)
     {
 
-        Mesh m = MeshCreator.GenerateMeshFromSet(_pcm.GetPointCloud(), Vector3.zero, Vector3.zero, Color.green, 0.005f);
-    
-        CreateGameObject(m);
-        
+        HashSet<Vector3> pointCloud = _pcm.CreatePointSet(tex);
+        _pcm.BuildPointCloudObjectFromCloud(_meshPosition, pointCloud, _pointCloudScale);
     }
 
     private void AddView(Texture2D tex)
@@ -161,4 +171,8 @@ public class MainController : MonoBehaviour
          ViewSphereGenerator.BuildSphere(_views, Vector3.zero);
     }
 
+    private float GetMaxElement(Vector3 v)
+    {
+        return Mathf.Max(v.x,v.y,v.z);
+    }
 }
