@@ -91,10 +91,13 @@ public class PointCloudManager
             {
                 Color c = colors[j * h + i];
                 float depth = c.r + c.g / 256f + c.b / 256f / 256f;
+                //float depth = c.r;
 
 
                 //float z = _viewFrustumDistance * (1f - depth) + _nearPlane/_viewFrustumDistance; //+ _nearPlane;
+
                 float z = _viewFrustumDistance * (1f - depth);// + 0.032655f ;
+                
                 //z = z / Mathf.Cos(_angleArray[j * h + i]);
 
 
@@ -109,8 +112,8 @@ public class PointCloudManager
             }
 
         }
-        Debug.Log(min.ToString("F4"));
-        Debug.Log(max.ToString("F4"));
+        Debug.Log(min.ToString("F6"));
+        Debug.Log(max.ToString("F6"));
         return pointSet;
     }
 

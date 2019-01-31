@@ -20,11 +20,12 @@ public class MainController : MonoBehaviour
     private GameObject _studyObject;
 
     private float _objectSize = 2f;
+    private Vector3 _objectPosition = new Vector3(0, -1f, 0);
 
     //Depth Camera Settings
-    private float _nearClipPlane = 1f;
+    private float _nearClipPlane = 0.4f;
     private float _farClipPlane = 10f;
-    private float _depthSawOff = 0.8f;
+    private float _depthSawOff = 0.4f;
     private int _textureResolution = 128;
     private float _studyGridSize = 2f;
 
@@ -40,7 +41,7 @@ public class MainController : MonoBehaviour
 
     private Vector3 _referenceGridPosition = new Vector3(14, 0, 0);
     //Mesh Creatonr
-    private Vector3 _meshPosition = new Vector3(16,0,0);
+    private Vector3 _meshPosition = new Vector3(1,0,0);
     private Vector3 _pointCloudScale = new Vector3(1, 1, 1);
     
 
@@ -121,7 +122,7 @@ public class MainController : MonoBehaviour
 
         //_studyObject.transform.localScale = Vector3.one / (boundaries.) * _objectSize;
         _studyObject.transform.localScale = Vector3.one / GetMaxElement(boundaries);
-        _studyObject.transform.position = Vector3.zero;
+        _studyObject.transform.position = _objectPosition;
         UnityEngine.Debug.Log("Object size:" + _studyObject.GetComponent<MeshFilter>().mesh.bounds.size);
 
         //Setup views
