@@ -17,7 +17,7 @@ public class DepthRenderingManager
         _depthCamera.nearClipPlane = nearClipPlane;
         _renderTexture = _depthCamera.targetTexture;
         _textureSixe = _renderTexture.height;
-        _currentRendering = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGB24, false);
+        _currentRendering = new Texture2D(_renderTexture.width, _renderTexture.height, TextureFormat.RGBAFloat, false);
       
     }
 
@@ -26,12 +26,12 @@ public class DepthRenderingManager
 
         RenderTexture.active = _depthCamera.targetTexture;
         _depthCamera.Render();
-        //_currentRendering.ReadPixels(new Rect(0, 0, 512, 512), 0, 0);
         _currentRendering.ReadPixels(new Rect(0, 0, _textureSixe, _textureSixe), 0, 0);
+        
         _currentRendering.Apply();
         return _currentRendering;
     }
-
+  
     public void SetCameraView(Vector3 view)
     {
         _depthCamera.transform.position = view;

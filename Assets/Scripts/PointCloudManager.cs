@@ -31,7 +31,7 @@ public class PointCloudManager
 
         _nearPlane = _depthCamera.nearClipPlane;
         _farPlane = _depthCamera.farClipPlane;
-        _viewFrustumDistance = _farPlane; //- _nearPlane;
+        _viewFrustumDistance = _farPlane;// - _nearPlane; //- _nearPlane;
     }
 
     private Vector3[] CreateViewPortArray(RenderTexture rTex, float studyGridSize, float frustumAngle)
@@ -90,15 +90,15 @@ public class PointCloudManager
             for (int i = 0; i < h; i++)
             {
                 Color c = colors[j * h + i];
-                float depth = c.r + c.g / 256f + c.b / 256f / 256f;
-                //float depth = c.r;
+                //float depth = c.r + c.g / 256f + c.b / 256f / 256f;
+                float depth = c.r;
 
 
                 //float z = _viewFrustumDistance * (1f - depth) + _nearPlane/_viewFrustumDistance; //+ _nearPlane;
 
                 float z = _viewFrustumDistance * (1f - depth);// + 0.032655f ;
                 
-                //z = z / Mathf.Cos(_angleArray[j * h + i]);
+                //z = z * Mathf.Cos(_angleArray[j * h + i]);
 
 
                 Vector3 p = cameraRotationMatrix.MultiplyVector(_viewportArray[j * h + i] * z) + cameraOfsett;
