@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Linq;
 
 public class MainController : MonoBehaviour
 {
@@ -18,16 +19,19 @@ public class MainController : MonoBehaviour
     GameObject _pointCloudVisualizer;
 
     private GameObject _studyObject;
+    private GameObject[] _studyObjects;
 
+
+    private int _studyID = 5;
     private float _objectSize = 2f;
     private Vector3 _objectPosition = new Vector3(0, 0, 0);
 
     //Depth Camera Settings
-    private float _nearClipPlane = 1f;
-    private float _farClipPlane = 10f;
-    private float _depthSawOff = 0.7f;
+    private float _nearClipPlane = 0.2f;
+    private float _farClipPlane = 5f;
+    private float _depthSawOff = 0.01f;
     private int _textureResolution = 128;
-    private float _studyGridSize = 2f;
+    
 
 
     //View Sphere Settings
@@ -36,8 +40,9 @@ public class MainController : MonoBehaviour
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 64;
-    
-    private Vector3 _gridPosition = new Vector3(12, 0, 0);
+    private float _studyGridSize = 1.2f;
+
+    private Vector3 _gridPosition = new Vector3(8, 0, 0);
 
     private Vector3 _referenceGridPosition = new Vector3(14, 0, 0);
     //Mesh Creatonr
@@ -68,7 +73,7 @@ public class MainController : MonoBehaviour
         _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
-        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer, _studyGridSize);
+        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         SetupScene(_prefabStudyObject);
     }
@@ -117,14 +122,25 @@ public class MainController : MonoBehaviour
     private void SetupScene(GameObject prefabObject)
     {
         //Setup object
-        _studyObject = Instantiate(prefabObject);
+        if (_studyID >= 0)
+        {
+            _studyObjects = Resources.LoadAll("Models", typeof(GameObject)).Cast<GameObject>().ToArray();
+            _studyObject = Instantiate(_studyObjects[_studyID]);
+        }
+        else{
+            _studyObject = Instantiate(prefabObject);
+        }
+       
+        
         Vector3 boundaries = _studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size;
 
         //_studyObject.transform.localScale = Vector3.one / (boundaries.) * _objectSize;
         _studyObject.transform.localScale = Vector3.one / GetMaxElement(boundaries);
         _studyObject.transform.position = _objectPosition;
         _studyObject.name = "StudyObject";
-        UnityEngine.Debug.Log("Object size:" + _studyObject.GetComponent<MeshFilter>().mesh.bounds.size);
+        UnityEngine.Debug.Log("Object size:" + _studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size);
+
+        
 
         //Setup views
         _views = ViewSphereGenerator.GenerateViews(_viewGridLayers, _sphereRadius);

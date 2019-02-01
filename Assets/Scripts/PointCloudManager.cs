@@ -20,10 +20,10 @@ public class PointCloudManager
     private float _farPlane;
     private float _viewFrustumDistance;
 
-    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera, GameObject representationPrefab, float studyGridSize)
+    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera, GameObject representationPrefab)
     {
         float frustumAngle = depthCamera.fieldOfView/2f;
-        _viewportArray = CreateViewPortArray(rTex, studyGridSize, frustumAngle);
+        _viewportArray = CreateViewPortArray(rTex, frustumAngle);
         _angleArray = CreateViewPortAngles(rTex, frustumAngle);
         _depthSawOff = depthSawOff;
         _depthCamera = depthCamera;
@@ -31,10 +31,31 @@ public class PointCloudManager
 
         _nearPlane = _depthCamera.nearClipPlane;
         _farPlane = _depthCamera.farClipPlane;
-        _viewFrustumDistance = _farPlane;// - _nearPlane; //- _nearPlane;
+        _viewFrustumDistance = _farPlane;
     }
 
-    private Vector3[] CreateViewPortArray(RenderTexture rTex, float studyGridSize, float frustumAngle)
+    private Vector3[] CreateViewPortArray(RenderTexture rTex, float frustumAngle)
+    {
+        int h = rTex.height;
+        int w = rTex.width;
+        Vector3[] array = new Vector3[w * h];
+        for (int j = 0; j < w; j++)
+        {
+            for (int i = 0; i < h; i++)
+            {
+                //float y = Mathf.Tan((j * 2f / w - 1f) * frustumAngle * Mathf.Deg2Rad);
+                float y = (j * 2f / w - 1f) * Mathf.Tan(frustumAngle * Mathf.Deg2Rad);
+                //float x = Mathf.Tan((i * 2f / h - 1f) * frustumAngle * Mathf.Deg2Rad);
+                float x = (i * 2f / h - 1f) * Mathf.Tan(frustumAngle * Mathf.Deg2Rad);
+
+                float z = 1.0f;
+                array[j * h + i] = new Vector3(x, y, z);
+            }
+        }
+        return array;
+    }
+
+    private Vector3[] CreateViewPortArrayUsingVectors(RenderTexture rTex, float frustumAngle)
     {
         int h = rTex.height;
         int w = rTex.width;
@@ -52,23 +73,7 @@ public class PointCloudManager
         return array;
     }
 
-    private float[] CreateViewPortAngles(RenderTexture rTex, float frustumAngle)
-    {
-        int h = rTex.height;
-        int w = rTex.width;
-        float[] angleArray = new float[w * h];
-        for (int j = 0; j < w; j++)
-        {
-            for (int i = 0; i < h; i++)
-            {
-                float y = Mathf.Tan((j * 2f / w - 1f) * frustumAngle * Mathf.Deg2Rad);
-                float x = Mathf.Tan((i * 2f / h - 1f) * frustumAngle * Mathf.Deg2Rad);
-                Vector3 direction = new Vector3(x, y, 1.0f);
-                angleArray[j * h + i] = Vector3.Angle(direction, Vector3.forward) * Mathf.Deg2Rad;
-            }
-        }
-        return angleArray;
-    }
+
 
     public HashSet<Vector3> CreatePointSet(Texture2D tex)
     {
@@ -90,16 +95,9 @@ public class PointCloudManager
             for (int i = 0; i < h; i++)
             {
                 Color c = colors[j * h + i];
-                //float depth = c.r + c.g / 256f + c.b / 256f / 256f;
                 float depth = c.r;
 
-
-                //float z = _viewFrustumDistance * (1f - depth) + _nearPlane/_viewFrustumDistance; //+ _nearPlane;
-
-                float z = _viewFrustumDistance * (1f - depth);// + 0.032655f ;
-                
-                //z = z * Mathf.Cos(_angleArray[j * h + i]);
-
+                float z = _viewFrustumDistance * (1f - depth);
 
                 Vector3 p = cameraRotationMatrix.MultiplyVector(_viewportArray[j * h + i] * z) + cameraOfsett;
 
@@ -154,5 +152,24 @@ public class PointCloudManager
         Matrix4x4 transMatrix = pointTranform.localToWorldMatrix;
         UnityEngine.Object.Destroy(tempGO);
         return transMatrix;
+    }
+
+    //Not required
+    private float[] CreateViewPortAngles(RenderTexture rTex, float frustumAngle)
+    {
+        int h = rTex.height;
+        int w = rTex.width;
+        float[] angleArray = new float[w * h];
+        for (int j = 0; j < w; j++)
+        {
+            for (int i = 0; i < h; i++)
+            {
+                float y = Mathf.Tan((j * 2f / w - 1f) * frustumAngle * Mathf.Deg2Rad);
+                float x = Mathf.Tan((i * 2f / h - 1f) * frustumAngle * Mathf.Deg2Rad);
+                Vector3 direction = new Vector3(x, y, 1.0f);
+                angleArray[j * h + i] = Vector3.Angle(direction, Vector3.forward) * Mathf.Deg2Rad;
+            }
+        }
+        return angleArray;
     }
 }
