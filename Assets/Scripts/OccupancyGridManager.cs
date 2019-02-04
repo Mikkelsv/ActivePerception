@@ -65,7 +65,7 @@ public class OccupancyGridManager {
                 for (int x = 0; x < _gridCount; x++)
                 {
                     int i = z * _gridCount * _gridCount + y * _gridCount + x;
-                    if (_grid[i] > 3 && !_builtGrid[i])
+                    if (_grid[i] > 0 && !_builtGrid[i])
                     {
 
                         GameObject c = GameObject.CreatePrimitive(PrimitiveType.Cube);

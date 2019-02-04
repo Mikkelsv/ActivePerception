@@ -35,7 +35,7 @@ public class MainController : MonoBehaviour
 
 
     //View Sphere Settings
-    private int _viewGridLayers = 6;
+    private int _viewGridLayers = 4;
     private float _sphereRadius = 2f;   
 
     //Occupancy Grid Settings
