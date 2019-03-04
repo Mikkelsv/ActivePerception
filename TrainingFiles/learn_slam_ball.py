@@ -7,7 +7,7 @@ from trainer import Trainer
 def main():
     # env_name = "../envs/3DBall"  # Name of the Unity environment binary to launch
     env_name = "Env/SlamBall"
-    env = UnityEnvironment(file_name=env_name, worker_id=0, seed=1)  # Add seed=n for consistent results
+    env = UnityEnvironment(file_name=None, worker_id=0, seed=1)  # Add seed=n for consistent results
 
     # Investigate environment
     default_brain = env.brain_names[0]

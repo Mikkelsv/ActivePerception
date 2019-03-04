@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="" />
+    <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/learn_slam_ball.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn_slam_ball.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -10,14 +12,23 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="221" column="32" selection-start-line="221" selection-start-column="32" selection-end-line="221" selection-end-column="32" />
+            <state relative-caret-position="646">
+              <caret line="252" lean-forward="true" selection-start-line="252" selection-end-line="252" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/learn_slam_ball.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="18" column="15" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="15" />
             </state>
           </provider>
         </entry>
@@ -45,7 +56,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="436">
+            <state relative-caret-position="1190">
               <caret line="88" column="59" selection-start-line="88" selection-start-column="59" selection-end-line="88" selection-end-column="59" />
               <folding>
                 <element signature="e#0#23#0" expanded="true" />
@@ -85,14 +96,14 @@
         <option value="$PROJECT_DIR$/memory.py" />
         <option value="$PROJECT_DIR$/slam_model.py" />
         <option value="$PROJECT_DIR$/model_manager.py" />
-        <option value="$PROJECT_DIR$/learn_slam_ball.py" />
         <option value="$PROJECT_DIR$/trainer.py" />
+        <option value="$PROJECT_DIR$/learn_slam_ball.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds">
     <option name="x" value="1273" />
-    <option name="width" value="1292" />
+    <option name="width" value="1294" />
     <option name="height" value="1407" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -136,7 +147,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.deprecated_learn_slam_ball">
+  <component name="RunManager" selected="Python.learn_slam_ball">
     <configuration name="deprecated_learn_slam_ball" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TrainingFiles" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -244,8 +255,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.deprecated_learn_slam_ball" />
         <item itemvalue="Python.learn_slam_ball" />
+        <item itemvalue="Python.deprecated_learn_slam_ball" />
         <item itemvalue="Python.model_manager" />
         <item itemvalue="Python.trainer" />
         <item itemvalue="Python.train_slam_model" />
@@ -266,15 +277,15 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <frame x="1273" y="0" width="1294" height="1407" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.07722616" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15605095" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.23783359" />
-      <window_info active="true" anchor="bottom" x="1292" y="485" width="1256" height="436" id="Run" order="2" visible="true" weight="0.33982852" />
+      <window_info active="true" anchor="bottom" x="1292" y="485" width="1256" height="436" id="Run" order="2" visible="true" weight="0.3422292" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.39952904" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -342,21 +353,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/deprecated_slam_model.py" />
     <entry file="file://$PROJECT_DIR$/deprecated_train_slam_model.py" />
-    <entry file="file://$PROJECT_DIR$/learn_slam_ball.py" />
     <entry file="file://$PROJECT_DIR$/memory.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
           <caret line="4" selection-start-line="4" selection-end-line="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="436">
-          <caret line="88" column="59" selection-start-line="88" selection-start-column="59" selection-end-line="88" selection-end-column="59" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -371,11 +371,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="221" column="32" selection-start-line="221" selection-start-column="32" selection-end-line="221" selection-end-column="32" />
+        <state relative-caret-position="646">
+          <caret line="252" lean-forward="true" selection-start-line="252" selection-end-line="252" />
           <folding>
             <element signature="e#0#42#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="88" column="59" selection-start-line="88" selection-start-column="59" selection-end-line="88" selection-end-column="59" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/learn_slam_ball.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="18" column="15" selection-start-line="18" selection-start-column="15" selection-end-line="18" selection-end-column="15" />
         </state>
       </provider>
     </entry>

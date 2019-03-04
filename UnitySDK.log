@@ -1,0 +1,15 @@
+3/4/2019 3:33:13 PM
+ 
+Log
+Object size:(2.2, 2.0, 2.0)
+UnityEngine.Debug:Log(Object)
+MainController:SetupScene(GameObject) (at Assets/Scripts/MainController.cs:141)
+MainController:Start() (at Assets/Scripts/MainController.cs:78)
+
+Log
+121 views created
+UnityEngine.Debug:Log(Object)
+ViewSphereGenerator:GenerateViews(Int32, Single) (at Assets/Scripts/ViewSphereGenerator.cs:18)
+MainController:SetupScene(GameObject) (at Assets/Scripts/MainController.cs:146)
+MainController:Start() (at Assets/Scripts/MainController.cs:78)
+
