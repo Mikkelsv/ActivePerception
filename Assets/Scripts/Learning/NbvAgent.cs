@@ -5,10 +5,13 @@ using MLAgents;
 
 public class NbvAgent : Agent {
 
+    [SerializeField]
+    Camera depthCamera;
+
     private NbvManager _nvbManager;
 
     void Start () {
-        _nvbManager = new NbvManager(this.gameObject);
+        _nvbManager = new NbvManager(depthCamera);
     }
 
     public override void AgentReset()

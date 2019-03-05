@@ -116,11 +116,11 @@ class Trainer:
             steps += 1
             observation = env_info.vector_observations
 
-            action = self._get_action(observation, stochastic)
+            action, action_indexed = self._get_action(observation, stochastic)
 
             # Fetch next environment and reward, track the time
             now = time.time()
-            env_info = self.env.step(action)[self.default_brain]
+            env_info = self.env.step(action_indexed)[self.default_brain]
             self.update_time_keeper(self.duration_environment, time.time() - now)
 
             reward = env_info.rewards[0]
@@ -170,7 +170,7 @@ class Trainer:
             action = np.argmax(action_values)
             self.update_time_keeper(self.duration_selecting_action, time.time() - now)
         actions[action] = 1
-        return actions
+        return actions, action
 
     def _get_discounted_action_rewards(self, actions, rewards):
         prior = 0

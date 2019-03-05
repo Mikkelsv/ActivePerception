@@ -5,27 +5,32 @@ using UnityEngine;
 
 public class OccupancyGridManager {
 
-    private int _gridCount;
+    
     private int[] _grid;
+    private float[] _occupancyGrid;
     private bool[] _builtGrid;
     private float _gridSize;
 
     private GameObject _gridObject;
     private GameObject _referenceGrid;
 
+
     private Vector3 _alignVector;
     private float _inverseGridScale;
+
+    private int _gridCount;
     private int _gridCountSquared;
     private int _gridCountCubed;
+
     private float _gridSizeRelaxed;
 
     public OccupancyGridManager(int g, float gridSize, Vector3 position)
     {
       
         _grid = new int[g * g * g];
+        _occupancyGrid = new float[g * g * g];
         _builtGrid = new bool[g * g * g];
         
-       
         _gridObject = new GameObject();
         _gridObject.transform.position = position;
         _gridObject.name = "OccupancyGrid";
@@ -41,6 +46,18 @@ public class OccupancyGridManager {
 
         _gridCountSquared = _gridCount * _gridCount;
         _gridCountCubed = _gridCountSquared * _gridCount;
+    }
+
+    public void ClearGrid()
+    {
+        _grid = new int[_gridCountCubed];
+        _occupancyGrid = new float[_gridCountCubed];
+        _builtGrid = new bool[_gridCountCubed];
+    }
+
+    public float[] GetGrid()
+    {
+        return _occupancyGrid;
     }
 
 
@@ -113,13 +130,16 @@ public class OccupancyGridManager {
     private int[] GenerateNewGrid(HashSet<Vector3> points)
     {
         int[] grid = new int[_gridCountCubed];
+        int x, y, z, i;
         foreach(Vector3 p0 in points)
         {
             Vector3 p = p0 + _alignVector;
-            int x = Mathf.FloorToInt(p.x * _inverseGridScale);
-            int y = Mathf.FloorToInt(p.y * _inverseGridScale) * _gridCount;
-            int z = Mathf.FloorToInt(p.z * _inverseGridScale) * _gridCountSquared;
-            grid[x + y + z] += 1;
+            x = Mathf.FloorToInt(p.x * _inverseGridScale);
+            y = Mathf.FloorToInt(p.y * _inverseGridScale) * _gridCount;
+            z = Mathf.FloorToInt(p.z * _inverseGridScale) * _gridCountSquared;
+            i = x + y + z;
+            grid[i] += 1;
+            _occupancyGrid[i] = 1f;
         }
         return grid;
     }

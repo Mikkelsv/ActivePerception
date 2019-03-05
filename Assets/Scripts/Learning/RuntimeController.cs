@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LearningController : MonoBehaviour {
+public class RuntimeController : MonoBehaviour {
     [SerializeField]
     GameObject agent;
+
+    [SerializeField]
+    GameObject acadamy;
 
     [SerializeField]
     bool testWithModel;
 
     [SerializeField]
     TextAsset model;
+
 
     void Awake()
     {
@@ -27,10 +31,11 @@ public class LearningController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("Commencing training with model");
+            Debug.Log("Commencing training using mlagents");
 
             agent.GetComponent<TestingAgent>().enabled = false;
             agent.GetComponent<NbvAgent>().enabled = true;
+            acadamy.SetActive(false);
         }
 
     }

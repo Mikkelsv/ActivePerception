@@ -10,9 +10,6 @@ public class MainController : MonoBehaviour
     private Camera _depthCamera;
 
     [SerializeField]
-    Shader _shader;
-
-    [SerializeField]
     GameObject _prefabStudyObject;
 
     [SerializeField]
@@ -32,8 +29,6 @@ public class MainController : MonoBehaviour
     private float _depthSawOff = 0.01f;
     private int _textureResolution = 128;
     
-
-
     //View Sphere Settings
     private int _viewGridLayers = 4;
     private float _sphereRadius = 2f;   
@@ -70,10 +65,9 @@ public class MainController : MonoBehaviour
         RenderTexture rTex = _depthCamera.targetTexture;
         rTex.width = _textureResolution;
         rTex.height = _textureResolution;
-        _depthCamera.SetReplacementShader(_shader, null);
         _timer = new Stopwatch();
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
-        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera, _pointCloudVisualizer);
+        _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         SetupScene(_prefabStudyObject);
     }

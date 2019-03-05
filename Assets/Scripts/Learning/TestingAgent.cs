@@ -7,17 +7,22 @@ using System;
 
 public class TestingAgent : MonoBehaviour {
 
-    
+    [SerializeField]
+    Camera depthcamera;
+
+    [SerializeField]
+    float actionFrequency;
+
+    [SerializeField]
+    int maxEpisodes;
+        
+    float nextAction = 0;
+    bool nvb = true;
+    int episode = 0;
+
     public TextAsset model;
-
-    [SerializeField]
+    
     private int _maxStep;
-
-    [SerializeField]
-    private int _decisionFrequency;
-
-    [SerializeField]
-    readonly int step;
 
     private NbvManager _ball;
     private int _currentStep = 0;
@@ -35,7 +40,8 @@ public class TestingAgent : MonoBehaviour {
                 TensorFlowSharp.Android.NativeBinding.Init();
 #endif
 
-        _ball = new NbvManager(this.gameObject);
+        _ball = new NbvManager(depthcamera);
+        _maxStep = _ball.maxStep;
 
         _currentReward = 0f;
 
@@ -44,29 +50,40 @@ public class TestingAgent : MonoBehaviour {
 
 
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
-        _currentStep++;
-
-        if (_currentStep % _decisionFrequency == 0)
+        if((Time.time > nextAction) && nvb)
         {
+            _currentStep++;
+
             float[] actions = ComputeAction(_ball.CollectObservations());
             Evaluate(actions);
+
+            if (_currentStep > 2)
+            {
+                Debug.Log("Accumulated Reward: " + _currentReward);
+                _currentReward = 0;
+                _ball.Reset();
+                _currentStep = 0;
+                episode++;
+                if (true)
+                {
+                    nvb = false;
+                    Debug.Log("done");
+                }
+
+            }
         }
-        if (_currentStep > _maxStep)
-        {
-            Debug.Log("Accumulated Reward: " + _currentReward);
-            _currentReward = 0;
-            _ball.Reset();
-            _currentStep = 0;
-        }
+        
     }
 
     private void Evaluate(float[] actions)
     {
-        var eval = _ball.Action(actions);
+        float maxValue = actions.Max();
+        int maxIndex = actions.ToList().IndexOf(maxValue);
+        float[] action = { maxIndex };
+        var eval = _ball.Action(action);
         _currentReward += eval.Item1;
         if (eval.Item2)
         {

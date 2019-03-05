@@ -12,7 +12,7 @@ public class PointCloudManager
 
     private Camera _depthCamera;
 
-    private GameObject _representationPrefab;
+    private GameObject _representationPrefab = (GameObject)Resources.Load("Assets/Prefabs/tiny_sphere.obj");
 
     private HashSet<Vector3> _pointCloud = new HashSet<Vector3>();
 
@@ -20,14 +20,13 @@ public class PointCloudManager
     private float _farPlane;
     private float _viewFrustumDistance;
 
-    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera, GameObject representationPrefab)
+    public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera)
     {
         float frustumAngle = depthCamera.fieldOfView/2f;
         _viewportArray = CreateViewPortArray(rTex, frustumAngle);
         _angleArray = CreateViewPortAngles(rTex, frustumAngle);
         _depthSawOff = depthSawOff;
         _depthCamera = depthCamera;
-        _representationPrefab = representationPrefab;
 
         _nearPlane = _depthCamera.nearClipPlane;
         _farPlane = _depthCamera.farClipPlane;

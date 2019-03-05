@@ -12,14 +12,11 @@ MonoBehaviour:
   m_Name: NbvBrain
   m_EditorClassIdentifier: 
   brainParameters:
-    vectorObservationSize: 2
+    vectorObservationSize: 32768
     numStackedVectorObservations: 1
-    vectorActionSize: 01000000010000000100000001000000
+    vectorActionSize: 79000000
     cameraResolutions: []
     vectorActionDescriptions:
-    - 
-    - 
-    - 
-    - 
+    - ViewArray
     vectorActionSpaceType: 0
   model: {fileID: 0}

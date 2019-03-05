@@ -6,7 +6,7 @@ from trainer import Trainer
 
 def main():
     # env_name = "../envs/3DBall"  # Name of the Unity environment binary to launch
-    env_name = "Env/SlamBall"
+    env_name = "Env/ActivePerception"
     env = UnityEnvironment(file_name=None, worker_id=0, seed=1)  # Add seed=n for consistent results
 
     # Investigate environment
@@ -16,14 +16,14 @@ def main():
     num_output = len(env_info.action_masks[0])
 
     # Fetching model
-    load = True
-    model_name = "slam_model_trained"
+    load = False
+    model_name = "active_perception_trained"
     model_manager = ModelManager(load=load, num_input=num_input, num_output=num_output, model_name=model_name)
     model = model_manager.get_model()
 
     # Train
     trainer = Trainer(model, env)
-    trainer.train(10, 10, 10, 10)
+    trainer.train(1, 1, 1, 1)
     trainer.print_summary()
 
     # Close environment

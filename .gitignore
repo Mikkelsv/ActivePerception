@@ -101,6 +101,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 Assets/ML-Agents/*
+Assets/Resources/TrainedPolicies/*
 
 TrainingFiles/Env/*
 TrainingFiles/Models/*

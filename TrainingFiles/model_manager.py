@@ -34,6 +34,34 @@ class ModelManager:
             print("TF Keras version: " + tf.keras.__version__)
 
         inputs = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
+        n1 = tf.keras.layers.Dense(1000, activation="relu", name="hidden_layer_1")(inputs)
+        n2 = tf.keras.layers.Dense(1028, activation="relu", name="hidden_layer_2")(n1)
+
+        outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(n1)
+
+        self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
+
+        self._compile_model()
+
+        print("New Model Generated")
+        print("Using Learning Rate: {}".format(self.learning_rate))
+        print(self.model.summary())
+        return self.model
+
+    def generate_ball_model(self, print_version=True):
+        """
+            Generates cumstome made models specific for slam ball implementation, thus lacking in generatlization.
+            Notice naming of 'observation' inputlayer and 'actions' output layer
+        :param print_version: Print TF keras version number
+        :param num_input: Number of inputs (observations) in model
+        :param num_output: Number of outputs (action predictions) in model
+        :return: TensorFlow Model
+        """
+        if print_version:
+            print("TensorFlow version: " + tf.VERSION)
+            print("TF Keras version: " + tf.keras.__version__)
+
+        inputs = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
         n1 = tf.keras.layers.Dense(6, activation="relu", name="hidden_layer_1")(inputs)
         n2 = tf.keras.layers.Dense(1028, activation="relu", name="hidden_layer_2")(n1)
 
