@@ -9,17 +9,6 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private Camera _depthCamera;
 
-    [SerializeField]
-    GameObject _prefabStudyObject;
-
-    [SerializeField]
-    GameObject _pointCloudVisualizer;
-
-    private GameObject _studyObject;
-    private GameObject[] _studyObjects;
-
-
-    private int _studyID = 5;
     private float _objectSize = 2f;
     private Vector3 _objectPosition = new Vector3(0, 0, 0);
 
@@ -31,7 +20,7 @@ public class MainController : MonoBehaviour
     
     //View Sphere Settings
     private int _viewGridLayers = 4;
-    private float _sphereRadius = 2f;   
+    private float _sphereRadius = 1.8f;   
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 64;
@@ -50,11 +39,13 @@ public class MainController : MonoBehaviour
 
     private PointCloudManager _pcm;
 
-    private HashSet<Vector3> _pc = new HashSet<Vector3>();
-
     private OccupancyGridManager _ogm;
 
     private DepthRenderingManager _drm;
+
+    private StudyObjectMamanger _som;
+
+    private ViewManager _vm;
 
     private List<Vector3> _views;
 
@@ -66,31 +57,29 @@ public class MainController : MonoBehaviour
         rTex.width = _textureResolution;
         rTex.height = _textureResolution;
         _timer = new Stopwatch();
+
+        _vm = new ViewManager(_viewGridLayers, _sphereRadius);
+        _som = new StudyObjectMamanger(_objectPosition);
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
-        SetupScene(_prefabStudyObject);
+
+        Vector3 v = _vm.GetView(0);
+        _drm.SetCameraView(v);
+        
     }
 
     void Update()
     {
-        
-        Texture2D tex = _drm.GetDepthRendering();
-
         if (Input.GetKeyDown(KeyCode.C))
         {
-            RenderView(tex);
+            RenderView();
         }
 
         if (Input.GetKeyDown(KeyCode.B))
         {
-            AddView(tex);
-        }
-        
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            UnityEngine.Debug.Log(tex.GetPixel(256, 256));
-        }
+            AddView();
+        } 
 
         if(Input.GetKeyDown(KeyCode.V))
         {
@@ -98,62 +87,38 @@ public class MainController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.I))
         {
-            _viewIndex = (_viewIndex + 1) % _views.Count;
-            _drm.SetCameraView(_views[_viewIndex]);
+            Vector3 v = _vm.GetNeighbouringView();
+            _drm.SetCameraView(v);
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            _viewIndex = (_viewIndex + 10) % _views.Count;
-            _drm.SetCameraView(_views[_viewIndex]);
+            Vector3 v = _vm.GetNeighbouringView(10);
+            _drm.SetCameraView(v);
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             _pcm.BuildPointCloudObject(_meshPosition, _pointCloudScale);
         }
-
-    }
-
-    private void SetupScene(GameObject prefabObject)
-    {
-        //Setup object
-        if (_studyID >= 0)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            _studyObjects = Resources.LoadAll("Models", typeof(GameObject)).Cast<GameObject>().ToArray();
-            _studyObject = Instantiate(_studyObjects[_studyID]);
+            _som.PrepareNextStudyObject();
         }
-        else{
-            _studyObject = Instantiate(prefabObject);
-        }
-       
-        
-        Vector3 boundaries = _studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size;
 
-        //_studyObject.transform.localScale = Vector3.one / (boundaries.) * _objectSize;
-        _studyObject.transform.localScale = Vector3.one / GetMaxElement(boundaries);
-        _studyObject.transform.position = _objectPosition;
-        _studyObject.name = "StudyObject";
-        UnityEngine.Debug.Log("Object size:" + _studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size);
 
-        
-
-        //Setup views
-        _views = ViewSphereGenerator.GenerateViews(_viewGridLayers, _sphereRadius);
-        _drm.SetCameraView(_views[_viewIndex]);
-
-        //_ogm.GenerateExampleGrid(_referenceGridPosition);
     }
 
-    private void RenderView(Texture2D tex)
+    private void RenderView()
     {
-
+        Texture2D tex = _drm.GetDepthRendering();
         HashSet<Vector3> pointCloud = _pcm.CreatePointSet(tex);
         _pcm.BuildPointCloudObjectFromCloud(_meshPosition, pointCloud, _pointCloudScale);
     }
 
-    private void AddView(Texture2D tex)
+    private void AddView()
     {
         _timer.Reset();
         _timer.Start();
+        Texture2D tex = _drm.GetDepthRendering();
         HashSet<Vector3> pointSet = _pcm.CreatePointSet(tex);
         UnityEngine.Debug.Log("Creating point set -" + _timer.Elapsed);
         _pcm.AddToCloud(pointSet);
@@ -178,7 +143,7 @@ public class MainController : MonoBehaviour
 
     private void BuildViewSphere()
     {
-         ViewSphereGenerator.BuildSphere(_views, Vector3.zero);
+         _vm.BuildSphere(Vector3.zero);
     }
 
     private float GetMaxElement(Vector3 v)

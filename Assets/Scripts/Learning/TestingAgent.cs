@@ -53,25 +53,20 @@ public class TestingAgent : MonoBehaviour {
     
     void Update()
     {
-        if((Time.time > nextAction) && nvb)
+        if(nvb)
         {
             _currentStep++;
 
             float[] actions = ComputeAction(_ball.CollectObservations());
             Evaluate(actions);
 
-            if (_currentStep > 2)
+            if (_currentStep > 3)
             {
                 Debug.Log("Accumulated Reward: " + _currentReward);
                 _currentReward = 0;
                 _ball.Reset();
                 _currentStep = 0;
                 episode++;
-                if (true)
-                {
-                    nvb = false;
-                    Debug.Log("done");
-                }
 
             }
         }
@@ -91,6 +86,7 @@ public class TestingAgent : MonoBehaviour {
             _currentReward = 0;
             _ball.Reset();
             _currentStep = 0;
+            nvb = false;
         }
 
     }
@@ -101,15 +97,15 @@ public class TestingAgent : MonoBehaviour {
         float[,] obs = ExpandArray(observations);
         float[] actions;
 
-        if (log)
-        {
-            Debug.Log(graph);
-            foreach (var x in graph.GetEnumerator())
-            {
-                Debug.Log(x.Name);
-            }
-            log = false;
-        }
+        //if (log)
+        //{
+        //    Debug.Log(graph);
+        //    foreach (var x in graph.GetEnumerator())
+        //    {
+        //        Debug.Log(x.Name);
+        //    }
+        //    log = false;
+        //}
 
         var session = new TFSession(graph);
         var runner = session.GetRunner();

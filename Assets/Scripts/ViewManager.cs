@@ -12,12 +12,16 @@ public class ViewManager{
     private List<Vector3> _views;
 
     private int _currentView;
+    private int _viewCount;
+
+    private GameObject _viewSphereObject;
 
 	public ViewManager(int viewLayers, float viewRadius)
     {
         _viewLayers = viewLayers;
         _viewRadius = viewRadius;
         _views = GenerateViews();
+        _viewCount = _views.Count;
         _currentView = 0;
     }
 
@@ -30,6 +34,31 @@ public class ViewManager{
     public Vector3 GetView(int view)
     {
         return _views[view];
+    }
+
+    public Vector3 GetNeighbouringView(int increment = 1)
+    {
+        _currentView = (_currentView + increment)%_viewCount;
+        return _views[_currentView];
+    }
+
+    public void BuildSphere(Vector3 position)
+    {
+        float s = 0.05f;
+        _viewSphereObject = new GameObject();
+        _viewSphereObject.transform.position = position;
+        Vector3 scale = new Vector3(s, s, s);
+        int i = 0;
+        foreach (Vector3 view in _views)
+        {
+
+            GameObject v = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            v.transform.parent = _viewSphereObject.transform;
+            v.transform.localPosition = view;
+            v.transform.localScale = scale;
+            v.name = "Sphere_" + i.ToString();
+            i++;
+        }
     }
 
     private List<Vector3> GenerateViews()
@@ -107,4 +136,6 @@ public class ViewManager{
         sortedViews = sortedViews.OrderBy(v => -v.y).ThenBy(v => v.x).ThenBy(v => -v.z).ToList();
         return sortedViews;
     }
+
+    
 }

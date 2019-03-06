@@ -45,8 +45,6 @@ public class SystemInterface{
     
     private PointCloudManager _pcm;
 
-    private HashSet<Vector3> _pc = new HashSet<Vector3>();
-
     private OccupancyGridManager _ogm;
 
     private DepthRenderingManager _drm;
@@ -77,9 +75,8 @@ public class SystemInterface{
     {
         _ogm.ClearGrid();
         Vector3 newView =_vm.SetView(0);
-        _som.PrepareNewStudyObject();
+        _som.PrepareRandomStudyObject();
         _drm.SetCameraView(newView);
-        
     }
 
     public void RenderView(int viewIndex)

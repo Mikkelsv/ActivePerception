@@ -12,7 +12,7 @@ public class PointCloudManager
 
     private Camera _depthCamera;
 
-    private GameObject _representationPrefab = (GameObject)Resources.Load("Assets/Prefabs/tiny_sphere.obj");
+    private GameObject _representationPrefab;
 
     private HashSet<Vector3> _pointCloud = new HashSet<Vector3>();
 
@@ -31,6 +31,9 @@ public class PointCloudManager
         _nearPlane = _depthCamera.nearClipPlane;
         _farPlane = _depthCamera.farClipPlane;
         _viewFrustumDistance = _farPlane;
+
+        _representationPrefab = (GameObject)Resources.Load("Prefabs/LowResSphere");
+        Debug.Log(_representationPrefab.name + " used as point cloud representation object");
     }
 
     private Vector3[] CreateViewPortArray(RenderTexture rTex, float frustumAngle)
@@ -109,8 +112,8 @@ public class PointCloudManager
             }
 
         }
-        Debug.Log(min.ToString("F6"));
-        Debug.Log(max.ToString("F6"));
+        //Debug.Log(min.ToString("F6"));
+        //Debug.Log(max.ToString("F6"));
         return pointSet;
     }
 

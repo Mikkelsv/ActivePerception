@@ -7,9 +7,10 @@ public class StudyObjectMamanger{
 
     private GameObject[] _studyObjects;
     private GameObject _studyObject;
+    private int _studyObjectIndex = 0;
     private GameObject _studyObjectsManager;
 
-    private Vector3 _position = new Vector3(1000, 0, 0);
+    private Vector3 _position = new Vector3(0, 0, 0);
     private Vector3 _objectPosition;
 
     private static System.Random _rnd = new System.Random();
@@ -20,29 +21,36 @@ public class StudyObjectMamanger{
         _objectPosition = objectPosition;
         LoadStudyObjects();
         _countObjects = _studyObjects.Count();
-        SetRandomStudyObject();
+        PrepareRandomStudyObject();
     }
 
-    public void PrepareNewStudyObject()
+    public void PrepareRandomStudyObject()
+    {
+        int i = _rnd.Next(_countObjects);
+        PrepareStudyObject(i);
+    }
+
+    public void PrepareNextStudyObject()
+    {
+        PrepareStudyObject((_studyObjectIndex + 1)%_countObjects);
+    }
+
+    public void PrepareStudyObject(int i)
     {
         RemoveStudyObject();
-        SetRandomStudyObject();
-    }
-
-    private void SetRandomStudyObject()
-    {
-        //Set new study object randomly
-        int i = _rnd.Next(_countObjects);
+        _studyObjectIndex = i;
         _studyObject = _studyObjects[i];
-
         _studyObject.SetActive(true);
         _studyObject.transform.position = _objectPosition;
     }
 
     private void RemoveStudyObject()
     {
-        _studyObject.transform.position = _position;
-        _studyObject.SetActive(false);
+        if (_studyObject)
+        {
+            _studyObject.transform.position = _position;
+            _studyObject.SetActive(false);
+        }
     }
 
     private void LoadStudyObjects()

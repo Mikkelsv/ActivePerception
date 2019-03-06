@@ -18,25 +18,23 @@ public class RuntimeController : MonoBehaviour {
 
     void Awake()
     {
+        var nvbAgent = agent.GetComponent<NbvAgent>();
+        var testingAgent = agent.GetComponent<TestingAgent>();
+
         if (testWithModel)
         {
             Debug.Log("Testing environment with model");
-
-            TestingAgent ta = agent.GetComponent<TestingAgent>();
-            ta.model = model;
-            ta.enabled = true;
-            agent.GetComponent<NbvAgent>().enabled = false;
-            agent.SetActive(true);
-            this.gameObject.SetActive(false);
+            testingAgent.model = model;
+            testingAgent.enabled = true;
+            nvbAgent.enabled = false;
+            acadamy.SetActive(false);
         }
         else
         {
             Debug.Log("Commencing training using mlagents");
-
-            agent.GetComponent<TestingAgent>().enabled = false;
-            agent.GetComponent<NbvAgent>().enabled = true;
-            acadamy.SetActive(false);
+            testingAgent.enabled = false;
+            nvbAgent.enabled = true;
+            acadamy.SetActive(true);
         }
-
     }
 }

@@ -1,4 +1,4 @@
-3/5/2019 4:17:39 PM
+3/6/2019 11:30:01 AM
  
 Log
 121 views created
@@ -8,6 +8,126 @@ ViewManager:.ctor(Int32, Single) (at Assets/Scripts/ViewManager.cs:20)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:69)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
 NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:14)
+
+Log
+(-0.266794, 0.000000, -0.282397)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(0.262636, 0.555284, 0.282291)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(-0.490826, -0.473121, -0.485955)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(0.468516, 0.487430, 0.468515)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(-0.306813, -0.507273, -0.213150)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(0.054266, 0.492004, 0.317861)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(-0.297631, -0.506981, -0.307586)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(0.321666, 0.495011, 0.307774)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(-0.297631, -0.506981, -0.307586)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+(0.321666, 0.495011, 0.307774)
+UnityEngine.Debug:Log(Object)
+PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
+SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
+NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
+NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
+NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
+MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
 (-0.507995, 0.000000, -0.257974)
@@ -34,7 +154,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(-0.500671, 0.000000, -0.500671)
+(-0.311228, 0.000000, -0.311228)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -46,7 +166,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(0.487139, 0.500000, 0.487139)
+(0.297696, 0.500000, 0.297696)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -58,7 +178,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(-0.442408, -0.001452, -0.229586)
+(-0.495756, -0.000863, -0.219904)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -70,7 +190,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(0.503570, 0.137660, 0.245082)
+(0.506833, 0.146035, 0.259682)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -82,7 +202,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(-0.499519, 0.000000, -0.262320)
+(-0.504041, -0.006220, -0.243849)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -94,7 +214,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(0.499035, 0.145865, 0.237454)
+(0.488984, 0.175660, 0.258711)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -106,7 +226,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(-0.490422, 0.000000, -0.259046)
+(-0.495756, -0.000863, -0.219904)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -118,7 +238,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(0.506526, 0.144318, 0.241872)
+(0.506833, 0.146035, 0.259682)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -130,7 +250,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(-0.529298, -0.451098, -0.479390)
+(-0.505881, -0.334945, -0.402517)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -142,7 +262,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(0.447880, 0.439487, 0.418830)
+(0.476405, 0.517860, 0.495390)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -154,7 +274,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(-0.500671, 0.000000, -0.500671)
+(-0.507995, 0.000000, -0.257974)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
@@ -166,127 +286,7 @@ MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
 MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 
 Log
-(0.487139, 0.500000, 0.487139)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(-0.433803, -0.460557, -0.456282)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(0.486185, 0.444442, 0.442251)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(-0.283612, -0.460273, -0.471061)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(0.478507, 0.430073, 0.428198)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(-0.283612, -0.460273, -0.471061)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(0.478507, 0.430073, 0.428198)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(-0.529298, -0.451098, -0.479390)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(0.447880, 0.439487, 0.418830)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(-0.266794, 0.000000, -0.282397)
-UnityEngine.Debug:Log(Object)
-PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:112)
-SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)
-NbvManager:ApplyAction(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:36)
-NbvManager:Action(Single[]) (at Assets/Scripts/Learning/NbvManager.cs:29)
-NbvAgent:AgentAction(Single[], String) (at Assets/Scripts/Learning/NbvAgent.cs:29)
-MLAgents.Agent:AgentStep() (at Assets/ML-Agents/Scripts/Agent.cs:1014)
-MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:589)
-MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
-
-Log
-(0.262636, 0.555284, 0.282291)
+(0.491116, 0.184503, 0.241271)
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreatePointSet(Texture2D) (at Assets/Scripts/PointCloudManager.cs:113)
 SystemInterface:RenderView(Int32) (at Assets/Scripts/SystemInterface.cs:90)

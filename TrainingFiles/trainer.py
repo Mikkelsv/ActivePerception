@@ -18,7 +18,7 @@ class Trainer:
 
         # Memory specifics
         self.buffer_size = 5000
-        self.batch_training_size = 256
+        self.batch_training_size = 1
 
         # Setup environment dependant variables
         self.default_brain = self.env.brain_names[0]
