@@ -6,12 +6,14 @@ public class RewardManager {
     private GroundTruthGenerator _gtg;
     private OccupancyGridManager _ogm;
     private StudyObjectMamanger _som;
+    private ViewManager _vm;
 
-    public RewardManager(GroundTruthGenerator gtg, OccupancyGridManager ogm, StudyObjectMamanger som)
+    public RewardManager(GroundTruthGenerator gtg, OccupancyGridManager ogm, StudyObjectMamanger som, ViewManager vm)
     {
         _gtg = gtg;
         _ogm = ogm;
         _som = som;
+        _vm = vm;
     }
 
     public float ComputeLocalIncreasedAccuracy()
@@ -25,5 +27,10 @@ public class RewardManager {
         Debug.Log(_gtg.gridCount[_som.CurrentObject()]);
         Debug.Log(_ogm.increasedOccupiedCount);
         return r;
+    }
+
+    public float ComputeDistanceReward()
+    {
+        return -_vm.distanceTravelled;
     }
 }

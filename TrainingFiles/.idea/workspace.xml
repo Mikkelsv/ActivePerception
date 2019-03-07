@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="" />
+    <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/RewardManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/RewardManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/TestingAgent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/TestingAgent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/PointCloudManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/PointCloudManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/ViewManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/ViewManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/ViewSphereGenerator.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/ViewSphereGenerator.cs.meta" beforeDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

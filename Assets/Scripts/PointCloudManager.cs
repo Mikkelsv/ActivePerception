@@ -6,7 +6,7 @@ public class PointCloudManager
 {
     private Vector3[] _viewportArray;
 
-    private float[] _angleArray;
+    //private float[] _angleArray;
 
     private float _depthSawOff;
 
@@ -24,7 +24,7 @@ public class PointCloudManager
     {
         float frustumAngle = depthCamera.fieldOfView / 2f;
         _viewportArray = CreateViewPortArray(rTex, frustumAngle);
-        _angleArray = CreateViewPortAngles(rTex, frustumAngle);
+        //_angleArray = CreateViewPortAngles(rTex, frustumAngle);
         _depthSawOff = depthSawOff;
         _depthCamera = depthCamera;
 
@@ -157,21 +157,21 @@ public class PointCloudManager
     }
 
     //Not required
-    private float[] CreateViewPortAngles(RenderTexture rTex, float frustumAngle)
-    {
-        int h = rTex.height;
-        int w = rTex.width;
-        float[] angleArray = new float[w * h];
-        for (int j = 0; j < w; j++)
-        {
-            for (int i = 0; i < h; i++)
-            {
-                float y = Mathf.Tan((j * 2f / w - 1f) * frustumAngle * Mathf.Deg2Rad);
-                float x = Mathf.Tan((i * 2f / h - 1f) * frustumAngle * Mathf.Deg2Rad);
-                Vector3 direction = new Vector3(x, y, 1.0f);
-                angleArray[j * h + i] = Vector3.Angle(direction, Vector3.forward) * Mathf.Deg2Rad;
-            }
-        }
-        return angleArray;
-    }
+    //private float[] CreateViewPortAngles(RenderTexture rTex, float frustumAngle)
+    //{
+    //    int h = rTex.height;
+    //    int w = rTex.width;
+    //    float[] angleArray = new float[w * h];
+    //    for (int j = 0; j < w; j++)
+    //    {
+    //        for (int i = 0; i < h; i++)
+    //        {
+    //            float y = Mathf.Tan((j * 2f / w - 1f) * frustumAngle * Mathf.Deg2Rad);
+    //            float x = Mathf.Tan((i * 2f / h - 1f) * frustumAngle * Mathf.Deg2Rad);
+    //            Vector3 direction = new Vector3(x, y, 1.0f);
+    //            angleArray[j * h + i] = Vector3.Angle(direction, Vector3.forward) * Mathf.Deg2Rad;
+    //        }
+    //    }
+    //    return angleArray;
+    //}
 }

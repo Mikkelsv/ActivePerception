@@ -27,7 +27,6 @@ public class MainController : MonoBehaviour
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
 
-    private Vector3 _referenceGridPosition = new Vector3(14, 0, 0);
     //Mesh Creatonr
     private Vector3 _meshPosition = new Vector3(0,0,0);
     private Vector3 _pointCloudScale = new Vector3(1, 1, 1);
@@ -60,7 +59,7 @@ public class MainController : MonoBehaviour
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         _gtg = new GroundTruthGenerator(_occupancyGridCount, _drm, _vm, _pcm, _ogm, _som);
-        _rm = new RewardManager(_gtg, _ogm, _som);
+        _rm = new RewardManager(_gtg, _ogm, _som, _vm);
 
         Vector3 v = _vm.GetView(0);
         _drm.SetCameraView(v);
@@ -105,7 +104,7 @@ public class MainController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             float[][] grids = _gtg.Grids();
-            _ogm.BuildGrid(grids[2]);
+            _ogm.BuildGrid(grids[_som.CurrentObject()]);
         }
     }
 
@@ -130,6 +129,7 @@ public class MainController : MonoBehaviour
         _ogm.UpdateGridObject();
         UnityEngine.Debug.Log("Update Grid - " + _timer.Elapsed);
         UnityEngine.Debug.Log(_rm.ComputeGlobalIncreasedAccuracy().ToString());
+        UnityEngine.Debug.Log(_rm.ComputeDistanceReward().ToString());
         _timer.Stop();
     }
 

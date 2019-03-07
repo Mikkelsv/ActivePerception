@@ -10,9 +10,11 @@ public class ViewManager{
 
     private float _viewRadius;
 
-    private List<Vector3> _views;
+    private Vector3[] _views;
+    private float[][] _viewDistances;
 
-    private int _currentView;
+    public float distanceTravelled = 0;
+    private int _currentView = 0;
     private int _viewCount;
 
     private GameObject _viewSphereObject;
@@ -22,14 +24,20 @@ public class ViewManager{
         _viewLayers = viewLayers;
         _viewRadius = viewRadius;
         _views = GenerateViews();
-        _viewCount = _views.Count;
-        _currentView = 0;
+        _viewCount = _views.Length;
+        _viewDistances = GenerateViewNeighbourhood();
     }
 
     public Vector3 SetView(int view)
     {
+        distanceTravelled = GetDistance(_currentView, view);
         _currentView = view;
         return _views[view];
+    }
+
+    public int GetCurrentViewIndex()
+    {
+        return _currentView;
     }
 
     public Vector3 GetView(int view)
@@ -67,16 +75,21 @@ public class ViewManager{
         }
     }
 
-    private List<Vector3> GenerateViews()
+    private Vector3[] GenerateViews()
     {
         HashSet<Vector3> viewsUnsorted = GenerateViewSphere();
-        List<Vector3> viewsSorted = SortViews(viewsUnsorted);
-        Debug.Log(viewsSorted.Count.ToString() + " views created");
+        Vector3[] viewsSorted = SortViews(viewsUnsorted);
+        Debug.Log(viewsSorted.Length.ToString() + " views created");
         return viewsSorted;
     }
 
     private HashSet<Vector3> GenerateViewSphere()
     {
+        /*
+        * Generates View Sphere using Lambert's projection
+        * Based on paper:
+        * D Roşca. “New uniform grids on the sphere”. In: Astronomy & Astrophysics 520 (2010), A63.
+        */
         int g = _viewLayers;
         float pi = Mathf.PI;
         float r = _viewRadius;
@@ -96,17 +109,18 @@ public class ViewManager{
                     float x = abJoint * Mathf.Cos(b * pi / (4 * a));
                     float y = abJoint * Mathf.Sin(b * pi / (4 * a));
                     float z = 2 * a * a / (pi * r) - r;
-                    if (!float.IsNaN(x))
+                    if (!float.IsNaN(x) && z<0)
                     {
-                        if (z <= -0.01f)
-                        {
-                            views.Add(new Vector3(x, -z, y));
+                        views.Add(new Vector3(x, -z, y));
+                        //if (z <= -0.01f)
+                        //{
+                            
 
-                        }
-                        else if (z <= 0f)
-                        {
-                            views.Add(new Vector3(x, 0, z));
-                        }
+                        //}
+                        //else if (z <= 0f)
+                        //{
+                        //    views.Add(new Vector3(x, 0, z));
+                        //}
                     }
                 }
                 if (Mathf.Abs(a) <= Mathf.Abs(b))
@@ -116,17 +130,18 @@ public class ViewManager{
                     float x = abJoint * Mathf.Sin(a * pi / (4 * b));
                     float y = abJoint * Mathf.Cos(a * pi / (4 * b));
                     float z = 2 * b * b / (pi * r) - r;
-                    if (!float.IsNaN(x))
+                    if (!float.IsNaN(x) && z<0)
                     {
-                        if (z <= -0.01f)
-                        {
-                            views.Add(new Vector3(x, -z, y));
+                        views.Add(new Vector3(x, -z, y));
+                        //if (z <= -0.01f)
+                        //{
+                            
 
-                        }
-                        else if (z <= 0f)
-                        {
-                            views.Add(new Vector3(x, 0, y));
-                        }
+                        //}
+                        //else if (z <= 0f)
+                        //{
+                        //    views.Add(new Vector3(x, 0, y));
+                        //}
                     }
 
                 }
@@ -136,12 +151,32 @@ public class ViewManager{
         return views;
     }
 
-    private List<Vector3> SortViews(HashSet<Vector3> views)
+    private Vector3[] SortViews(HashSet<Vector3> views)
     {
         List<Vector3> sortedViews = views.ToList();
         sortedViews = sortedViews.OrderBy(v => -v.y).ThenBy(v => v.x).ThenBy(v => -v.z).ToList();
-        return sortedViews;
+        return sortedViews.ToArray();
     }
 
-    
+    private float[][] GenerateViewNeighbourhood()
+    {
+        float[][] distances = new float[_viewCount][];
+        for(int v1 = 0; v1<_viewCount; v1++)
+        {
+            float[] v1Distances = new float[_viewCount];
+            Vector3 vector1 = _views[v1];
+            for (int v2 = 0; v2 < _viewCount; v2++)
+            {
+                float d = Vector3.Angle(vector1, _views[v2]);
+                v1Distances[v2] = d;
+            }
+            distances[v1] = v1Distances;
+        }
+        return distances;
+    }
+
+    private float GetDistance(int from, int to)
+    {
+        return _viewDistances[from][to];
+    }
 }

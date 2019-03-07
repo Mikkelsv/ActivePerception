@@ -36,8 +36,6 @@ public class SystemInterface{
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
 
-    //private Vector3 _referenceGridPosition = new Vector3(14, 0, 0);
-
     //Mesh Creatonr
     private Vector3 _meshPosition = new Vector3(0, 0, 0);
     private Vector3 _pointCloudScale = new Vector3(1, 1, 1);
@@ -97,10 +95,5 @@ public class SystemInterface{
     {
         //Compute score of last rendering
         return -1f;
-    }
-
-    public void GenerateGroundTruth()
-    {
-
     }
 }

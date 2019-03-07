@@ -16,7 +16,6 @@ public class TestingAgent : MonoBehaviour {
     [SerializeField]
     int maxEpisodes;
         
-    float nextAction = 0;
     bool nvb = true;
     int episode = 0;
 

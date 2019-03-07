@@ -29,7 +29,7 @@ public class GroundTruthGenerator
         _pcm = pcm;
         _ogm = ogm;
         _som = som;
-        Generate();
+        Generate(false);
     }
 
     public float[][] Grids()
@@ -55,7 +55,6 @@ public class GroundTruthGenerator
 
     public float[][] Build()
     {
-        int gridLength = _gridSize * _gridSize * _gridSize;
         float[][] grids = new float[_som.Count()][];
         gridCount = new int[_som.Count()];
 
