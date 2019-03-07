@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -36,10 +37,15 @@ public class ViewManager{
         return _views[view];
     }
 
-    public Vector3 GetNeighbouringView(int increment = 1)
+    public Vector3 SetNeighbouringView(int increment = 1)
     {
         _currentView = (_currentView + increment)%_viewCount;
         return _views[_currentView];
+    }
+
+    public int Count()
+    {
+        return _viewCount;
     }
 
     public void BuildSphere(Vector3 position)

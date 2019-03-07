@@ -22,7 +22,7 @@ public class PointCloudManager
 
     public PointCloudManager(RenderTexture rTex, float depthSawOff, Camera depthCamera)
     {
-        float frustumAngle = depthCamera.fieldOfView/2f;
+        float frustumAngle = depthCamera.fieldOfView / 2f;
         _viewportArray = CreateViewPortArray(rTex, frustumAngle);
         _angleArray = CreateViewPortAngles(rTex, frustumAngle);
         _depthSawOff = depthSawOff;
@@ -81,7 +81,7 @@ public class PointCloudManager
     {
         int w = tex.width;
         int h = tex.height;
-      
+
         Color[] colors = tex.GetPixels();
 
         Matrix4x4 cameraRotationMatrix = GetCameraRotationMatrix(_depthCamera);
@@ -133,7 +133,7 @@ public class PointCloudManager
     }
 
     public void BuildPointCloudObjectFromCloud(Vector3 position, HashSet<Vector3> pointCloud, Vector3 scale)
-    { 
+    {
         GameObject pointCloudObject = new GameObject();
         pointCloudObject.name = "PointCloudRepresentation";
         pointCloudObject.transform.position = position;

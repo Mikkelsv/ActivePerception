@@ -98,4 +98,9 @@ public class SystemInterface{
         //Compute score of last rendering
         return -1f;
     }
+
+    public void GenerateGroundTruth()
+    {
+
+    }
 }

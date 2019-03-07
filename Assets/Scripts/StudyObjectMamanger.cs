@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class StudyObjectMamanger{
+public class StudyObjectMamanger
+{
 
     private GameObject[] _studyObjects;
     private GameObject _studyObject;
@@ -32,7 +33,7 @@ public class StudyObjectMamanger{
 
     public void PrepareNextStudyObject()
     {
-        PrepareStudyObject((_studyObjectIndex + 1)%_countObjects);
+        PrepareStudyObject((_studyObjectIndex + 1) % _countObjects);
     }
 
     public void PrepareStudyObject(int i)
@@ -42,6 +43,16 @@ public class StudyObjectMamanger{
         _studyObject = _studyObjects[i];
         _studyObject.SetActive(true);
         _studyObject.transform.position = _objectPosition;
+    }
+
+    public int Count()
+    {
+        return _countObjects;
+    }
+
+    public int CurrentObject()
+    {
+        return _studyObjectIndex;
     }
 
     private void RemoveStudyObject()
@@ -55,16 +66,16 @@ public class StudyObjectMamanger{
 
     private void LoadStudyObjects()
     {
-        
+
         _studyObjectsManager = new GameObject("StudyObjectsManager");
         _studyObjectsManager.transform.position = _position;
         GameObject[] modelPrefabs = Resources.LoadAll("Models", typeof(GameObject)).Cast<GameObject>().ToArray();
         _studyObjects = new GameObject[modelPrefabs.Length];
 
         int i = 0;
-        foreach(GameObject g in modelPrefabs)
+        foreach (GameObject g in modelPrefabs)
         {
-            GameObject studyObject = GameObject.Instantiate(g,_studyObjectsManager.transform);
+            GameObject studyObject = GameObject.Instantiate(g, _studyObjectsManager.transform);
 
             Vector3 boundaries = studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size;
             studyObject.transform.localScale = Vector3.one / GetMaxElement(boundaries);

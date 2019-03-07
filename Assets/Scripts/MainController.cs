@@ -9,7 +9,6 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private Camera _depthCamera;
 
-    private float _objectSize = 2f;
     private Vector3 _objectPosition = new Vector3(0, 0, 0);
 
     //Depth Camera Settings
@@ -23,7 +22,7 @@ public class MainController : MonoBehaviour
     private float _sphereRadius = 1.8f;   
 
     //Occupancy Grid Settings
-    private int _occupancyGridCount = 64;
+    private int _occupancyGridCount = 32;
     private float _studyGridSize = 1.2f;
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
@@ -38,18 +37,15 @@ public class MainController : MonoBehaviour
     private Stopwatch _timer;
 
     private PointCloudManager _pcm;
-
     private OccupancyGridManager _ogm;
-
     private DepthRenderingManager _drm;
-
     private StudyObjectMamanger _som;
-
     private ViewManager _vm;
+    private GroundTruthGenerator _gtg;
+    private RewardManager _rm;
 
     private List<Vector3> _views;
 
-    private int _viewIndex = 0;
 
     private void Start()
     {
@@ -63,6 +59,8 @@ public class MainController : MonoBehaviour
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
+        _gtg = new GroundTruthGenerator(_occupancyGridCount, _drm, _vm, _pcm, _ogm, _som);
+        _rm = new RewardManager(_gtg, _ogm, _som);
 
         Vector3 v = _vm.GetView(0);
         _drm.SetCameraView(v);
@@ -87,12 +85,12 @@ public class MainController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.I))
         {
-            Vector3 v = _vm.GetNeighbouringView();
+            Vector3 v = _vm.SetNeighbouringView();
             _drm.SetCameraView(v);
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
-            Vector3 v = _vm.GetNeighbouringView(10);
+            Vector3 v = _vm.SetNeighbouringView(10);
             _drm.SetCameraView(v);
         }
         if (Input.GetKeyDown(KeyCode.X))
@@ -102,9 +100,13 @@ public class MainController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E))
         {
             _som.PrepareNextStudyObject();
+            _ogm.ClearGrid();
         }
-
-
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            float[][] grids = _gtg.Grids();
+            _ogm.BuildGrid(grids[2]);
+        }
     }
 
     private void RenderView()
@@ -127,6 +129,7 @@ public class MainController : MonoBehaviour
         UnityEngine.Debug.Log("Add to occupancy grid - " + _timer.Elapsed);
         _ogm.UpdateGridObject();
         UnityEngine.Debug.Log("Update Grid - " + _timer.Elapsed);
+        UnityEngine.Debug.Log(_rm.ComputeGlobalIncreasedAccuracy().ToString());
         _timer.Stop();
     }
 

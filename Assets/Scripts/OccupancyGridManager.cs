@@ -24,6 +24,9 @@ public class OccupancyGridManager {
 
     private float _gridSizeRelaxed;
 
+    public int occupiedCount;
+    public int increasedOccupiedCount;
+
     public OccupancyGridManager(int g, float gridSize, Vector3 position)
     {
       
@@ -53,6 +56,7 @@ public class OccupancyGridManager {
         _grid = new int[_gridCountCubed];
         _occupancyGrid = new float[_gridCountCubed];
         _builtGrid = new bool[_gridCountCubed];
+        occupiedCount = 0;
     }
 
     public float[] GetGrid()
@@ -63,12 +67,19 @@ public class OccupancyGridManager {
 
     public void AddPoints(HashSet<Vector3> points)
     {
+        increasedOccupiedCount = 0;
         int[] newPoints = GenerateNewGrid(points);
         
         for(int i=0; i<_grid.Length; i++)
         {
             _grid[i] += newPoints[i];
+            if (newPoints[i] > 0 && _occupancyGrid[i] == 0)
+            {
+                _occupancyGrid[i] = 1f;
+                increasedOccupiedCount++;
+            }
         }
+        occupiedCount += increasedOccupiedCount;
     }
 
     public void UpdateGridObject()
@@ -98,6 +109,34 @@ public class OccupancyGridManager {
                 }
             }
         }
+    }
+
+    public void BuildGrid(float[] grid)
+    {
+        Vector3 scale = new Vector3(_gridSize / _gridCount, _gridSize / _gridCount, _gridSize / _gridCount);
+        for (int z = 0; z < _gridCount; z++)
+        {
+            for (int y = 0; y < _gridCount; y++)
+            {
+                for (int x = 0; x < _gridCount; x++)
+                {
+                    int i = z * _gridCount * _gridCount + y * _gridCount + x;
+                    if (grid[i] > 0)
+                    {
+
+                        GameObject c = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        c.transform.parent = _gridObject.transform;
+
+                        Vector3 pointPosition = new Vector3(x - _gridCount / 2f, y - _gridCount / 2f, z - _gridCount / 2f);
+                        c.transform.localPosition = Vector3.Scale(pointPosition, scale);
+                        c.transform.localScale = scale;
+
+                        c.name = x.ToString() + "-" + y.ToString() + "-" + z.ToString();
+                    }
+                }
+            }
+        }
+
     }
 
     public void GenerateExampleGrid(Vector3 position)
@@ -139,12 +178,10 @@ public class OccupancyGridManager {
             z = Mathf.FloorToInt(p.z * _inverseGridScale) * _gridCountSquared;
             i = x + y + z;
             grid[i] += 1;
-            _occupancyGrid[i] = 1f;
         }
         return grid;
     }
 
-   
 
     private void UpdateGrid(HashSet<Vector3> pointCloud)
     {
