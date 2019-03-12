@@ -1,5 +1,6 @@
 import tensorflow as tf
 from tensorflow.python.keras import layers
+from tensorflow.python.keras._impl.keras.engine import Model
 
 
 class ModelManager:
@@ -15,7 +16,7 @@ class ModelManager:
         if load:
             self.model = self.load_model()
         else:
-            self.model = self.generate_model()
+            self.model = self.generate_conv_model()
 
     def get_model(self):
         return self.model
@@ -34,44 +35,33 @@ class ModelManager:
             print("TF Keras version: " + tf.keras.__version__)
 
         inputs = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
-        n1 = tf.keras.layers.Dense(1000, activation="relu", name="hidden_layer_1")(inputs)
-        n2 = tf.keras.layers.Dense(1028, activation="relu", name="hidden_layer_2")(n1)
+        n1 = tf.keras.layers.Dense(200, activation="relu", name="hidden_layer_1")(inputs)
 
         outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(n1)
 
         self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
 
-        self._compile_model()
+        self.compile_model()
 
         print("New Model Generated")
         print("Using Learning Rate: {}".format(self.learning_rate))
         print(self.model.summary())
         return self.model
 
-    def generate_ball_model(self, print_version=True):
-        """
-            Generates cumstome made models specific for slam ball implementation, thus lacking in generatlization.
-            Notice naming of 'observation' inputlayer and 'actions' output layer
-        :param print_version: Print TF keras version number
-        :param num_input: Number of inputs (observations) in model
-        :param num_output: Number of outputs (action predictions) in model
-        :return: TensorFlow Model
-        """
-        if print_version:
-            print("TensorFlow version: " + tf.VERSION)
-            print("TF Keras version: " + tf.keras.__version__)
-
-        inputs = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
-        n1 = tf.keras.layers.Dense(6, activation="relu", name="hidden_layer_1")(inputs)
-        n2 = tf.keras.layers.Dense(1028, activation="relu", name="hidden_layer_2")(n1)
-
-        outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(n1)
+    def generate_conv_model(self):
+        inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
+        c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
+        c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
+        pool = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), name="pooling_layer")(c2)
+        flatten = tf.keras.layers.Flatten()(pool)
+        fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(flatten)
+        outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(fc1)
 
         self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
 
-        self._compile_model()
+        self.compile_model()
 
-        print("New Model Generated")
+        print("New Convolutional Model Generated")
         print("Using Learning Rate: {}".format(self.learning_rate))
         print(self.model.summary())
         return self.model
@@ -114,7 +104,7 @@ class ModelManager:
             frozen_graph = tf.graph_util.convert_variables_to_constants(
                 session, input_graph_def, output_names, freeze_var_names)
 
-        tf.train.write_graph(frozen_graph, "",self.folder + name + ".bytes", as_text=False)
+        tf.train.write_graph(frozen_graph, "", self.folder + name + ".bytes", as_text=False)
         print("Model saved as " + self.folder + name)
 
     def load_model(self, model_name=""):
@@ -123,12 +113,12 @@ class ModelManager:
         loaded_model = tf.keras.models.load_model(self.folder + model_name + ".h5")
         self.model = loaded_model
 
-        self._compile_model()
+        self.compile_model()
 
         print("Loaded Model -" + model_name + ".h5- from " + self.folder)
         return self.model
 
-    def _compile_model(self):
+    def compile_model(self):
         self.model.compile(optimizer=tf.train.AdamOptimizer(self.learning_rate),
                            loss='categorical_crossentropy',
                            metrics=['accuracy'])

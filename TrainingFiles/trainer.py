@@ -18,16 +18,18 @@ class Trainer:
 
         # Memory specifics
         self.buffer_size = 5000
-        self.batch_training_size = 1
+        self.batch_training_size = 32
 
         # Setup environment dependant variables
         self.default_brain = self.env.brain_names[0]
         env_info = self.env.reset(train_mode=False)[self.default_brain]
-        self.num_observations = len(env_info.vector_observations[0])
+
+        # self.observation_shape = len(env_info.vector_observations[0])
+        self.observation_shape = (32, 32, 32, 1)
         self.num_actions = len(env_info.action_masks[0])
 
         # Init Memory
-        self.memory = Memory(self.num_observations, self.num_actions, self.buffer_size)
+        self.memory = Memory(self.observation_shape, self.num_actions, self.buffer_size)
 
         # Runtime variables
         self.step_count = 0
@@ -46,14 +48,6 @@ class Trainer:
         self.duration_training = [0, 0]
         self.duration_environment = [0, 0]
         self.duration_selecting_action = [0, 0]
-
-    def generate_test_cases(self, num_test_cases):
-        observations = np.zeros((num_test_cases, self.num_observations))
-        for i in range(num_test_cases):
-            env_info = self.env.reset(train_mode=False)[self.default_brain]
-            observation = env_info.vector_observations
-            observations[i, :] = observation[:]
-        self.test_cases = observations
 
     def train(self, num_generations=1, num_batches=1, batch_size=1, test_size=10):
         """
@@ -107,7 +101,7 @@ class Trainer:
         :param stochastic: Use stochastic action generation based on exploration rate
         :return: Steps in episode, Mean Reward of episode
         """
-        observations = np.empty(0).reshape(0, self.num_observations)
+        observations = np.empty(0).reshape((0,) + self.observation_shape)
         actions = np.empty(0).reshape(0, self.num_actions)
         rewards = np.empty(0).reshape(0, 1)
         steps = 0
@@ -115,6 +109,7 @@ class Trainer:
         while True:
             steps += 1
             observation = env_info.vector_observations
+            observation = self.reshape_input(observation)
 
             action, action_indexed = self._get_action(observation, stochastic)
 
@@ -215,6 +210,10 @@ class Trainer:
     @staticmethod
     def get_time_keeper_average(keeper):
         return keeper[0] / keeper[1]
+
+    @staticmethod
+    def reshape_input(input):
+        return input.reshape((-1, 32, 32, 32, 1))
 
 
 def main():

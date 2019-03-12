@@ -23,7 +23,7 @@ def main():
 
     # Train
     trainer = Trainer(model, env)
-    trainer.train(1, 1, 1, 1)
+    trainer.train(2, 5, 5, 5)
     trainer.print_summary()
 
     # Close environment
