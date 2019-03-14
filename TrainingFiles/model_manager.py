@@ -63,7 +63,7 @@ class ModelManager:
 
         print("New Convolutional Model Generated")
         print("Using Learning Rate: {}".format(self.learning_rate))
-        print(self.model.summary())
+        self.model.summary()
         return self.model
 
     def save_model(self, name="", keep_var_names=None, clear_devices=True):

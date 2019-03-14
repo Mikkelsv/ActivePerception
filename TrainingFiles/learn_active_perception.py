@@ -2,12 +2,12 @@ from mlagents.envs import UnityEnvironment
 
 from model_manager import ModelManager
 from trainer import Trainer
-
+from synopsis_manager import SynopsisManager
 
 def main():
     # env_name = "../envs/3DBall"  # Name of the Unity environment binary to launch
     env_name = "Env/ActivePerception"
-    env = UnityEnvironment(file_name=None, worker_id=0, seed=1)  # Add seed=n for consistent results
+    env = UnityEnvironment(file_name=env_name, worker_id=0, seed=1)  # Add seed=n for consistent results
 
     # Investigate environment
     default_brain = env.brain_names[0]
@@ -23,8 +23,9 @@ def main():
 
     # Train
     trainer = Trainer(model, env)
-    trainer.train(2, 5, 5, 5)
-    trainer.print_summary()
+    synopsis = SynopsisManager(trainer)
+    trainer.train(2, 2, 5, 5)
+    synopsis.print_training_summary()
 
     # Close environment
     env.close()

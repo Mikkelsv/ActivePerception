@@ -5,6 +5,7 @@ import random
 import time
 
 from memory import Memory
+from synopsis_manager import SynopsisManager
 
 
 class Trainer:
@@ -42,6 +43,7 @@ class Trainer:
         self.test_cases = np.empty(0)
         self.num_tests = 0
         self.generation_size = 0
+        self.num_episodes = 0
 
         # Timekeeping variables
         self.duration_total = 0
@@ -49,33 +51,37 @@ class Trainer:
         self.duration_environment = [0, 0]
         self.duration_selecting_action = [0, 0]
 
-    def train(self, num_generations=1, num_batches=1, batch_size=1, test_size=10):
+        self.sm: SynopsisManager = None
+        self.generation_reward = []
+
+    def set_synopsis_manager(self, sm: SynopsisManager):
+        self.sm = sm
+
+    def train(self, num_generations=1, num_batches=1, batch_size=1, num_tests=10):
         """
             Trains the trainer using environment and model
         :param num_generations: Number of generations
         :param num_batches: Number of training batches in each generation
         :param batch_size: Number of episodes in each batch
-        :param test_size: Number of episodes in each generation test
+        :param num_tests: Number of episodes in each generation test
         """
-        self.num_tests = test_size
+        self.num_tests = num_tests
         self.num_generations = num_generations
         self.num_batches = num_batches
         self.batch_size = batch_size
 
-        num_episodes = num_generations * num_batches * batch_size
+        self.num_episodes = num_generations * num_batches * batch_size
         self.generation_size = batch_size * num_batches
+
+        self.sm.print_training_config()
 
         steps = 0
         episode = 0
         generation = 1
 
-        print("Commencing Training - {} generations, {} batches, {} episodes, {} tests"
-              .format(num_generations, num_batches, batch_size, test_size))
-        print("\t - In total {} training episodes".format(num_episodes))
-        print("Memory - {} buffer size, {} batch training size".format(self.buffer_size, self.batch_training_size))
         self.duration_total = time.time()
         self.generation_time_stamp = time.time()
-        while episode < num_episodes:
+        while episode < self.num_episodes:
             episode += 1
             steps += self.run_episode()[0]
 
@@ -146,8 +152,17 @@ class Trainer:
         dur = self._get_generation_duration()
         avg_steps = steps / self.generation_size
         avg_step_duration = dur / steps
-        print("Gen {}\t Avg Reward: {:.2f}, Duration {:.1f}s, SpE {:.1f}, DpS: {:.04f}s"
-              .format(generation, avg_reward, dur, avg_steps, avg_step_duration))
+        self.generation_reward.append((avg_reward, avg_steps))
+        self.sm.write("Gen {}\t Avg Reward: {:.2f}, Duration {:.1f}s, SpE {:.1f}, DpS: {:.04f}s"
+                      .format(generation, avg_reward, dur, avg_steps, avg_step_duration))
+
+    def evaluate_solution(self, num_runs):
+        rewards = np.zeros(num_runs)
+        for i in range(self.num_tests):
+            s, t = self.run_episode(False, False)
+            rewards[i] = t
+        self.sm.print_evaulation(num_runs, np.mean(rewards), np.std(rewards))
+
 
     def get_model(self):
         return self.model
@@ -187,33 +202,14 @@ class Trainer:
         self.generation_time_stamp = generation_end_time
         return dur
 
-    def print_summary(self):
-        avg_duration_env = self.get_time_keeper_average(self.duration_environment)
-        avg_duration_training = self.get_time_keeper_average(self.duration_training)
-        avg_duration_action = self.get_time_keeper_average(self.duration_selecting_action)
-        print("\n----------Training Summary-------------")
-        print("Time Durations")
-        print("Total Training Time: {:.1f}s".format(self.duration_total))
-        print("Interacting with Environment: {:.2f} - Average {:.4f}s"
-              .format(self.duration_environment[0], avg_duration_env))
-        print("Training Model: {:.2f} - Average {:.4f}s"
-              .format(self.duration_training[0], avg_duration_training))
-        print("Selecting Action: {:.2f} - Average{:.4f}s"
-              .format(self.duration_selecting_action[0], avg_duration_action))
-        print("-----------------------------------------")
-
     @staticmethod
     def update_time_keeper(keeper, duration):
         keeper[0] += duration
         keeper[1] += 1
 
     @staticmethod
-    def get_time_keeper_average(keeper):
-        return keeper[0] / keeper[1]
-
-    @staticmethod
-    def reshape_input(input):
-        return input.reshape((-1, 32, 32, 32, 1))
+    def reshape_input(observations):
+        return observations.reshape((-1, 32, 32, 32, 1))
 
 
 def main():
@@ -248,7 +244,8 @@ def main():
     # Train
     trainer = Trainer(model, env)
     trainer.train(10, 10, 10, 10)
-    trainer.print_summary()
+    trainer.evaluate_solution(20)
+
 
     # Close environment
     env.close()
