@@ -1,6 +1,8 @@
 import tensorflow as tf
-from tensorflow.python.keras import layers
-from tensorflow.python.keras._impl.keras.engine import Model
+import os
+# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+# from tensorflow.python.keras import layers
+# from tensorflow.python.keras._impl.keras.engine import Model
 
 
 class ModelManager:
@@ -49,6 +51,9 @@ class ModelManager:
         return self.model
 
     def generate_conv_model(self):
+        print("TensorFlow version: " + tf.VERSION)
+        print("TF Keras version: " + tf.keras.__version__)
+
         inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
         c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)

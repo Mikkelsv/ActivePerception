@@ -106,6 +106,7 @@ Assets/Resources/TrainedPolicies/*
 TrainingFiles/Env/*
 TrainingFiles/Models/*
 TrainingFiles/Summaries/*
+TrainingFiles/mlagents/*
 
 Library/
 
