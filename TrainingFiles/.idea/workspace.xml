@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Assets/Scenes/SampleScene/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scenes/SampleScene/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvAgent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvAgent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/UnitySDK.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learn_active_perception.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn_active_perception.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/../UnitySDK.log" afterDir="false" />
-    </list>
+    <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -298,7 +288,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.23772408" />
-      <window_info active="true" anchor="bottom" x="1292" y="485" width="1256" height="436" id="Run" order="2" visible="true" weight="0.3289166" />
+      <window_info anchor="bottom" x="1292" y="485" width="1256" height="436" id="Run" order="2" weight="0.3289166" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3990647" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
