@@ -1,0 +1,6 @@
+defaultRun
+
+-------------------- Training --------------------
+1 generations, 5 batches, 5 episodes, 10 tests
+	 - In total 25 training episodes
+Memory - 1000 buffer size, 32 batch training size

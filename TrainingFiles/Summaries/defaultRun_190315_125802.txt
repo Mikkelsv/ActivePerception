@@ -1,0 +1,7 @@
+defaultRun
+
+-------------------- Training --------------------
+2 generations, 5 batches, 5 episodes, 20 tests
+	 - In total 50 training episodes
+Memory - 1000 buffer size, 32 batch training size
+Gen 1	 Avg Reward: 0.00, Duration 102.7s, SpE 19.9, DpS: 0.2067s

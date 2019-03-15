@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class RuntimeController : MonoBehaviour {
     [SerializeField]
+    bool enable;
+
+    [SerializeField]
     GameObject agent;
 
     [SerializeField]
@@ -20,21 +23,33 @@ public class RuntimeController : MonoBehaviour {
     {
         var nvbAgent = agent.GetComponent<NbvAgent>();
         var testingAgent = agent.GetComponent<TestingAgent>();
-
-        if (testWithModel)
+        var mainController = this.GetComponent<MainController>();
+        if (enable)
         {
-            Debug.Log("Testing environment with model");
-            testingAgent.model = model;
-            testingAgent.enabled = true;
-            nvbAgent.enabled = false;
-            acadamy.SetActive(false);
+            mainController.enabled = false;
+            if (testWithModel)
+            {
+                Debug.Log("Testing environment with model");
+                testingAgent.model = model;
+                testingAgent.enabled = true;
+                nvbAgent.enabled = false;
+                acadamy.SetActive(false);
+            }
+            else
+            {
+                Debug.Log("Commencing training using mlagents");
+                testingAgent.enabled = false;
+                nvbAgent.enabled = true;
+                acadamy.SetActive(true);
+            }
         }
         else
         {
-            Debug.Log("Commencing training using mlagents");
+            Debug.Log("Test environment as user");
+            mainController.enabled = true;
+            nvbAgent.enabled = false;
             testingAgent.enabled = false;
-            nvbAgent.enabled = true;
-            acadamy.SetActive(true);
+            acadamy.SetActive(false);
         }
     }
 }

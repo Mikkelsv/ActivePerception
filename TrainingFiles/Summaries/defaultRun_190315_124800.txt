@@ -1,0 +1,15 @@
+defaultRun
+
+-------------------- Training --------------------
+2 generations, 2 batches, 5 episodes, 5 tests
+	 - In total 20 training episodes
+Memory - 5000 buffer size, 32 batch training size
+Gen 1	 Avg Reward: -0.00, Duration 26.9s, SpE 3.0, DpS: 0.8958s
+Gen 2	 Avg Reward: 0.00, Duration 25.7s, SpE 3.0, DpS: 0.8556s
+
+-------------------- Training Summary --------------------
+Time Durations
+Total Training Time: 52.5s
+Interacting with Environment: 3.77 - Average 0.0419s
+Training Model: 44.92 - Average 11.2297s
+Selecting Action: 0.62 - Average0.0124s

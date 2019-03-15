@@ -9,6 +9,12 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private Camera _depthCamera;
 
+    [SerializeField]
+    private int _setView;
+
+    [SerializeField]
+    private int _compareViewWith;
+
     private Vector3 _objectPosition = new Vector3(0, 0, 0);
 
     //Depth Camera Settings
@@ -58,7 +64,7 @@ public class MainController : MonoBehaviour
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
-        _gtg = new GroundTruthGenerator(_occupancyGridCount, _drm, _vm, _pcm, _ogm, _som);
+        _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
         _rm = new RewardManager(_gtg, _ogm, _som, _vm);
 
         Vector3 v = _vm.GetView(0);
@@ -105,6 +111,15 @@ public class MainController : MonoBehaviour
         {
             float[][] grids = _gtg.Grids();
             _ogm.BuildGrid(grids[_som.CurrentObject()]);
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Vector3 v = _vm.SetView(_setView);
+            _drm.SetCameraView(v);
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            UnityEngine.Debug.Log(_vm.GetDistance(_vm.GetCurrentViewIndex(), _compareViewWith).ToString());
         }
     }
 

@@ -8,7 +8,6 @@ public class GroundTruthGenerator
 {
     private readonly string _path = "TrainingFiles/OccupancyGrids/saved_occupancy_grids.txt";
 
-    private int _gridSize;
     private DepthRenderingManager _drm;
     private ViewManager _vm;
     private PointCloudManager _pcm;
@@ -17,18 +16,22 @@ public class GroundTruthGenerator
     private Texture2D _currentRendering;
 
     public float[][] _grids;
+    
     public int[] gridCount;
 
+    public int[] requiredCount;
+    private float _requiredAccuracy;
 
 
-    public GroundTruthGenerator(int gridSize, DepthRenderingManager drm, ViewManager vm, PointCloudManager pcm, OccupancyGridManager ogm, StudyObjectMamanger som)
+
+    public GroundTruthGenerator(DepthRenderingManager drm, ViewManager vm, PointCloudManager pcm, OccupancyGridManager ogm, StudyObjectMamanger som, float requiredAccuracy = 0.99f)
     {
-        _gridSize = gridSize;
         _drm = drm;
         _vm = vm;
         _pcm = pcm;
         _ogm = ogm;
         _som = som;
+        _requiredAccuracy = requiredAccuracy;
         Generate(false);
     }
 
@@ -50,13 +53,13 @@ public class GroundTruthGenerator
                 Save();
             }
         }
+        CountGrids();
         return _grids;
     }
 
     public float[][] Build()
     {
         float[][] grids = new float[_som.Count()][];
-        gridCount = new int[_som.Count()];
 
         for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
         {
@@ -65,12 +68,23 @@ public class GroundTruthGenerator
             RenderAllViews();
             float[] g = _ogm.GetGrid();
             grids[objectIndex] = g;
-            gridCount[objectIndex] = CountGrid(g);
         }
         _grids = grids;
         Debug.Log("Generated grids of " + _som.Count() + " objects");
         _ogm.ClearGrid();
         return grids;
+    }
+
+    private void CountGrids()
+    {
+        gridCount = new int[_som.Count()];
+        requiredCount = new int[_som.Count()];
+
+        for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
+        {
+            gridCount[objectIndex] = CountGrid(_grids[objectIndex]);
+            requiredCount[objectIndex] = (int)(gridCount[objectIndex] * _requiredAccuracy);
+        }
     }
 
 
@@ -130,6 +144,7 @@ public class GroundTruthGenerator
         }
         return count;
     }
+    
 
     
 }

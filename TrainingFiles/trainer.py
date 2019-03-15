@@ -18,7 +18,7 @@ class Trainer:
         self.gamma = 0.9  # Future reward discount
 
         # Memory specifics
-        self.buffer_size = 5000
+        self.buffer_size = 1000
         self.batch_training_size = 32
 
         # Setup environment dependant variables
@@ -153,12 +153,12 @@ class Trainer:
         avg_steps = steps / self.generation_size
         avg_step_duration = dur / steps
         self.generation_reward.append((avg_reward, avg_steps))
-        self.sm.write("Gen {}\t Avg Reward: {:.2f}, Duration {:.1f}s, SpE {:.1f}, DpS: {:.04f}s"
+        self.sm.write("Gen {}\t Avg Reward: {:.3f}, Duration {:.1f}s, SpE {:.1f}, DpS: {:.04f}s"
                       .format(generation, avg_reward, dur, avg_steps, avg_step_duration))
 
     def evaluate_solution(self, num_runs):
         rewards = np.zeros(num_runs)
-        for i in range(self.num_tests):
+        for i in range(num_runs):
             s, t = self.run_episode(False, False)
             rewards[i] = t
         self.sm.print_evaulation(num_runs, np.mean(rewards), np.std(rewards))

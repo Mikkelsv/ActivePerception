@@ -197,7 +197,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 400562734}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 41a69440746111949be72f1975f91b59, type: 3}
   m_Name: 
@@ -721,6 +721,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07ba85a99109ef4bbbd316557ed5911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enable: 1
   agent: {fileID: 1120863360}
   acadamy: {fileID: 400562734}
   testWithModel: 0
@@ -751,6 +752,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _depthCamera: {fileID: 830364732}
+  _setView: 0
+  _compareViewWith: 0
 --- !u!1001 &1673880014
 Prefab:
   m_ObjectHideFlags: 0

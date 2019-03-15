@@ -26,9 +26,7 @@ public class TestingAgent : MonoBehaviour {
     private NbvManager _ball;
     private int _currentStep = 0;
     private float _currentReward;
-
-    bool log = true;
-
+    
     TFGraph graph;
 
     // Use this for initialization
@@ -59,7 +57,7 @@ public class TestingAgent : MonoBehaviour {
             float[] actions = ComputeAction(_ball.CollectObservations());
             Evaluate(actions);
 
-            if (_currentStep > 3)
+            if (_currentStep > maxEpisodes)
             {
                 Debug.Log("Accumulated Reward: " + _currentReward);
                 _currentReward = 0;

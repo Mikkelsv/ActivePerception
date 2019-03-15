@@ -175,7 +175,7 @@ public class ViewManager{
         return distances;
     }
 
-    private float GetDistance(int from, int to)
+    public float GetDistance(int from, int to)
     {
         return _viewDistances[from][to];
     }

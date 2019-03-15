@@ -16,7 +16,6 @@ public class PointCloudManager
 
     private HashSet<Vector3> _pointCloud = new HashSet<Vector3>();
 
-    private float _nearPlane;
     private float _farPlane;
     private float _viewFrustumDistance;
 
@@ -28,7 +27,6 @@ public class PointCloudManager
         _depthSawOff = depthSawOff;
         _depthCamera = depthCamera;
 
-        _nearPlane = _depthCamera.nearClipPlane;
         _farPlane = _depthCamera.farClipPlane;
         _viewFrustumDistance = _farPlane;
 

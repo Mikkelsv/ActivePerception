@@ -16,6 +16,13 @@ public class RewardManager {
         _vm = vm;
     }
 
+    public float ComputeReward()
+    {
+        // Casted to 0-1 using Sidmoid function
+        float r = ComputeDistanceReward() + ComputeGlobalIncreasedAccuracy();
+        return Sigmoid(r);
+    }
+
     public float ComputeLocalIncreasedAccuracy()
     {
         return 1f;
@@ -23,14 +30,24 @@ public class RewardManager {
 
     public float ComputeGlobalIncreasedAccuracy()
     {
-        float r = _ogm.increasedOccupiedCount*1f / _gtg.gridCount[_som.CurrentObject()];
-        Debug.Log(_gtg.gridCount[_som.CurrentObject()]);
-        Debug.Log(_ogm.increasedOccupiedCount);
-        return r;
+        int prediscovered = _ogm.increasedOccupiedCount - _ogm.increasedOccupiedCount;
+        int undiscovered = _gtg.gridCount[_som.CurrentObject()] - prediscovered;
+        float increasedAccuracy = _ogm.increasedOccupiedCount * 1f / undiscovered;
+        return increasedAccuracy;
     }
 
     public float ComputeDistanceReward()
     {
-        return -_vm.distanceTravelled;
+        return -_vm.distanceTravelled / 180f;
+    }
+
+    public bool DetermineDone()
+    {
+        return _ogm.occupiedCount > _gtg.requiredCount[_som.CurrentObject()];
+    }
+
+    public static float Sigmoid(double value)
+    {
+        return 1.0f / (1.0f + (float)System.Math.Exp(-value));
     }
 }

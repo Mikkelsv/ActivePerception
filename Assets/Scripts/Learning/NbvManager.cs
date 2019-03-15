@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class NbvManager
 {
-    public int maxStep = 2;
+    public int maxStep = 20;
     private int _currentStep = 0;
     private SystemInterface _si;
 
@@ -44,8 +44,9 @@ public class NbvManager
 
         bool done = false;
         float reward = _si.GetScore();
+        Debug.Log(reward.ToString());
 
-        if (_currentStep > maxStep)
+        if (_currentStep > maxStep || _si.GetDoneOnAccuracy())
         {
             done = true;
         }

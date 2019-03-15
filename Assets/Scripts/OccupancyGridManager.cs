@@ -22,8 +22,6 @@ public class OccupancyGridManager {
     private int _gridCountSquared;
     private int _gridCountCubed;
 
-    private float _gridSizeRelaxed;
-
     public int occupiedCount;
     public int increasedOccupiedCount;
 
@@ -43,7 +41,6 @@ public class OccupancyGridManager {
         _gridSize = gridSize;
         _gridCount = g;
         _alignVector = Vector3.one * _gridSize / 2;
-        _gridSizeRelaxed = _gridSize / 2f * 1.1f;
 
         _inverseGridScale = _gridCount / _gridSize;
 
@@ -188,22 +185,6 @@ public class OccupancyGridManager {
         foreach (Vector3 p0 in pointCloud)
         {
             Vector3 p = p0 + _alignVector;
-            int x = Mathf.FloorToInt(p.x * _inverseGridScale);
-            int y = Mathf.FloorToInt(p.y * _inverseGridScale) * _gridCount;
-            int z = Mathf.FloorToInt(p.z * _inverseGridScale) * _gridCountSquared;
-            _grid[x + y + z] += 1;
-        }
-    }
-
-    private void UpdateGridWithRelaxation(HashSet<Vector3> pointCloud)
-    {
-        foreach (Vector3 p0 in pointCloud)
-        {
-            Vector3 p = p0 + _alignVector;
-            //if (Mathf.Abs(p.x) < _gridSizeRelaxed &&)
-            //{
-            //    AudioHighPassFilter;
-            //}
             int x = Mathf.FloorToInt(p.x * _inverseGridScale);
             int y = Mathf.FloorToInt(p.y * _inverseGridScale) * _gridCount;
             int z = Mathf.FloorToInt(p.z * _inverseGridScale) * _gridCountSquared;
