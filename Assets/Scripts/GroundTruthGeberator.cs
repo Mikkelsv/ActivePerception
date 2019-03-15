@@ -26,13 +26,14 @@ public class GroundTruthGenerator
 
     public GroundTruthGenerator(DepthRenderingManager drm, ViewManager vm, PointCloudManager pcm, OccupancyGridManager ogm, StudyObjectMamanger som, float requiredAccuracy = 0.99f)
     {
+        // Save function messes up executable file, must make due without it
         _drm = drm;
         _vm = vm;
         _pcm = pcm;
         _ogm = ogm;
         _som = som;
         _requiredAccuracy = requiredAccuracy;
-        Generate(false);
+        Generate(false, false);
     }
 
     public float[][] Grids()
@@ -80,7 +81,7 @@ public class GroundTruthGenerator
         gridCount = new int[_som.Count()];
         requiredCount = new int[_som.Count()];
 
-        for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
+        for (int objectIndex = 0; objectIndex < _grids.Length; objectIndex++)
         {
             gridCount[objectIndex] = CountGrid(_grids[objectIndex]);
             requiredCount[objectIndex] = (int)(gridCount[objectIndex] * _requiredAccuracy);

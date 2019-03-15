@@ -10,8 +10,13 @@ public class NbvAgent : Agent {
 
     private NbvManager _nvbManager;
 
-    void Start () {
+    void Awake()
+    {
         _nvbManager = new NbvManager(depthCamera);
+    }
+
+    void Start () {
+        
     }
 
     public override void AgentReset()

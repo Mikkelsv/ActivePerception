@@ -44,7 +44,6 @@ public class NbvManager
 
         bool done = false;
         float reward = _si.GetScore();
-        Debug.Log(reward.ToString());
 
         if (_currentStep > maxStep || _si.GetDoneOnAccuracy())
         {

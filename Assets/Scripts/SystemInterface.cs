@@ -66,6 +66,8 @@ public class SystemInterface {
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
         _rm = new RewardManager(_gtg, _ogm, _som, _vm);
+
+        Reset();
     }
 
     public void Reset()
