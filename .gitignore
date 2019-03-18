@@ -107,6 +107,7 @@ TrainingFiles/Env/*
 TrainingFiles/Models/*
 TrainingFiles/Summaries/*
 TrainingFiles/mlagents/*
+TrainingFiles/venv/*
 
 Library/
 
