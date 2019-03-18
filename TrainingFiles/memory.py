@@ -6,7 +6,7 @@ class Memory:
     def __init__(self, shape_input, num_output, buffer_size=500):
         self.num_actions = num_output
         self.num_observations = shape_input
-        self.memory = np.zeros(((buffer_size, ) + shape_input))
+        self.memory = np.zeros(((buffer_size,) + shape_input))
         self.actions = np.zeros((buffer_size, num_output))
         self.memory_index = 0
         self.buffer_size = buffer_size

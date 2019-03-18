@@ -3,7 +3,7 @@ from mlagents.envs import UnityEnvironment
 from model_manager import ModelManager
 from trainer import Trainer
 from synopsis_manager import SynopsisManager
-import time
+
 
 def main():
     # env_name = "../envs/3DBall"  # Name of the Unity environment binary to launch
@@ -26,7 +26,7 @@ def main():
     # Train
     trainer = Trainer(model, env)
     synopsis = SynopsisManager(trainer)
-    trainer.train(1, 5, 5, 10)
+    trainer.train(1, 2, 5, 5)
     synopsis.print_training_summary()
     trainer.evaluate_solution(10)
 

@@ -1,8 +1,6 @@
 import tensorflow as tf
-import os
-# os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-# from tensorflow.python.keras import layers
-# from tensorflow.python.keras._impl.keras.engine import Model
+
+tf.logging.set_verbosity(tf.logging.ERROR)
 
 
 class ModelManager:
@@ -106,11 +104,12 @@ class ModelManager:
             if clear_devices:
                 for node in input_graph_def.node:
                     node.device = ""
-            frozen_graph = tf.graph_util.convert_variables_to_constants(
+            frozen_graph = tf.compat.v1.graph_util.convert_variables_to_constants(
                 session, input_graph_def, output_names, freeze_var_names)
 
         tf.train.write_graph(frozen_graph, "", self.folder + name + ".bytes", as_text=False)
         print("Model saved as " + self.folder + name)
+        # session.close()
 
     def load_model(self, model_name=""):
         if model_name == "":
@@ -124,7 +123,9 @@ class ModelManager:
         return self.model
 
     def compile_model(self):
-        self.model.compile(optimizer=tf.train.AdamOptimizer(self.learning_rate),
+        opt = tf.keras.optimizers.Adam(lr=self.learning_rate)
+        # self.model.compile(optimizer=tf.train.AdamOptimizer(self.learning_rate),
+        self.model.compile(optimizer=opt,
                            loss='categorical_crossentropy',
                            metrics=['accuracy'])
 

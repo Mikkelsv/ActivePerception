@@ -51,10 +51,10 @@ class SynopsisManager:
         self.generation_reward_summary()
 
     def print_evaulation(self, num_runs, mean, std):
-        a  = []
+        a = []
         a.append("\n-------------------- Results --------------------")
         a.append("Number of tests: {}".format(num_runs))
-        a.append("Mean reward: {:.3f} \t std: {:.4f}".format(mean,std))
+        a.append("Mean reward: {:.3f} \t std: {:.4f}".format(mean, std))
         self.writelines(a)
 
     def write(self, string):
@@ -74,10 +74,9 @@ class SynopsisManager:
         reward = self.t.generation_reward
         f = open(self.name + ".csv", "a")
         f.write("Reward,Steps")
-        for a,b, in reward:
-            f.write("\n{:.4f},{}".format(a,b))
+        for a, b, in reward:
+            f.write("\n{:.4f},{}".format(a, b))
         f.close()
-
 
     @staticmethod
     def get_time_keeper_average(keeper):

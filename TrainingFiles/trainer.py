@@ -1,11 +1,11 @@
 from mlagents.envs import UnityEnvironment
-
 import numpy as np
-import random
-import time
 
 from memory import Memory
 from synopsis_manager import SynopsisManager
+
+import random
+import time
 
 
 class Trainer:
@@ -163,7 +163,6 @@ class Trainer:
             rewards[i] = t
         self.sm.print_evaulation(num_runs, np.mean(rewards), np.std(rewards))
 
-
     def get_model(self):
         return self.model
 
@@ -245,7 +244,6 @@ def main():
     trainer = Trainer(model, env)
     trainer.train(10, 10, 10, 10)
     trainer.evaluate_solution(20)
-
 
     # Close environment
     env.close()
