@@ -27,10 +27,12 @@ class Trainer:
 
         # self.observation_shape = len(env_info.vector_observations[0])
         self.observation_shape = (32, 32, 32, 1)
+        self.views_shape = (121, 1)
         self.num_actions = len(env_info.action_masks[0])
 
         # Init Memory
-        self.memory = Memory(self.observation_shape, self.num_actions, self.buffer_size)
+        input_shape = (self.observation_shape, self.views_shape)
+        self.memory = Memory(input_shape, self.num_actions, self.buffer_size)
 
         # Runtime variables
         self.step_count = 0
@@ -88,8 +90,8 @@ class Trainer:
             if episode % self.batch_size == 0:
                 # Train model on batch
                 now = time.time()
-                o, a = self.memory.get_random_batch(self.batch_training_size)
-                loss = self.model.train_on_batch(o, a)
+                o, v, a = self.memory.get_random_batch(self.batch_training_size)
+                loss = self.model.train_on_batch([o, v], a)
                 self.update_time_keeper(self.duration_training, time.time() - now)
 
             if episode % self.generation_size == 0:
@@ -108,6 +110,7 @@ class Trainer:
         :return: Steps in episode, Mean Reward of episode
         """
         observations = np.empty(0).reshape((0,) + self.observation_shape)
+        views = np.empty(0).reshape((0,) + self.views_shape)
         actions = np.empty(0).reshape(0, self.num_actions)
         rewards = np.empty(0).reshape(0, 1)
         steps = 0
@@ -115,9 +118,9 @@ class Trainer:
         while True:
             steps += 1
             observation = env_info.vector_observations
-            observation = self.reshape_input(observation)
+            observation, view = self.reshape_input(observation)
 
-            action, action_indexed = self._get_action(observation, stochastic)
+            action, action_indexed = self._get_action([observation, view], stochastic)
 
             # Fetch next environment and reward, track the time
             now = time.time()
@@ -128,6 +131,7 @@ class Trainer:
 
             # Update memory
             observations = np.vstack([observation, observations])
+            views = np.vstack([view, views])
             actions = np.vstack([action, actions])
             rewards = np.vstack([reward, rewards])
 
@@ -139,7 +143,7 @@ class Trainer:
                 # Update Memory
                 action_rewards = self._get_discounted_action_rewards(actions, rewards)
                 if store:
-                    self.memory.add(observations, action_rewards)
+                    self.memory.add(observations, views, action_rewards)
                 return steps, np.mean(action_rewards)
 
     def evaluate_generation(self, generation, steps):
@@ -206,14 +210,16 @@ class Trainer:
         keeper[0] += duration
         keeper[1] += 1
 
-    @staticmethod
-    def reshape_input(observations):
-        return observations.reshape((-1, 32, 32, 32, 1))
+    def reshape_input(self, observations):
+        grid = observations[0, :-1].reshape((-1, 32, 32, 32, 1))
+        views = np.zeros(self.num_actions)
+        views[int(observations[0, -1])] = 1
+        views = views.reshape((-1, self.num_actions, 1))
+        return grid, views
 
 
 def main():
     import sys
-    import deprecated_slam_model
 
     print("Python version: {}".format(sys.version))
     # check Python version

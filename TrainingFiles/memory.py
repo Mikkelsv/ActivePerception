@@ -3,24 +3,27 @@ import numpy as np
 
 class Memory:
 
-    def __init__(self, shape_input, num_output, buffer_size=500):
+    def __init__(self, shape_input,num_output, buffer_size=500):
         self.num_actions = num_output
-        self.num_observations = shape_input
-        self.memory = np.zeros(((buffer_size,) + shape_input))
+
+        self.observations = np.zeros(((buffer_size,) + shape_input[0]))
+        self.views = np.zeros(((buffer_size,) + shape_input[1]))
         self.actions = np.zeros((buffer_size, num_output))
+
         self.memory_index = 0
         self.buffer_size = buffer_size
         self.memory_full = False
 
-    def add(self, state, reward):
+    def add(self, state_observations, state_views, reward):
         # new_info = np.hstack((state, reward))
         m = self.memory_index
 
-        new_length = len(state)
+        new_length = len(state_observations)
         current_index = min(m + new_length, self.buffer_size)
 
         if current_index < self.buffer_size:
-            self.memory[m:current_index, :] = state[:]
+            self.observations[m:current_index, :] = state_observations[:]
+            self.views[m:current_index, :] = state_views[:]
             self.actions[m:current_index, :] = reward[:]
             self.memory_index += new_length
         else:
@@ -28,10 +31,14 @@ class Memory:
             fit_count = new_length - overflow_count
 
             # Fit end of buffer
-            self.memory[m:, :] = state[:fit_count]
+            self.observations[m:, :] = state_observations[:fit_count]
+            self.views[m:, :] = state_views[:fit_count]
             self.actions[m:, :] = reward[:fit_count]
+
+
             # Fit start of buffer
-            self.memory[:overflow_count, :] = state[fit_count:]
+            self.observations[:overflow_count, :] = state_observations[fit_count:]
+            self.views[:overflow_count, :] = state_views[fit_count:]
             self.actions[:overflow_count, :] = reward[fit_count:]
             self.memory_index = overflow_count
 
@@ -46,9 +53,10 @@ class Memory:
         # batch = self.memory[indices]
         # batch_observations = batch[:, :self.num_observations]
         # batch_actions = batch[:, self.num_observations:]
-        batch_observations = self.memory[indices]
+        batch_observations = self.observations[indices]
+        batch_views = self.views[indices]
         batch_actions = self.actions[indices]
-        return batch_observations, batch_actions
+        return batch_observations, batch_views, batch_actions
 
 
 def main():

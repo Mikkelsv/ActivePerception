@@ -26,7 +26,7 @@ def main():
     # Train
     trainer = Trainer(model, env)
     synopsis = SynopsisManager(trainer)
-    trainer.train(1, 2, 5, 5)
+    trainer.train(5, 10, 5, 10)
     synopsis.print_training_summary()
     trainer.evaluate_solution(10)
 

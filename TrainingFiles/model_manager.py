@@ -6,9 +6,11 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 class ModelManager:
     learning_rate = 0.01
 
-    def __init__(self, load=False, num_input=2, num_output=4, learning_rate=0.01, model_name="default_model"):
+    def __init__(self, load=False, num_input=2, num_views=121, num_output=4, learning_rate=0.01,
+                 model_name="default_model"):
         self.learning_rate = learning_rate
         self.num_input = num_input
+        self.num_views = num_views
         self.num_output = num_output
         self.model_name = model_name
         self.folder = "Models/"
@@ -34,8 +36,8 @@ class ModelManager:
             print("TensorFlow version: " + tf.VERSION)
             print("TF Keras version: " + tf.keras.__version__)
 
-        inputs = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
-        n1 = tf.keras.layers.Dense(200, activation="relu", name="hidden_layer_1")(inputs)
+        observations = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
+        n1 = tf.keras.layers.Dense(200, activation="relu", name="hidden_layer_1")(observations)
 
         outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(n1)
 
@@ -56,11 +58,16 @@ class ModelManager:
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
         c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
         pool = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), name="pooling_layer")(c2)
-        flatten = tf.keras.layers.Flatten()(pool)
-        fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(flatten)
+        conv_output = tf.keras.layers.Flatten()(pool)
+
+        auxiliary_inputs = tf.keras.layers.Input(shape=(self.num_views, 1), name="views")
+        aux_output = tf.keras.layers.Flatten()(auxiliary_inputs)
+        merged = tf.keras.layers.Concatenate()([conv_output, aux_output])
+
+        fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(merged)
         outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(fc1)
 
-        self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
+        self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
 
         self.compile_model()
 
@@ -129,6 +136,28 @@ class ModelManager:
                            loss='categorical_crossentropy',
                            metrics=['accuracy'])
 
+    def _generate_auxiliary_input_model(self):
+
+        print("TensorFlow version: " + tf.VERSION)
+        print("TF Keras version: " + tf.keras.__version__)
+
+        inputs = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
+        n1 = tf.keras.layers.Dense(200, activation="relu", name="hidden_layer_1")(inputs)
+
+        auxiliary_inputs = tf.keras.layers.Input(shape=(self.num_input,), name="auxiliary_inputs")
+
+        merged = tf.keras.layers.Concatenate()([n1, auxiliary_inputs])
+        outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(merged)
+
+        self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
+
+        self.compile_model()
+
+        print("New Model Generated")
+        print("Using Learning Rate: {}".format(self.learning_rate))
+        print(self.model.summary())
+        return self.model
+
 
 if __name__ == "__main__":
     print(tf.VERSION)
@@ -144,7 +173,7 @@ if __name__ == "__main__":
     data = np.random.random((1000, num_inputs))
     labels = np.random.random((1000, num_outputs))
 
-    mm.model.fit(data, labels, epochs=10, batch_size=32)
+    mm.model.fit([data, data], labels, epochs=10, batch_size=32)
 
     tf.keras.backend.set_learning_phase(0)
     # tf.keras.backend.get_session(),
