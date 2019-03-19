@@ -51,12 +51,12 @@ class SynopsisManager:
         self.generation_reward_summary()
         self.plot_reward_summary()
 
-    def print_evaulation(self, num_runs, avg_reward, avg_steps, avg_distance):
+    def print_evaluation(self, num_runs, avg_reward, avg_steps, avg_distance, avg_accuracy):
         a = []
         a.append("\n-------------------- Results --------------------")
         a.append("Number of tests: {}".format(num_runs))
-        a.append("Mean reward: {:.3f} \t Mean steps: {:1f} \t Mean distance: {:1f}"
-                 .format(avg_reward, avg_steps, avg_distance))
+        a.append("Mean reward: {:.3f} \t Mean steps: {:1f} \t Mean distance: {:1f}, Avg Accuracy: {:.3f}"
+                 .format(avg_reward, avg_steps, avg_distance, avg_accuracy))
         self.writelines(a)
 
     def write(self, string):
@@ -75,9 +75,9 @@ class SynopsisManager:
     def generation_reward_summary(self):
         reward = self.t.generation_reward
         f = open(self.name + ".csv", "a")
-        f.write("#Reward, Steps, Distance \t {} tests every generation".format(self.t.num_tests))
-        for reward, steps, distance in reward:
-            f.write("\n{:.4f}, {:.1f}, {:.1f}".format(reward, steps, distance))
+        f.write("#Reward, Steps, Distance, Accuracy\t- {} tests/gen ".format(self.t.num_tests))
+        for reward, steps, distance, acc in reward:
+            f.write("\n{:.4f}, {:.1f}, {:.1f}, {:.3f}".format(reward, steps, distance, acc))
         f.close()
 
     def plot_reward_summary(self):
@@ -85,7 +85,7 @@ class SynopsisManager:
         import numpy as np
 
         generation_reward = np.asarray(self.t.generation_reward)
-        print(generation_reward)
+
 
         rewards = generation_reward[:, 0]
         steps = generation_reward[:, 1]
@@ -94,6 +94,7 @@ class SynopsisManager:
         plt.subplot(311)
         plt.title("Average Reward")
         plt.plot(rewards)
+        print("[Rewards plotted]")
 
         plt.subplot(312)
         plt.title("Steps")

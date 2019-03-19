@@ -115,13 +115,15 @@ class Trainer:
         rewards = np.empty(0).reshape(0, 1)
         steps = 0
         distances = []
+        accuracies = []
         env_info = self.env.reset(train_mode=False)[self.default_brain]
         while True:
             steps += 1
 
             observation = env_info.vector_observations
-            observation, view, distance = self.reshape_input(observation)
+            observation, view, distance, accuracy = self.reshape_input(observation)
             distances.append(distance)
+            accuracies.append(accuracy)
 
             action, action_indexed = self._get_action([observation, view], stochastic)
 
@@ -147,35 +149,39 @@ class Trainer:
                 action_rewards = self._get_discounted_action_rewards(actions, rewards)
                 if store:
                     self.memory.add(observations, views, action_rewards)
-                return steps, distances, action_rewards
+                return steps, distances, accuracies, action_rewards
 
     def evaluate_model(self, num_runs):
-        mean_rewards = np.zeros(num_runs)
-        mean_distances = np.zeros(num_runs)
+        sum_rewards = np.zeros(num_runs)
+        sum_distances = np.zeros(num_runs)
         episode_steps = np.zeros(num_runs)
+        max_accuracies = np.zeros(num_runs)
         for i in range(num_runs):
-            steps, distances, action_rewards = self.run_episode(False, False)
-            mean_rewards[i] = np.mean(action_rewards)
-            mean_distances[i] = np.mean(distances)
+            steps, distances, accuracies, action_rewards = self.run_episode(False, False)
+            sum_rewards[i] = np.sum(action_rewards)
+            sum_distances[i] = np.sum(distances)
             episode_steps[i] = steps
-        avg_reward = np.mean(mean_rewards)
+            max_accuracies[i] = np.max(accuracies)
+        avg_reward = np.mean(sum_rewards)
         avg_steps = np.mean(episode_steps)
-        avg_distance = np.mean(mean_distances)
-        return avg_reward, avg_steps, avg_distance
+        avg_distance = np.mean(sum_distances)
+        avg_accuracy = np.mean(max_accuracies)
+        return avg_reward, avg_steps, avg_distance, avg_accuracy
 
     def evaluate_generation(self, generation_number):
         if self.num_tests:
-            avg_reward, avg_steps, avg_distance = self.evaluate_model(self.num_tests)
+            avg_reward, avg_steps, avg_distance, avg_accuracy = self.evaluate_model(self.num_tests)
 
             dur = self._get_generation_duration()
-            self.generation_reward.append(np.array([avg_reward, avg_steps, avg_distance]))
-            self.sm.write("Gen {}\t Avg Reward: {:.5}, Duration {:.1f}s, SpE {:.1f}, AvgDistance: {:.1f}"
-                          .format(generation_number, avg_reward, dur, avg_steps, avg_distance))
+            self.generation_reward.append(np.array([avg_reward, avg_steps, avg_distance, avg_accuracy]))
+            self.sm.write(("Gen {}\t Avg Reward: {:.5}, Duration {:.1f}s, SpE {:.1f}, " +
+                          "AvgDistance: {:.1f}, AvgAccuracy: {:.3f}")
+                          .format(generation_number, avg_reward, dur, avg_steps, avg_distance, avg_accuracy))
 
     def evaluate_solution(self, num_runs):
         if num_runs:
-            avg_reward, avg_steps, avg_distance = self.evaluate_model(num_runs)
-            self.sm.print_evaulation(num_runs, avg_reward, avg_steps, avg_distance)
+            avg_reward, avg_steps, avg_distance, avg_acc = self.evaluate_model(num_runs)
+            self.sm.print_evaluation(num_runs, avg_reward, avg_steps, avg_distance, avg_acc)
 
     def get_model(self):
         return self.model
@@ -221,53 +227,11 @@ class Trainer:
         keeper[1] += 1
 
     def reshape_input(self, observations):
-        grid = observations[0, :-2].reshape((-1, 32, 32, 32, 1))
+        grid = observations[0, :-3].reshape((-1, 32, 32, 32, 1))
         views = np.zeros(self.num_actions)
-        views[int(observations[0, -2])] = 1
+        views[int(observations[0, -3])] = 1
         views = views.reshape((-1, self.num_actions, 1))
-        distance = observations[0, -1]
-        return grid, views, distance
+        distance = observations[0, -2]
+        accuracy = observations[0, -1]
+        return grid, views, distance, accuracy
 
-
-def main():
-    import sys
-
-    print("Python version: {}".format(sys.version))
-    # check Python version
-    if sys.version_info[0] < 3:
-        raise Exception("ERROR: ML-Agents Toolkit (v0.3 onwards) requires Python 3")
-
-    env_name = "Env/SlamBall"
-    env = UnityEnvironment(file_name=None, worker_id=0, seed=1)  # Add seed=n for consistent results
-    train_mode = False  # Whether to run the environment in training or inference mode
-
-    # Set the default brain to work with
-    default_brain = env.brain_names[0]
-
-    # Investigate environment
-    env_info = env.reset(train_mode=train_mode)[default_brain]
-    num_inputs = len(env_info.vector_observations[0])
-    num_outputs = len(env_info.action_masks[0])
-
-    # Fetching model
-    rebuild = True
-    model_name = "slam_model_trained"
-    if rebuild:
-        model = deprecated_slam_model.generate_model(num_inputs, num_outputs)
-    else:
-        model = deprecated_slam_model.load_model(model_name)
-
-    # Train
-    trainer = Trainer(model, env)
-    trainer.train(1, 1, 1, 1)
-    trainer.evaluate_solution(0)
-
-    # Close environment
-    env.close()
-
-    # Save model
-    deprecated_slam_model.save_model(model, model_name)
-
-
-if __name__ == "__main__":
-    main()
