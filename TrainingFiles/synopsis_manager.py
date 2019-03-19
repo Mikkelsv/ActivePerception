@@ -49,12 +49,14 @@ class SynopsisManager:
                  .format(self.t.duration_selecting_action[0], avg_duration_action))
         self.writelines(a)
         self.generation_reward_summary()
+        self.plot_reward_summary()
 
-    def print_evaulation(self, num_runs, mean, std):
+    def print_evaulation(self, num_runs, avg_reward, avg_steps, avg_distance):
         a = []
         a.append("\n-------------------- Results --------------------")
         a.append("Number of tests: {}".format(num_runs))
-        a.append("Mean reward: {:.3f} \t std: {:.4f}".format(mean, std))
+        a.append("Mean reward: {:.3f} \t Mean steps: {:1f} \t Mean distance: {:1f}"
+                 .format(avg_reward, avg_steps, avg_distance))
         self.writelines(a)
 
     def write(self, string):
@@ -73,10 +75,34 @@ class SynopsisManager:
     def generation_reward_summary(self):
         reward = self.t.generation_reward
         f = open(self.name + ".csv", "a")
-        f.write("Reward,Steps")
-        for a, b, in reward:
-            f.write("\n{:.4f},{}".format(a, b))
+        f.write("#Reward, Steps, Distance \t {} tests every generation".format(self.t.num_tests))
+        for reward, steps, distance in reward:
+            f.write("\n{:.4f}, {:.1f}, {:.1f}".format(reward, steps, distance))
         f.close()
+
+    def plot_reward_summary(self):
+        import matplotlib.pyplot as plt
+        import numpy as np
+
+        generation_reward = np.asarray(self.t.generation_reward)
+        print(generation_reward)
+
+        rewards = generation_reward[:, 0]
+        steps = generation_reward[:, 1]
+        distance = generation_reward[:, 2]
+        plt.figure(1)
+        plt.subplot(311)
+        plt.title("Average Reward")
+        plt.plot(rewards)
+
+        plt.subplot(312)
+        plt.title("Steps")
+        plt.plot(steps)
+
+        plt.subplot(313)
+        plt.title("Distance")
+        plt.plot(distance)
+        plt.savefig(self.name)
 
     @staticmethod
     def get_time_keeper_average(keeper):

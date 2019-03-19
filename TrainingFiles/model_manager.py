@@ -58,10 +58,10 @@ class ModelManager:
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
         c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
         pool = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), name="pooling_layer")(c2)
-        conv_output = tf.keras.layers.Flatten()(pool)
+        conv_output = tf.keras.layers.Flatten(name="flatten_conv_output")(pool)
 
         auxiliary_inputs = tf.keras.layers.Input(shape=(self.num_views, 1), name="views")
-        aux_output = tf.keras.layers.Flatten()(auxiliary_inputs)
+        aux_output = tf.keras.layers.Flatten(name="flatten_views")(auxiliary_inputs)
         merged = tf.keras.layers.Concatenate()([conv_output, aux_output])
 
         fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(merged)

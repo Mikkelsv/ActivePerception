@@ -15,7 +15,7 @@ class Trainer:
         self.env = env
         self.exploration = 0.8
         self.exploration_decay = 0.9
-        self.gamma = 0.9  # Future reward discount
+        self.gamma = 0.0  # Future reward discount
 
         # Memory specifics
         self.buffer_size = 1000
@@ -95,7 +95,7 @@ class Trainer:
                 self.update_time_keeper(self.duration_training, time.time() - now)
 
             if episode % self.generation_size == 0:
-                self.evaluate_generation(generation, steps)
+                self.evaluate_generation(generation)
                 # Update runtime variables
                 generation += 1
                 steps = 0
@@ -114,11 +114,14 @@ class Trainer:
         actions = np.empty(0).reshape(0, self.num_actions)
         rewards = np.empty(0).reshape(0, 1)
         steps = 0
+        distances = []
         env_info = self.env.reset(train_mode=False)[self.default_brain]
         while True:
             steps += 1
+
             observation = env_info.vector_observations
-            observation, view = self.reshape_input(observation)
+            observation, view, distance = self.reshape_input(observation)
+            distances.append(distance)
 
             action, action_indexed = self._get_action([observation, view], stochastic)
 
@@ -144,28 +147,35 @@ class Trainer:
                 action_rewards = self._get_discounted_action_rewards(actions, rewards)
                 if store:
                     self.memory.add(observations, views, action_rewards)
-                return steps, np.mean(action_rewards)
+                return steps, distances, action_rewards
 
-    def evaluate_generation(self, generation, steps):
-        rewards = np.zeros(self.num_tests)
-        for i in range(self.num_tests):
-            s, t = self.run_episode(False, False)
-            rewards[i] = t
+    def evaluate_model(self, num_runs):
+        mean_rewards = np.zeros(num_runs)
+        mean_distances = np.zeros(num_runs)
+        episode_steps = np.zeros(num_runs)
+        for i in range(num_runs):
+            steps, distances, action_rewards = self.run_episode(False, False)
+            mean_rewards[i] = np.mean(action_rewards)
+            mean_distances[i] = np.mean(distances)
+            episode_steps[i] = steps
+        avg_reward = np.mean(mean_rewards)
+        avg_steps = np.mean(episode_steps)
+        avg_distance = np.mean(mean_distances)
+        return avg_reward, avg_steps, avg_distance
 
-        avg_reward = np.mean(rewards)
-        dur = self._get_generation_duration()
-        avg_steps = steps / self.generation_size
-        avg_step_duration = dur / steps
-        self.generation_reward.append((avg_reward, avg_steps))
-        self.sm.write("Gen {}\t Avg Reward: {:.3f}, Duration {:.1f}s, SpE {:.1f}, DpS: {:.04f}s"
-                      .format(generation, avg_reward, dur, avg_steps, avg_step_duration))
+    def evaluate_generation(self, generation_number):
+        if self.num_tests:
+            avg_reward, avg_steps, avg_distance = self.evaluate_model(self.num_tests)
+
+            dur = self._get_generation_duration()
+            self.generation_reward.append(np.array([avg_reward, avg_steps, avg_distance]))
+            self.sm.write("Gen {}\t Avg Reward: {:.5}, Duration {:.1f}s, SpE {:.1f}, AvgDistance: {:.1f}"
+                          .format(generation_number, avg_reward, dur, avg_steps, avg_distance))
 
     def evaluate_solution(self, num_runs):
-        rewards = np.zeros(num_runs)
-        for i in range(num_runs):
-            s, t = self.run_episode(False, False)
-            rewards[i] = t
-        self.sm.print_evaulation(num_runs, np.mean(rewards), np.std(rewards))
+        if num_runs:
+            avg_reward, avg_steps, avg_distance = self.evaluate_model(num_runs)
+            self.sm.print_evaulation(num_runs, avg_reward, avg_steps, avg_distance)
 
     def get_model(self):
         return self.model
@@ -211,11 +221,12 @@ class Trainer:
         keeper[1] += 1
 
     def reshape_input(self, observations):
-        grid = observations[0, :-1].reshape((-1, 32, 32, 32, 1))
+        grid = observations[0, :-2].reshape((-1, 32, 32, 32, 1))
         views = np.zeros(self.num_actions)
-        views[int(observations[0, -1])] = 1
+        views[int(observations[0, -2])] = 1
         views = views.reshape((-1, self.num_actions, 1))
-        return grid, views
+        distance = observations[0, -1]
+        return grid, views, distance
 
 
 def main():
@@ -248,8 +259,8 @@ def main():
 
     # Train
     trainer = Trainer(model, env)
-    trainer.train(10, 10, 10, 10)
-    trainer.evaluate_solution(20)
+    trainer.train(1, 1, 1, 1)
+    trainer.evaluate_solution(0)
 
     # Close environment
     env.close()
