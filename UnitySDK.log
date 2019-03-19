@@ -1,13 +1,18 @@
-3/15/2019 4:27:56 PM
+3/19/2019 3:52:08 PM
  
+Log
+Commencing training using mlagents
+UnityEngine.Debug:Log(Object)
+RuntimeController:Awake() (at Assets/Scripts/Learning/RuntimeController.cs:40)
+
 Log
 121 views created
 UnityEngine.Debug:Log(Object)
-ViewManager:GenerateViews() (at Assets/Scripts/ViewManager.cs:82)
+ViewManager:GenerateViews() (at Assets/Scripts/ViewManager.cs:89)
 ViewManager:.ctor(Int32, Single) (at Assets/Scripts/ViewManager.cs:26)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:62)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Awake() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
 
 Log
 LowResSphere used as point cloud representation object
@@ -15,25 +20,24 @@ UnityEngine.Debug:Log(Object)
 PointCloudManager:.ctor(RenderTexture, Single, Camera) (at Assets/Scripts/PointCloudManager.cs:34)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:65)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Awake() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
 
 Log
 Generated grids of 10 objects
 UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:Build() (at Assets/Scripts/GroundTruthGeberator.cs:73)
-GroundTruthGenerator:Generate(Boolean, Boolean) (at Assets/Scripts/GroundTruthGeberator.cs:50)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:35)
+GroundTruthGenerator:Build() (at Assets/Scripts/GroundTruthGeberator.cs:80)
+GroundTruthGenerator:Generate(Boolean, Boolean) (at Assets/Scripts/GroundTruthGeberator.cs:56)
+GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:67)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Awake() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
 
 Log
-Ground truth stoed in TrainingFiles/OccupancyGrids/saved_occupancy_grids.txt
+Ground Truth Objects Generated
 UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:Save() (at Assets/Scripts/GroundTruthGeberator.cs:116)
-GroundTruthGenerator:Generate(Boolean, Boolean) (at Assets/Scripts/GroundTruthGeberator.cs:53)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:35)
+GroundTruthGenerator:Generate(Boolean, Boolean) (at Assets/Scripts/GroundTruthGeberator.cs:63)
+GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:67)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Awake() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
 

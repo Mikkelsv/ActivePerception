@@ -21,7 +21,7 @@ public class NbvManager
 
     public float[] CollectObservations()
     {
-        return _si.GetOngoingOccupancyGrid();
+        return _si.CollectObservations();
     }
 
     public System.Tuple<float, bool> Action(float[] vectorAction)

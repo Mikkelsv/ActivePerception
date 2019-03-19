@@ -11,10 +11,6 @@
       <change beforePath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Assets/Scripts/ViewManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/ViewManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/UnitySDK.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learn_active_perception.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn_active_perception.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/synopsis_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/synopsis_manager.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/../UnitySDK.log" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -79,8 +75,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="77" column="51" selection-start-line="77" selection-start-column="51" selection-end-line="77" selection-end-column="51" />
+            <state relative-caret-position="600">
+              <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -125,7 +121,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
     <option name="x" value="1273" />
     <option name="width" value="1294" />
     <option name="height" value="1407" />
@@ -424,8 +420,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="77" column="51" selection-start-line="77" selection-start-column="51" selection-end-line="77" selection-end-column="51" />
+        <state relative-caret-position="600">
+          <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
         </state>
       </provider>
     </entry>

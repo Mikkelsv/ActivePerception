@@ -86,7 +86,6 @@ class SynopsisManager:
 
         generation_reward = np.asarray(self.t.generation_reward)
 
-
         rewards = generation_reward[:, 0]
         steps = generation_reward[:, 1]
         distance = generation_reward[:, 2]

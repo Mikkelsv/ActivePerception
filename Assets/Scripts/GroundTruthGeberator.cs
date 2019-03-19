@@ -41,6 +41,11 @@ public class GroundTruthGenerator
         return _grids;
     }
 
+    public int CurrentObjectGridCount()
+    {
+        return gridCount[_som.CurrentObject()];
+    }
+
     public float[][] Generate(bool load = false, bool save = true)
     {
         if (load) {
@@ -55,6 +60,7 @@ public class GroundTruthGenerator
             }
         }
         CountGrids();
+        Debug.Log("Ground Truth Objects Generated");
         return _grids;
     }
 

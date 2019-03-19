@@ -28,6 +28,13 @@ public class ViewManager{
         _viewDistances = GenerateViewNeighbourhood();
     }
 
+    public Vector3 Reset()
+    {
+        distanceTravelled = 0f;
+        _currentView = 0;
+        return _views[0];
+    }
+
     public Vector3 SetView(int view)
     {
         distanceTravelled = GetDistance(_currentView, view);
@@ -149,6 +156,11 @@ public class ViewManager{
         }
         views.Add(new Vector3(0, r, 0));
         return views;
+    }
+
+    internal IEnumerable<float> GetVisitedViews()
+    {
+        throw new NotImplementedException();
     }
 
     private Vector3[] SortViews(HashSet<Vector3> views)

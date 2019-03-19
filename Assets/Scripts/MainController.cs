@@ -54,11 +54,14 @@ public class MainController : MonoBehaviour
 
     private void Start()
     {
+        _timer = new Stopwatch();
+
+
         RenderTexture rTex = _depthCamera.targetTexture;
         rTex.width = _textureResolution;
         rTex.height = _textureResolution;
-        _timer = new Stopwatch();
-
+       
+        //Setup Managers
         _vm = new ViewManager(_viewGridLayers, _sphereRadius);
         _som = new StudyObjectMamanger(_objectPosition);
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);

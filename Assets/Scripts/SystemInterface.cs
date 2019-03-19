@@ -28,7 +28,7 @@ public class SystemInterface {
 
     //View Sphere Settings
     private int _viewGridLayers = 4;
-    private float _sphereRadius = 2f;
+    private float _sphereRadius = 1.8f;
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
@@ -67,13 +67,14 @@ public class SystemInterface {
         _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
         _rm = new RewardManager(_gtg, _ogm, _som, _vm);
 
+
         Reset();
     }
 
     public void Reset()
     {
         _ogm.ClearGrid();
-        Vector3 newView = _vm.SetView(0);
+        Vector3 newView = _vm.Reset();
         _som.PrepareRandomStudyObject();
         _drm.SetCameraView(newView);
     }
@@ -87,11 +88,6 @@ public class SystemInterface {
         _ogm.AddPoints(pointCloud);
     }
 
-    public float[] GetOngoingOccupancyGrid()
-    {
-        return _ogm.GetGrid();
-    }
-
     public float GetScore()
     {
         //Compute score of last rendering
@@ -100,5 +96,10 @@ public class SystemInterface {
     public bool GetDoneOnAccuracy()
     {
         return _rm.DetermineDone();
+    }
+
+    public float[] CollectObservations()
+    {
+        return _ogm.GetObservations(_vm.GetCurrentViewIndex(), _vm.distanceTravelled, _gtg.CurrentObjectGridCount());
     }
 }
