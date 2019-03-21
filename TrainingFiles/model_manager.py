@@ -4,7 +4,7 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 
 
 class ModelManager:
-    learning_rate = 0.01
+    learning_rate = 0.1
 
     def __init__(self, load=False, num_input=2, num_views=121, num_output=4, learning_rate=0.01,
                  model_name="default_model"):
@@ -33,7 +33,7 @@ class ModelManager:
         :return: TensorFlow Model
         """
         if print_version:
-            print("TensorFlow version: " + tf.VERSION)
+            print("TensorFlow version: " + tf.__version__)
             print("TF Keras version: " + tf.keras.__version__)
 
         observations = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
@@ -51,8 +51,7 @@ class ModelManager:
         return self.model
 
     def generate_conv_model(self):
-        print("TensorFlow version: " + tf.VERSION)
-        print("TF Keras version: " + tf.keras.__version__)
+
 
         inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
@@ -65,14 +64,16 @@ class ModelManager:
         merged = tf.keras.layers.Concatenate()([conv_output, aux_output])
 
         fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(merged)
-        outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(fc1)
+        outputs = tf.keras.layers.Dense(self.num_output, activation="tanh", name="actions")(fc1)
 
         self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
 
         self.compile_model()
-
+        print("\n---------------------------- Model ----------------------")
         print("New Convolutional Model Generated")
         print("Using Learning Rate: {}".format(self.learning_rate))
+        print("TensorFlow version: " + tf.__version__)
+        print("TF Keras version: " + tf.keras.__version__)
         self.model.summary()
         return self.model
 

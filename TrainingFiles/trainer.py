@@ -19,7 +19,7 @@ class Trainer:
 
         # Memory specifics
         self.buffer_size = 1000
-        self.batch_training_size = 32
+        self.batch_training_size = 64
 
         # Setup environment dependant variables
         self.default_brain = self.env.brain_names[0]
@@ -55,6 +55,7 @@ class Trainer:
 
         self.sm: SynopsisManager = None
         self.generation_reward = []
+        self.loss = []
 
     def set_synopsis_manager(self, sm: SynopsisManager):
         self.sm = sm
@@ -76,8 +77,8 @@ class Trainer:
         self.generation_size = batch_size * num_batches
 
         self.sm.print_training_config()
+        self.loss = []
 
-        steps = 0
         episode = 0
         generation = 1
 
@@ -85,7 +86,7 @@ class Trainer:
         self.generation_time_stamp = time.time()
         while episode < self.num_episodes:
             episode += 1
-            steps += self.run_episode()[0]
+            self.run_episode()
 
             if episode % self.batch_size == 0:
                 # Train model on batch
@@ -93,26 +94,26 @@ class Trainer:
                 o, v, a = self.memory.get_random_batch(self.batch_training_size)
                 loss = self.model.train_on_batch([o, v], a)
                 self.update_time_keeper(self.duration_training, time.time() - now)
+                self.loss.append(loss)
 
             if episode % self.generation_size == 0:
                 self.evaluate_generation(generation)
                 # Update runtime variables
                 generation += 1
-                steps = 0
                 self.exploration *= self.exploration_decay
         self.duration_total = time.time() - self.duration_total
 
-    def run_episode(self, store=True, stochastic=True):
+    def run_episode(self, train=True):
         """
             Resets and runs a single episode in the trainer environment
-        :param store: Store episode in trainer memory
-        :param stochastic: Use stochastic action generation based on exploration rate
-        :return: Steps in episode, Mean Reward of episode
+        :param train: Wether to train or test
+        :return: Steps in episode, Distances, Accuracies and Mean Reward of episode
         """
         observations = np.empty(0).reshape((0,) + self.observation_shape)
         views = np.empty(0).reshape((0,) + self.views_shape)
-        actions = np.empty(0).reshape(0, self.num_actions)
-        rewards = np.empty(0).reshape(0, 1)
+        predictions = np.empty(0).reshape(0, self.num_actions)
+        action_indexes = []
+        rewards = []
         steps = 0
         distances = []
         accuracies = []
@@ -125,7 +126,7 @@ class Trainer:
             distances.append(distance)
             accuracies.append(accuracy)
 
-            action, action_indexed = self._get_action([observation, view], stochastic)
+            action_indexed, prediction = self.get_action([observation, view], train)
 
             # Fetch next environment and reward, track the time
             now = time.time()
@@ -136,33 +137,32 @@ class Trainer:
 
             # Update memory
             observations = np.vstack([observation, observations])
-            views = np.vstack([view, views])
-            actions = np.vstack([action, actions])
-            rewards = np.vstack([reward, rewards])
+            views = np.vstack([views, view])
+            predictions = np.vstack([predictions, prediction])
+            action_indexes.append(action_indexed)
+            rewards.append(reward)
 
             # If end of episode
             if env_info.local_done[0]:
-                # Reset Environment
-                r = self.env.reset(train_mode=False)[self.default_brain]
-
                 # Update Memory
-                action_rewards = self._get_discounted_action_rewards(actions, rewards)
-                if store:
+                action_rewards, discounted_rewards = self.get_discounted_action_rewards(predictions,
+                                                                                        action_indexes, rewards)
+                if train:
                     self.memory.add(observations, views, action_rewards)
-                return steps, distances, accuracies, action_rewards
+                return steps, distances, accuracies, discounted_rewards
 
     def evaluate_model(self, num_runs):
-        sum_rewards = np.zeros(num_runs)
+        rewards = []
         sum_distances = np.zeros(num_runs)
         episode_steps = np.zeros(num_runs)
         max_accuracies = np.zeros(num_runs)
         for i in range(num_runs):
-            steps, distances, accuracies, action_rewards = self.run_episode(False, False)
-            sum_rewards[i] = np.sum(action_rewards)
+            steps, distances, accuracies, discounted_rewards = self.run_episode(train=False)
+            rewards.append(discounted_rewards)
             sum_distances[i] = np.sum(distances)
             episode_steps[i] = steps
             max_accuracies[i] = np.max(accuracies)
-        avg_reward = np.mean(sum_rewards)
+        avg_reward = np.mean(rewards)
         avg_steps = np.mean(episode_steps)
         avg_distance = np.mean(sum_distances)
         avg_accuracy = np.mean(max_accuracies)
@@ -189,31 +189,36 @@ class Trainer:
     def close_environment(self):
         self.env.close()
 
-    def _get_action(self, observation, stochastic):
-        actions = np.zeros(self.num_actions)
+    def get_action(self, observation, stochastic):
+        predictions = self.model.predict(observation)[0]
         if stochastic and random.random() < self.exploration:
-            action = np.random.randint(0, self.num_actions)
+            action_index = np.random.randint(0, self.num_actions)
         else:
             now = time.time()
-            action_values = self.model.predict(observation)[0]
-            action = np.argmax(action_values)
+            action_index = np.argmax(predictions)
             self.update_time_keeper(self.duration_selecting_action, time.time() - now)
-        actions[action] = 1
-        return actions, action
 
-    def _get_discounted_action_rewards(self, actions, rewards):
+        return action_index, predictions
+
+    def get_discounted_action_rewards(self, predictions, action_indexes, rewards):
+        # Compute true action prediction derived from reward
+        action_rewards = predictions
         prior = 0
-        discounted_rewards = []
-        if self.gamma < 0:
-            for r in rewards:
+        discounted_rewards = np.empty(len(rewards))
+        if self.gamma > 0:
+            for i in reversed(range(len(rewards))):
+                r = rewards[i]
                 new_r = r + prior * self.gamma
-                discounted_rewards.append(new_r)
+                discounted_rewards[i] = new_r
                 prior = new_r
         else:
             discounted_rewards = rewards
+        discounted_activated_rewards = np.tanh(discounted_rewards)
 
-        action_rewards = np.multiply(actions, discounted_rewards)
-        return action_rewards
+        # Update chosen action prediction to match reward
+        for i in range(len(predictions)):
+            action_rewards[i, action_indexes[i]] = discounted_activated_rewards[i]  # Set true output to be discounted reward
+        return action_rewards, discounted_activated_rewards
 
     def _get_generation_duration(self):
         generation_end_time = time.time()
@@ -235,3 +240,5 @@ class Trainer:
         accuracy = observations[0, -1]
         return grid, views, distance, accuracy
 
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))

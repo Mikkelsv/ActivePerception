@@ -89,19 +89,24 @@ class SynopsisManager:
         rewards = generation_reward[:, 0]
         steps = generation_reward[:, 1]
         distance = generation_reward[:, 2]
-        plt.figure(1)
-        plt.subplot(311)
+        plt.figure()
+        plt.tight_layout()
+
+        plt.subplot(411)
         plt.title("Average Reward")
         plt.plot(rewards)
         print("[Rewards plotted]")
 
-        plt.subplot(312)
+        plt.subplot(412)
         plt.title("Steps")
         plt.plot(steps)
 
-        plt.subplot(313)
+        plt.subplot(413)
         plt.title("Distance")
         plt.plot(distance)
+
+        plt.subplot(414)
+        plt.plot(self.t.loss)
         plt.savefig(self.name)
 
     @staticmethod

@@ -74,9 +74,8 @@ public class SystemInterface {
     public void Reset()
     {
         _ogm.ClearGrid();
-        Vector3 newView = _vm.Reset();
         _som.PrepareRandomStudyObject();
-        _drm.SetCameraView(newView);
+        RenderView(0);
     }
 
     public void RenderView(int viewIndex)

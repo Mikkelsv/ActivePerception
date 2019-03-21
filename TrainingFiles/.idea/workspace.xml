@@ -2,16 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Assets/Scenes/SampleScene/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scenes/SampleScene/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvAgent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvAgent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvBrain.asset" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvBrain.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/NbvManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/ViewManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/ViewManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/../UnitySDK.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/Learning/RewardManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/Learning/RewardManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/UnitySDK.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/learn_active_perception.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn_active_perception.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/model_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/synopsis_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/synopsis_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/learn_active_perception.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="45" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+            <state relative-caret-position="436">
+              <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
@@ -33,23 +30,34 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="178" column="107" selection-start-line="178" selection-start-column="107" selection-end-line="178" selection-end-column="107" />
+            <state relative-caret-position="412">
+              <caret line="135" column="40" selection-start-line="135" selection-start-column="40" selection-end-line="135" selection-end-column="40" />
               <folding>
-                <element signature="e#0#42#0" expanded="true" />
+                <element signature="e#1786#1798#0" />
+                <element signature="e#1891#3495#0" />
+                <element signature="e#1891#2222#1" />
+                <element signature="e#2764#3431#0" />
+                <element signature="e#2872#3191#0" />
+                <element signature="e#3261#3431#0" />
+                <element signature="e#3544#3761#1" />
+                <element signature="e#5600#6292#0" />
+                <element signature="e#5794#6038#0" />
+                <element signature="e#6204#6748#0" />
+                <element signature="e#6235#6748#0" />
+                <element signature="e#6801#6995#0" />
+                <element signature="e#6826#6995#0" />
+                <element signature="e#7030#7047#0" />
+                <element signature="e#7090#7106#0" />
+                <element signature="e#8091#8288#0" />
+                <element signature="e#8157#8294#0" />
+                <element signature="e#8179#8351#0" />
+                <element signature="e#8425#8469#0" />
+                <element signature="e#8522#8847#0" />
+                <element signature="e#8883#8910#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/numpy/core/shape_base.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="635">
-              <caret line="282" selection-start-line="282" selection-end-line="282" />
             </state>
           </provider>
         </entry>
@@ -57,7 +65,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/memory.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="575">
+            <state relative-caret-position="1190">
               <caret line="70" column="24" selection-start-line="70" selection-start-column="24" selection-end-line="70" selection-end-column="24" />
             </state>
           </provider>
@@ -66,17 +74,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="64" column="73" selection-start-line="64" selection-start-column="73" selection-end-line="64" selection-end-column="73" />
+            <state relative-caret-position="816">
+              <caret line="66" column="73" selection-start-line="66" selection-start-column="73" selection-end-line="66" selection-end-column="73" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="600">
-              <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
+            <state relative-caret-position="566">
+              <caret line="51" selection-start-line="51" selection-end-line="51" />
             </state>
           </provider>
         </entry>
@@ -114,14 +122,14 @@
         <option value="$PROJECT_DIR$/slam_model.py" />
         <option value="$PROJECT_DIR$/learn_slam_ball.py" />
         <option value="$PROJECT_DIR$/memory.py" />
+        <option value="$PROJECT_DIR$/synopsis_manager.py" />
         <option value="$PROJECT_DIR$/model_manager.py" />
         <option value="$PROJECT_DIR$/learn_active_perception.py" />
         <option value="$PROJECT_DIR$/trainer.py" />
-        <option value="$PROJECT_DIR$/synopsis_manager.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="1273" />
     <option name="width" value="1294" />
     <option name="height" value="1407" />
@@ -297,16 +305,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1273" y="0" width="1294" height="1407" extended-state="0" />
+    <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28503186" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14105596" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.23704867" />
-      <window_info active="true" anchor="bottom" x="1292" y="485" width="1256" height="436" id="Run" order="2" visible="true" weight="0.33124018" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.3990647" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.33041576" />
+      <window_info anchor="bottom" x="1292" y="485" width="1256" height="436" id="Run" order="2" weight="0.3289166" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.33125487" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -337,6 +345,17 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout-to-restore>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/trainer.py</url>
+          <line>145</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/generate_simple_model.py" />
@@ -370,9 +389,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/numpy/core/fromnumeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="373">
+          <caret line="3117" selection-start-line="3117" selection-end-line="3117" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/memory.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
+        <state relative-caret-position="1190">
           <caret line="70" column="24" selection-start-line="70" selection-start-column="24" selection-end-line="70" selection-end-column="24" />
         </state>
       </provider>
@@ -386,22 +412,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/model_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="64" column="73" selection-start-line="64" selection-start-column="73" selection-end-line="64" selection-end-column="73" />
+        <state relative-caret-position="816">
+          <caret line="66" column="73" selection-start-line="66" selection-start-column="73" selection-end-line="66" selection-end-column="73" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/venv/Lib/site-packages/numpy/core/fromnumeric.py">
+    <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="373">
-          <caret line="3117" selection-start-line="3117" selection-end-line="3117" />
+        <state relative-caret-position="566">
+          <caret line="51" selection-start-line="51" selection-end-line="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydevd_bundle/pydevd_vars.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="247" selection-start-line="247" selection-end-line="247" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/learn_active_perception.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="45" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
+        <state relative-caret-position="436">
+          <caret line="28" column="4" selection-start-line="28" selection-start-column="4" selection-end-line="28" selection-end-column="4" />
           <folding>
             <element signature="e#0#42#0" expanded="true" />
           </folding>
@@ -410,18 +443,31 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/trainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="178" column="107" selection-start-line="178" selection-start-column="107" selection-end-line="178" selection-end-column="107" />
+        <state relative-caret-position="412">
+          <caret line="135" column="40" selection-start-line="135" selection-start-column="40" selection-end-line="135" selection-end-column="40" />
           <folding>
-            <element signature="e#0#42#0" expanded="true" />
+            <element signature="e#1786#1798#0" />
+            <element signature="e#1891#3495#0" />
+            <element signature="e#1891#2222#1" />
+            <element signature="e#2764#3431#0" />
+            <element signature="e#2872#3191#0" />
+            <element signature="e#3261#3431#0" />
+            <element signature="e#3544#3761#1" />
+            <element signature="e#5600#6292#0" />
+            <element signature="e#5794#6038#0" />
+            <element signature="e#6204#6748#0" />
+            <element signature="e#6235#6748#0" />
+            <element signature="e#6801#6995#0" />
+            <element signature="e#6826#6995#0" />
+            <element signature="e#7030#7047#0" />
+            <element signature="e#7090#7106#0" />
+            <element signature="e#8091#8288#0" />
+            <element signature="e#8157#8294#0" />
+            <element signature="e#8179#8351#0" />
+            <element signature="e#8425#8469#0" />
+            <element signature="e#8522#8847#0" />
+            <element signature="e#8883#8910#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="600">
-          <caret line="88" column="23" selection-start-line="88" selection-start-column="23" selection-end-line="88" selection-end-column="23" />
         </state>
       </provider>
     </entry>

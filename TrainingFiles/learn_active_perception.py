@@ -12,7 +12,7 @@ def main():
 
     # Investigate environment
     default_brain = env.brain_names[0]
-    print("Resetting environment")
+
     env_info = env.reset(train_mode=False)[default_brain]
     num_input = len(env_info.vector_observations[0])
     num_output = len(env_info.action_masks[0])
@@ -26,9 +26,9 @@ def main():
     # Train
     trainer = Trainer(model, env)
     synopsis = SynopsisManager(trainer)
-    trainer.train(5, 5, 5, 10)
+    trainer.train(2, 5, 5, 1)
     synopsis.print_training_summary()
-    trainer.evaluate_solution(20)
+    trainer.evaluate_solution(2)
 
     # Close environment
     env.close()
@@ -39,7 +39,7 @@ def main():
 
 if __name__ == "__main__":
     import sys
-
+    print("\n--------------------------- Environment --------------------")
     print("Python version: {}".format(sys.version))
     # check Python version
     if sys.version_info[0] < 3:

@@ -18,9 +18,9 @@ public class RewardManager {
 
     public float ComputeReward()
     {
-        // Casted to 0-1 using Sidmoid function
+        // Should be casted to 0-1 using Sidmoid function, done in python
         float r = ComputeDistanceReward() + ComputeGlobalIncreasedAccuracy();
-        return Sigmoid(r);
+        return r;
     }
 
     public float ComputeLocalIncreasedAccuracy()
@@ -38,7 +38,15 @@ public class RewardManager {
 
     public float ComputeDistanceReward()
     {
-        return -_vm.distanceTravelled / 180f;
+        float r = -_vm.distanceTravelled / 180f;
+        if (r == 0f)
+        {
+            return -1f;
+        }
+        else
+        {
+            return r;
+        }
     }
 
     public bool DetermineDone()
