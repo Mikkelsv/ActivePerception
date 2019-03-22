@@ -207,7 +207,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: d23546cd4228ad841a0ed830f8d3cab5, type: 2}
     _brainsToControl:
     - {fileID: 11400000, guid: d23546cd4228ad841a0ed830f8d3cab5, type: 2}
-  maxSteps: 75
+  maxSteps: 20
   trainingConfiguration:
     width: 80
     height: 80
@@ -628,6 +628,17 @@ Prefab:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 114791612968685020, guid: 6cc93a5bf81852a46883aa3277662fc0,
+        type: 2}
+      propertyPath: actionFrequency
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114524771412037246, guid: 6cc93a5bf81852a46883aa3277662fc0,
+        type: 2}
+      propertyPath: agentParameters.maxStep
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 114791612968685020, guid: 6cc93a5bf81852a46883aa3277662fc0, type: 2}
   m_SourcePrefab: {fileID: 100100000, guid: 6cc93a5bf81852a46883aa3277662fc0, type: 2}
   m_IsPrefabAsset: 0

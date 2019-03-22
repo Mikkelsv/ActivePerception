@@ -20,7 +20,7 @@ public class GroundTruthGenerator
     public int[] gridCount;
 
     public int[] requiredCount;
-    private float _requiredAccuracy;
+    public float requiredAccuracy;
 
 
 
@@ -32,7 +32,7 @@ public class GroundTruthGenerator
         _pcm = pcm;
         _ogm = ogm;
         _som = som;
-        _requiredAccuracy = requiredAccuracy;
+        this.requiredAccuracy = requiredAccuracy;
         Generate(false, false);
     }
 
@@ -90,7 +90,7 @@ public class GroundTruthGenerator
         for (int objectIndex = 0; objectIndex < _grids.Length; objectIndex++)
         {
             gridCount[objectIndex] = CountGrid(_grids[objectIndex]);
-            requiredCount[objectIndex] = (int)(gridCount[objectIndex] * _requiredAccuracy);
+            requiredCount[objectIndex] = (int)(gridCount[objectIndex] * requiredAccuracy);
         }
     }
 

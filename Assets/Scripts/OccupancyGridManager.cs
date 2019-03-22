@@ -7,7 +7,7 @@ public class OccupancyGridManager {
 
     
     private int[] _grid;
-    private float[] _occupancyGridWithObservation;
+    private float[] _occupancyGrid;
     private bool[] _builtGrid;
     private float _gridSize;
 
@@ -29,7 +29,7 @@ public class OccupancyGridManager {
     {
       
         _grid = new int[g * g * g];
-        _occupancyGridWithObservation = new float[g * g * g + 3];
+        _occupancyGrid = new float[g * g * g + 3];
         _builtGrid = new bool[g * g * g];
         
         _gridObject = new GameObject();
@@ -51,14 +51,14 @@ public class OccupancyGridManager {
     public void ClearGrid()
     {
         _grid = new int[_gridCountCubed];
-        _occupancyGridWithObservation = new float[_gridCountCubed + 3] ;
+        _occupancyGrid = new float[_gridCountCubed] ;
         _builtGrid = new bool[_gridCountCubed];
         occupiedCount = 0;
     }
 
     public float[] GetGrid()
     {
-        return _occupancyGridWithObservation;
+        return _occupancyGrid;
     }
 
 
@@ -70,9 +70,9 @@ public class OccupancyGridManager {
         for(int i=0; i<_grid.Length; i++)
         {
             _grid[i] += newPoints[i];
-            if (newPoints[i] > 0 && _occupancyGridWithObservation[i] == 0)
+            if (newPoints[i] > 0 && _occupancyGrid[i] == 0)
             {
-                _occupancyGridWithObservation[i] = 1f;
+                _occupancyGrid[i] = 1f;
                 increasedOccupiedCount++;
             }
         }
@@ -108,12 +108,9 @@ public class OccupancyGridManager {
         }
     }
 
-    public float[] GetObservations(int v, float distance, int targetCount)
+    public float[] GetObservations()
     {
-        _occupancyGridWithObservation[_gridCountCubed] = v;
-        _occupancyGridWithObservation[_gridCountCubed+ 1] = distance;
-        _occupancyGridWithObservation[_gridCountCubed + 2] = occupiedCount * 1f/targetCount;
-        return _occupancyGridWithObservation;
+        return _occupancyGrid;
     }
 
     public void BuildGrid(float[] grid)

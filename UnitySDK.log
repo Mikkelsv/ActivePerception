@@ -1,4 +1,4 @@
-3/19/2019 3:52:08 PM
+3/22/2019 4:53:15 PM
  
 Log
 Commencing training using mlagents
@@ -8,11 +8,11 @@ RuntimeController:Awake() (at Assets/Scripts/Learning/RuntimeController.cs:40)
 Log
 121 views created
 UnityEngine.Debug:Log(Object)
-ViewManager:GenerateViews() (at Assets/Scripts/ViewManager.cs:89)
-ViewManager:.ctor(Int32, Single) (at Assets/Scripts/ViewManager.cs:26)
+ViewManager:GenerateViews() (at Assets/Scripts/ViewManager.cs:108)
+ViewManager:.ctor(Int32, Single) (at Assets/Scripts/ViewManager.cs:29)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:62)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
 Log
 LowResSphere used as point cloud representation object
@@ -20,7 +20,7 @@ UnityEngine.Debug:Log(Object)
 PointCloudManager:.ctor(RenderTexture, Single, Camera) (at Assets/Scripts/PointCloudManager.cs:34)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:65)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
 Log
 Generated grids of 10 objects
@@ -30,7 +30,7 @@ GroundTruthGenerator:Generate(Boolean, Boolean) (at Assets/Scripts/GroundTruthGe
 GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:67)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
 Log
 Ground Truth Objects Generated
@@ -39,5 +39,60 @@ GroundTruthGenerator:Generate(Boolean, Boolean) (at Assets/Scripts/GroundTruthGe
 GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:67)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:15)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
+
+Log
+0.1625544
+UnityEngine.Debug:Log(Object)
+SystemInterface:CollectObservations() (at Assets/Scripts/SystemInterface.cs:109)
+NbvManager:CollectObservations() (at Assets/Scripts/Learning/NbvManager.cs:24)
+NbvAgent:CollectObservations() (at Assets/Scripts/Learning/NbvAgent.cs:26)
+MLAgents.Agent:SendInfoToBrain() (at Assets/ML-Agents/Scripts/Agent.cs:574)
+MLAgents.Agent:SendInfo() (at Assets/ML-Agents/Scripts/Agent.cs:984)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:583)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+0.1625544
+UnityEngine.Debug:Log(Object)
+SystemInterface:CollectObservations() (at Assets/Scripts/SystemInterface.cs:109)
+NbvManager:CollectObservations() (at Assets/Scripts/Learning/NbvManager.cs:24)
+NbvAgent:CollectObservations() (at Assets/Scripts/Learning/NbvAgent.cs:26)
+MLAgents.Agent:SendInfoToBrain() (at Assets/ML-Agents/Scripts/Agent.cs:574)
+MLAgents.Agent:SendInfo() (at Assets/ML-Agents/Scripts/Agent.cs:984)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:583)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+0.1625544
+UnityEngine.Debug:Log(Object)
+SystemInterface:CollectObservations() (at Assets/Scripts/SystemInterface.cs:109)
+NbvManager:CollectObservations() (at Assets/Scripts/Learning/NbvManager.cs:24)
+NbvAgent:CollectObservations() (at Assets/Scripts/Learning/NbvAgent.cs:26)
+MLAgents.Agent:SendInfoToBrain() (at Assets/ML-Agents/Scripts/Agent.cs:574)
+MLAgents.Agent:SendInfo() (at Assets/ML-Agents/Scripts/Agent.cs:984)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:583)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+0.317852
+UnityEngine.Debug:Log(Object)
+SystemInterface:CollectObservations() (at Assets/Scripts/SystemInterface.cs:109)
+NbvManager:CollectObservations() (at Assets/Scripts/Learning/NbvManager.cs:24)
+NbvAgent:CollectObservations() (at Assets/Scripts/Learning/NbvAgent.cs:26)
+MLAgents.Agent:SendInfoToBrain() (at Assets/ML-Agents/Scripts/Agent.cs:574)
+MLAgents.Agent:SendInfo() (at Assets/ML-Agents/Scripts/Agent.cs:984)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:583)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
+
+Log
+0.6087497
+UnityEngine.Debug:Log(Object)
+SystemInterface:CollectObservations() (at Assets/Scripts/SystemInterface.cs:109)
+NbvManager:CollectObservations() (at Assets/Scripts/Learning/NbvManager.cs:24)
+NbvAgent:CollectObservations() (at Assets/Scripts/Learning/NbvAgent.cs:26)
+MLAgents.Agent:SendInfoToBrain() (at Assets/ML-Agents/Scripts/Agent.cs:574)
+MLAgents.Agent:SendInfo() (at Assets/ML-Agents/Scripts/Agent.cs:984)
+MLAgents.Academy:EnvironmentStep() (at Assets/ML-Agents/Scripts/Academy.cs:583)
+MLAgents.Academy:FixedUpdate() (at Assets/ML-Agents/Scripts/Academy.cs:611)
 

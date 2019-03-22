@@ -28,6 +28,7 @@ public class StudyObjectMamanger
     public void PrepareRandomStudyObject()
     {
         int i = _rnd.Next(_countObjects);
+        i = 0; //Set for only one object
         PrepareStudyObject(i);
     }
 

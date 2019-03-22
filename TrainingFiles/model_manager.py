@@ -4,13 +4,12 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 
 
 class ModelManager:
-    learning_rate = 0.1
 
     def __init__(self, load=False, num_input=2, num_views=121, num_output=4, learning_rate=0.01,
                  model_name="default_model"):
         self.learning_rate = learning_rate
         self.num_input = num_input
-        self.num_views = num_views
+        self.num_views = num_views*2  # Both current and visited
         self.num_output = num_output
         self.model_name = model_name
         self.folder = "Models/"
@@ -51,7 +50,6 @@ class ModelManager:
         return self.model
 
     def generate_conv_model(self):
-
 
         inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)

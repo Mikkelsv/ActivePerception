@@ -75,6 +75,7 @@ public class SystemInterface {
     {
         _ogm.ClearGrid();
         _som.PrepareRandomStudyObject();
+        _vm.Reset();
         RenderView(0);
     }
 
@@ -99,6 +100,18 @@ public class SystemInterface {
 
     public float[] CollectObservations()
     {
-        return _ogm.GetObservations(_vm.GetCurrentViewIndex(), _vm.distanceTravelled, _gtg.CurrentObjectGridCount());
+
+        float[] distanceAndCount = new float[]
+        {
+            _vm.distanceTravelled,
+            _rm.ComputeAccuracy()
+        };
+
+        var obs = _ogm.GetGrid()
+            .Concat(_vm.GetCurrentViews())
+            .Concat(_vm.GetVisitedViews())
+            .Concat(distanceAndCount);
+
+        return obs.ToArray();
     }
 }

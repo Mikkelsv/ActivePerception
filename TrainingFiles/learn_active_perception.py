@@ -18,17 +18,19 @@ def main():
     num_output = len(env_info.action_masks[0])
 
     # Fetching model
+    learning_rate = 0.001
     load = False
     model_name = "active_perception_trained"
-    model_manager = ModelManager(load=load, num_input=num_input, num_output=num_output, model_name=model_name)
+    model_manager = ModelManager(load=load, num_input=num_input, num_output=num_output,
+                                 model_name=model_name, learning_rate=learning_rate)
     model = model_manager.get_model()
 
     # Train
     trainer = Trainer(model, env)
     synopsis = SynopsisManager(trainer)
-    trainer.train(2, 5, 5, 1)
+    trainer.train(200, 10, 5, 10)
     synopsis.print_training_summary()
-    trainer.evaluate_solution(2)
+    trainer.evaluate_solution(100)
 
     # Close environment
     env.close()
@@ -39,6 +41,7 @@ def main():
 
 if __name__ == "__main__":
     import sys
+
     print("\n--------------------------- Environment --------------------")
     print("Python version: {}".format(sys.version))
     # check Python version

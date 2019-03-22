@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class ViewManager{
+public class ViewManager {
 
     private int _viewLayers;
 
@@ -15,7 +15,10 @@ public class ViewManager{
 
     public float distanceTravelled = 0;
     private int _currentView = 0;
+    private float[] _currentViewArray;
+    private float[] _visitedViews;
     private int _viewCount;
+    private bool _revisited = false;
 
     private GameObject _viewSphereObject;
 
@@ -26,21 +29,37 @@ public class ViewManager{
         _views = GenerateViews();
         _viewCount = _views.Length;
         _viewDistances = GenerateViewNeighbourhood();
+        Reset();
     }
 
     public Vector3 Reset()
     {
         distanceTravelled = 0f;
+        _visitedViews = new float[_viewCount];
+        _currentViewArray = new float[_viewCount];
+        _revisited = false;
         _currentView = 0;
-        return _views[0];
+        return SetView(0);
     }
 
     public Vector3 SetView(int view)
     {
+        _currentViewArray[_currentView] = 0f;
         distanceTravelled = GetDistance(_currentView, view);
         _currentView = view;
+        _currentViewArray[_currentView] = 1f;
+        if(_visitedViews[view] == 0f)
+        {
+            _visitedViews[view] = 1.0f;
+        }
+        else
+        {
+            _revisited = true;
+        }
+        
         return _views[view];
     }
+
 
     public int GetCurrentViewIndex()
     {
@@ -54,8 +73,8 @@ public class ViewManager{
 
     public Vector3 SetNeighbouringView(int increment = 1)
     {
-        _currentView = (_currentView + increment)%_viewCount;
-        return _views[_currentView];
+        int nextView = (_currentView + increment)%_viewCount;
+        return SetView(nextView);
     }
 
     public int Count()
@@ -160,7 +179,15 @@ public class ViewManager{
 
     internal IEnumerable<float> GetVisitedViews()
     {
-        throw new NotImplementedException();
+        return _visitedViews;
+    }
+
+    internal float[] GetCurrentViews()
+    {
+        if(_currentViewArray.Sum() != 1) {
+            throw new ArgumentOutOfRangeException();
+        }
+        return _currentViewArray;
     }
 
     private Vector3[] SortViews(HashSet<Vector3> views)

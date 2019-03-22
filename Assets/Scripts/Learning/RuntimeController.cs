@@ -38,7 +38,7 @@ public class RuntimeController : MonoBehaviour {
             else
             {
                 Debug.Log("Commencing training using mlagents");
-                testingAgent.enabled = false;
+                //testingAgent.enabled = false;
                 nvbAgent.enabled = true;
                 acadamy.SetActive(true);
             }
@@ -48,7 +48,7 @@ public class RuntimeController : MonoBehaviour {
             Debug.Log("Test environment as user");
             mainController.enabled = true;
             nvbAgent.enabled = false;
-            testingAgent.enabled = false;
+            //testingAgent.enabled = false;
             acadamy.SetActive(false);
         }
     }

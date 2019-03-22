@@ -12,19 +12,11 @@ public class TestingAgent : MonoBehaviour {
 
     [SerializeField]
     float actionFrequency;
-
-    [SerializeField]
-    int maxEpisodes;
         
-    bool nvb = true;
-    int episode = 0;
 
     public TextAsset model;
-    
-    private int _maxStep;
 
     private NbvManager _ball;
-    private int _currentStep = 0;
     private float _currentReward;
     
     TFGraph graph;
@@ -38,7 +30,6 @@ public class TestingAgent : MonoBehaviour {
 #endif
 
         _ball = new NbvManager(depthcamera);
-        _maxStep = _ball.maxStep;
 
         _currentReward = 0f;
 
@@ -50,23 +41,23 @@ public class TestingAgent : MonoBehaviour {
     
     void Update()
     {
-        if(nvb)
-        {
-            _currentStep++;
+        //if(nvb)
+        //{
+        //    _currentStep++;
 
-            float[] actions = ComputeAction(_ball.CollectObservations());
-            Evaluate(actions);
+        //    float[] actions = ComputeAction(_ball.CollectObservations());
+        //    Evaluate(actions);
 
-            if (_currentStep > maxEpisodes)
-            {
-                Debug.Log("Accumulated Reward: " + _currentReward);
-                _currentReward = 0;
-                _ball.Reset();
-                _currentStep = 0;
-                episode++;
+        //    if (_currentStep > maxEpisodes)
+        //    {
+        //        Debug.Log("Accumulated Reward: " + _currentReward);
+        //        _currentReward = 0;
+        //        _ball.Reset();
+        //        _currentStep = 0;
+        //        episode++;
 
-            }
-        }
+        //    }
+        //}
         
     }
 
@@ -82,8 +73,6 @@ public class TestingAgent : MonoBehaviour {
             Debug.Log("Accumulated Reward: " + _currentReward);
             _currentReward = 0;
             _ball.Reset();
-            _currentStep = 0;
-            nvb = false;
         }
 
     }

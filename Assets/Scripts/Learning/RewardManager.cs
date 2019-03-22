@@ -23,14 +23,15 @@ public class RewardManager {
         return r;
     }
 
-    public float ComputeLocalIncreasedAccuracy()
+    public float ComputeAccuracy()
     {
-        return 1f;
+        float acc = _ogm.occupiedCount *1f/ _gtg.gridCount[_som.CurrentObject()];
+        return acc;
     }
 
     public float ComputeGlobalIncreasedAccuracy()
     {
-        int prediscovered = _ogm.increasedOccupiedCount - _ogm.increasedOccupiedCount;
+        int prediscovered = _ogm.occupiedCount - _ogm.increasedOccupiedCount;
         int undiscovered = _gtg.gridCount[_som.CurrentObject()] - prediscovered;
         float increasedAccuracy = _ogm.increasedOccupiedCount * 1f / undiscovered;
         return increasedAccuracy;
@@ -51,7 +52,7 @@ public class RewardManager {
 
     public bool DetermineDone()
     {
-        return _ogm.occupiedCount > _gtg.requiredCount[_som.CurrentObject()];
+        return ComputeAccuracy() > _gtg.requiredAccuracy;
     }
 
     public static float Sigmoid(double value)

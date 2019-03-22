@@ -1,7 +1,11 @@
-3/21/2019 3:21:03 PM
+3/22/2019 2:56:51 PM
  
 Log
 Commencing training using mlagents
+
+Exception
+NullReferenceException: Object reference not set to an instance of an object
+RuntimeController.Awake () (at <2066e691cb3c48569207cd507a578f02>:0)
 
 Log
 121 views created

@@ -26,9 +26,12 @@ class Trainer:
         env_info = self.env.reset(train_mode=False)[self.default_brain]
 
         # self.observation_shape = len(env_info.vector_observations[0])
-        self.observation_shape = (32, 32, 32, 1)
-        self.views_shape = (121, 1)
         self.num_actions = len(env_info.action_masks[0])
+        self.num_views = self.num_actions * 2  # Both current and visited views
+        self.g = 32
+        self.gCubed = self.g ** 3
+        self.observation_shape = (32, 32, 32, 1)
+        self.views_shape = (self.num_views, 1)
 
         # Init Memory
         input_shape = (self.observation_shape, self.views_shape)
@@ -126,7 +129,7 @@ class Trainer:
             distances.append(distance)
             accuracies.append(accuracy)
 
-            action_indexed, prediction = self.get_action([observation, view], train)
+            action_indexed, prediction = self.get_action([observation, view])
 
             # Fetch next environment and reward, track the time
             now = time.time()
@@ -136,7 +139,7 @@ class Trainer:
             reward = env_info.rewards[0]
 
             # Update memory
-            observations = np.vstack([observation, observations])
+            observations = np.vstack([observations, observation])
             views = np.vstack([views, view])
             predictions = np.vstack([predictions, prediction])
             action_indexes.append(action_indexed)
@@ -175,7 +178,7 @@ class Trainer:
             dur = self._get_generation_duration()
             self.generation_reward.append(np.array([avg_reward, avg_steps, avg_distance, avg_accuracy]))
             self.sm.write(("Gen {}\t Avg Reward: {:.5}, Duration {:.1f}s, SpE {:.1f}, " +
-                          "AvgDistance: {:.1f}, AvgAccuracy: {:.3f}")
+                           "AvgDistance: {:.1f}, AvgAccuracy: {:.3f}")
                           .format(generation_number, avg_reward, dur, avg_steps, avg_distance, avg_accuracy))
 
     def evaluate_solution(self, num_runs):
@@ -189,7 +192,7 @@ class Trainer:
     def close_environment(self):
         self.env.close()
 
-    def get_action(self, observation, stochastic):
+    def get_action(self, observation, stochastic=True):
         predictions = self.model.predict(observation)[0]
         if stochastic and random.random() < self.exploration:
             action_index = np.random.randint(0, self.num_actions)
@@ -197,7 +200,6 @@ class Trainer:
             now = time.time()
             action_index = np.argmax(predictions)
             self.update_time_keeper(self.duration_selecting_action, time.time() - now)
-
         return action_index, predictions
 
     def get_discounted_action_rewards(self, predictions, action_indexes, rewards):
@@ -217,8 +219,19 @@ class Trainer:
 
         # Update chosen action prediction to match reward
         for i in range(len(predictions)):
-            action_rewards[i, action_indexes[i]] = discounted_activated_rewards[i]  # Set true output to be discounted reward
+            correct_prediction = discounted_activated_rewards[i]
+            action_rewards[i, action_indexes[i]] = correct_prediction  # Set true output to be discounted reward
         return action_rewards, discounted_activated_rewards
+
+    def reshape_input(self, observations):
+        grid = observations[0, :self.gCubed].reshape((-1, 32, 32, 32, 1))
+        views = observations[0, self.gCubed:self.gCubed + self.num_views].reshape((-1, self.num_views, 1))
+        distance = observations[0, -2]
+        accuracy = observations[0, -1]
+        return grid, views, distance, accuracy
+
+    def sigmoid(self, x):
+        return 1 / (1 + np.exp(-x))
 
     def _get_generation_duration(self):
         generation_end_time = time.time()
@@ -230,15 +243,3 @@ class Trainer:
     def update_time_keeper(keeper, duration):
         keeper[0] += duration
         keeper[1] += 1
-
-    def reshape_input(self, observations):
-        grid = observations[0, :-3].reshape((-1, 32, 32, 32, 1))
-        views = np.zeros(self.num_actions)
-        views[int(observations[0, -3])] = 1
-        views = views.reshape((-1, self.num_actions, 1))
-        distance = observations[0, -2]
-        accuracy = observations[0, -1]
-        return grid, views, distance, accuracy
-
-    def sigmoid(self, x):
-        return 1 / (1 + np.exp(-x))

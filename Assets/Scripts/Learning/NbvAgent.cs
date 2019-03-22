@@ -8,6 +8,7 @@ public class NbvAgent : Agent {
     [SerializeField]
     Camera depthCamera;
 
+
     private NbvManager _nvbManager;
 
     void Start()
