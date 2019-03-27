@@ -6,9 +6,13 @@ from synopsis_manager import SynopsisManager
 
 
 def main():
-    # env_name = "../envs/3DBall"  # Name of the Unity environment binary to launch
+    use_executable = False
+
     env_name = "Env/ActivePerception"
-    env = UnityEnvironment(file_name=env_name)  # Add seed=n for consistent results
+    if use_executable:
+        env = UnityEnvironment(file_name=env_name)
+    else:
+        env = UnityEnvironment(file_name=None)  # Add seed=n for consistent results
 
     # Investigate environment
     default_brain = env.brain_names[0]
@@ -20,17 +24,17 @@ def main():
     # Fetching model
     learning_rate = 0.001
     load = False
-    model_name = "active_perception_trained"
-    model_manager = ModelManager(load=load, num_input=num_input, num_output=num_output,
+    model_name = "greedyNBVmodel_100views"
+    model_manager = ModelManager(load=load, num_views=num_output, num_output=num_output,
                                  model_name=model_name, learning_rate=learning_rate)
     model = model_manager.get_model()
 
     # Train
     trainer = Trainer(model, env)
-    synopsis = SynopsisManager(trainer)
-    trainer.train(200, 10, 5, 10)
+    synopsis = SynopsisManager(trainer, run_name=model_name)
+    trainer.train(10, 10, 5, 2)
     synopsis.print_training_summary()
-    trainer.evaluate_solution(100)
+    trainer.evaluate_solution(5)
 
     # Close environment
     env.close()

@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+
 class SynopsisManager:
 
     def __init__(self, trainer, run_name="defaultRun"):
@@ -29,8 +33,12 @@ class SynopsisManager:
         a.append("{} generations, {} batches, {} episodes, {} tests".format(
             self.t.num_generations, self.t.num_batches, self.t.batch_size, self.t.num_tests))
         a.append("\t - In total {} training episodes".format(self.t.num_episodes))
-        a.append("Memory - {} buffer size, {} batch training size".format(
-            self.t.buffer_size, self.t.batch_training_size))
+        if self.t.replay:
+            a.append("ReplayMemory - {} buffer size, {} batch training size".format(
+                self.t.buffer_size, self.t.batch_training_size))
+        else:
+            a.append("No replay - {} buffer size, {} batch training size".format(
+                self.t.buffer_size, self.t.batch_training_size))
         self.writelines(a)
 
     def print_training_summary(self):
@@ -51,13 +59,18 @@ class SynopsisManager:
         self.generation_reward_summary()
         self.plot_reward_summary()
 
-    def print_evaluation(self, num_runs, avg_reward, avg_steps, avg_distance, avg_accuracy):
+    def print_evaluation(self, num_runs, avg_reward, avg_steps, avg_distance, avg_accuracy, distances, accuracies):
         a = []
         a.append("\n-------------------- Results --------------------")
         a.append("Number of tests: {}".format(num_runs))
-        a.append("Mean reward: {:.3f} \t Mean steps: {:1f} \t Mean distance: {:1f}, Avg Accuracy: {:.3f}"
+        a.append("Mean reward: {:.3f},\t Mean steps: {:1f},\t Mean distance: {:1f},\t Avg Accuracy: {:.3f}"
                  .format(avg_reward, avg_steps, avg_distance, avg_accuracy))
+        a.append("Distances: ")
+        a.append(np.array2string(np.asarray(distances), separator=', ', precision=1))
+        a.append("Accuracy:")
+        a.append(np.array2string(np.asarray(accuracies), separator=', ', precision=3))
         self.writelines(a)
+        self.plot_evaluation_summary(distances, accuracies)
 
     def write(self, string):
         print(string)
@@ -81,33 +94,54 @@ class SynopsisManager:
         f.close()
 
     def plot_reward_summary(self):
-        import matplotlib.pyplot as plt
-        import numpy as np
 
         generation_reward = np.asarray(self.t.generation_reward)
 
         rewards = generation_reward[:, 0]
         steps = generation_reward[:, 1]
         distance = generation_reward[:, 2]
-        plt.figure()
-        plt.tight_layout()
+
+        plt.figure(figsize=(6,12))
+
 
         plt.subplot(411)
         plt.title("Average Reward")
+        plt.ylim([0,1])
         plt.plot(rewards)
-        print("[Rewards plotted]")
 
         plt.subplot(412)
         plt.title("Steps")
+        plt.ylim([0,10])
         plt.plot(steps)
 
         plt.subplot(413)
         plt.title("Distance")
+        plt.ylim([0,2000])
         plt.plot(distance)
 
         plt.subplot(414)
         plt.plot(self.t.loss)
-        plt.savefig(self.name)
+
+        plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.2)
+        plt.savefig(self.name + "_training")
+        print("[Training Summary plotted]")
+
+    def plot_evaluation_summary(self, dist, acc):
+        plt.figure()
+
+        plt.subplot(211)
+        plt.title("Average Cumulative Distance")
+        plt.ylim([0, 1000])
+        plt.plot(dist)
+
+        plt.subplot(212)
+        plt.title("Completion Accuracy")
+        plt.ylim([0, 1])
+        plt.plot(acc)
+
+        plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.5)
+        plt.savefig(self.name + "_evaluation")
+        print("[Evaluation plotted]")
 
     @staticmethod
     def get_time_keeper_average(keeper):

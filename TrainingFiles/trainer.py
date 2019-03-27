@@ -13,13 +13,10 @@ class Trainer:
     def __init__(self, model, env):
         self.model = model
         self.env = env
-        self.exploration = 0.8
-        self.exploration_decay = 0.9
+        self.exploration = 0.9
+        self.exploration_decay = 0.999
+        self.exploration_minimum = 0.5
         self.gamma = 0.0  # Future reward discount
-
-        # Memory specifics
-        self.buffer_size = 1000
-        self.batch_training_size = 64
 
         # Setup environment dependant variables
         self.default_brain = self.env.brain_names[0]
@@ -33,9 +30,16 @@ class Trainer:
         self.observation_shape = (32, 32, 32, 1)
         self.views_shape = (self.num_views, 1)
 
+        # Memory specifics
+        self.replay = False
+        self.buffer_size = 100
+        self.batch_training_size = 32
+        buffer_filling_rate = 0.2
+        self.fill_memory_runs = int(self.buffer_size / 10 * buffer_filling_rate)
+
         # Init Memory
         input_shape = (self.observation_shape, self.views_shape)
-        self.memory = Memory(input_shape, self.num_actions, self.buffer_size)
+        self.memory = Memory(input_shape, self.num_actions, self.buffer_size, replay=self.replay)
 
         # Runtime variables
         self.step_count = 0
@@ -87,6 +91,10 @@ class Trainer:
 
         self.duration_total = time.time()
         self.generation_time_stamp = time.time()
+
+        if self.replay:
+            self.fill_memory()
+
         while episode < self.num_episodes:
             episode += 1
             self.run_episode()
@@ -103,13 +111,14 @@ class Trainer:
                 self.evaluate_generation(generation)
                 # Update runtime variables
                 generation += 1
-                self.exploration *= self.exploration_decay
+                self.exploration = max(self.exploration_decay * self.exploration_decay, self.exploration_minimum)
         self.duration_total = time.time() - self.duration_total
 
-    def run_episode(self, train=True):
+    def run_episode(self, train=True, stochastic=False):
         """
             Resets and runs a single episode in the trainer environment
-        :param train: Wether to train or test
+        :param stochastic: Determine action randomly
+        :param train: Whether to train or test
         :return: Steps in episode, Distances, Accuracies and Mean Reward of episode
         """
         observations = np.empty(0).reshape((0,) + self.observation_shape)
@@ -129,7 +138,7 @@ class Trainer:
             distances.append(distance)
             accuracies.append(accuracy)
 
-            action_indexed, prediction = self.get_action([observation, view])
+            action_indexed, prediction = self.get_action([observation, view], train, stochastic)
 
             # Fetch next environment and reward, track the time
             now = time.time()
@@ -148,53 +157,15 @@ class Trainer:
             # If end of episode
             if env_info.local_done[0]:
                 # Update Memory
-                action_rewards, discounted_rewards = self.get_discounted_action_rewards(predictions,
-                                                                                        action_indexes, rewards)
+                predictions_corrected, discounted_rewards = self.get_corrected_predictions(predictions,
+                                                                                           action_indexes, rewards)
                 if train:
-                    self.memory.add(observations, views, action_rewards)
+                    self.memory.add(observations, views, predictions_corrected)
                 return steps, distances, accuracies, discounted_rewards
 
-    def evaluate_model(self, num_runs):
-        rewards = []
-        sum_distances = np.zeros(num_runs)
-        episode_steps = np.zeros(num_runs)
-        max_accuracies = np.zeros(num_runs)
-        for i in range(num_runs):
-            steps, distances, accuracies, discounted_rewards = self.run_episode(train=False)
-            rewards.append(discounted_rewards)
-            sum_distances[i] = np.sum(distances)
-            episode_steps[i] = steps
-            max_accuracies[i] = np.max(accuracies)
-        avg_reward = np.mean(rewards)
-        avg_steps = np.mean(episode_steps)
-        avg_distance = np.mean(sum_distances)
-        avg_accuracy = np.mean(max_accuracies)
-        return avg_reward, avg_steps, avg_distance, avg_accuracy
-
-    def evaluate_generation(self, generation_number):
-        if self.num_tests:
-            avg_reward, avg_steps, avg_distance, avg_accuracy = self.evaluate_model(self.num_tests)
-
-            dur = self._get_generation_duration()
-            self.generation_reward.append(np.array([avg_reward, avg_steps, avg_distance, avg_accuracy]))
-            self.sm.write(("Gen {}\t Avg Reward: {:.5}, Duration {:.1f}s, SpE {:.1f}, " +
-                           "AvgDistance: {:.1f}, AvgAccuracy: {:.3f}")
-                          .format(generation_number, avg_reward, dur, avg_steps, avg_distance, avg_accuracy))
-
-    def evaluate_solution(self, num_runs):
-        if num_runs:
-            avg_reward, avg_steps, avg_distance, avg_acc = self.evaluate_model(num_runs)
-            self.sm.print_evaluation(num_runs, avg_reward, avg_steps, avg_distance, avg_acc)
-
-    def get_model(self):
-        return self.model
-
-    def close_environment(self):
-        self.env.close()
-
-    def get_action(self, observation, stochastic=True):
+    def get_action(self, observation, training, stochastic):
         predictions = self.model.predict(observation)[0]
-        if stochastic and random.random() < self.exploration:
+        if (training and random.random() < self.exploration) or stochastic:  # Either training or filling memory
             action_index = np.random.randint(0, self.num_actions)
         else:
             now = time.time()
@@ -202,9 +173,8 @@ class Trainer:
             self.update_time_keeper(self.duration_selecting_action, time.time() - now)
         return action_index, predictions
 
-    def get_discounted_action_rewards(self, predictions, action_indexes, rewards):
-        # Compute true action prediction derived from reward
-        action_rewards = predictions
+    def get_corrected_predictions(self, predictions, action_indexes, rewards):
+        # Compute true action prediction derived from discounted reward
         prior = 0
         discounted_rewards = np.empty(len(rewards))
         if self.gamma > 0:
@@ -215,13 +185,13 @@ class Trainer:
                 prior = new_r
         else:
             discounted_rewards = rewards
-        discounted_activated_rewards = np.tanh(discounted_rewards)
+        discounted_activated_rewards = self.sigmoid(np.array(discounted_rewards))
 
         # Update chosen action prediction to match reward
         for i in range(len(predictions)):
             correct_prediction = discounted_activated_rewards[i]
-            action_rewards[i, action_indexes[i]] = correct_prediction  # Set true output to be discounted reward
-        return action_rewards, discounted_activated_rewards
+            predictions[i, action_indexes[i]] = correct_prediction  # Set true output to be discounted reward
+        return predictions, discounted_activated_rewards
 
     def reshape_input(self, observations):
         grid = observations[0, :self.gCubed].reshape((-1, 32, 32, 32, 1))
@@ -229,6 +199,60 @@ class Trainer:
         distance = observations[0, -2]
         accuracy = observations[0, -1]
         return grid, views, distance, accuracy
+
+    def fill_memory(self):
+
+        for i in range(self.fill_memory_runs):
+            print("\rFilling buffer - {}/{} episodes".format(i + 1, self.fill_memory_runs), end="")
+            self.run_episode(stochastic=True)
+        print("\n")
+
+    def evaluate_model(self, num_runs):
+        rewards = []
+        sum_distances = np.zeros(num_runs)
+        episode_steps = np.zeros(num_runs)
+        max_accuracies = np.zeros(num_runs)
+        agg_distances = []
+        agg_accuracies = []
+        for i in range(num_runs):
+            steps, distances, accuracies, discounted_rewards = self.run_episode(train=False)
+            rewards.append(discounted_rewards)
+            sum_distances[i] = np.sum(distances)
+            episode_steps[i] = steps
+            max_accuracies[i] = np.max(accuracies)
+            agg_distances.append(distances)
+            agg_accuracies.append(accuracies)
+        agg_distances = np.asarray(agg_distances)
+        agg_accuracies = np.asarray(agg_accuracies)
+        avg_distances = np.mean(agg_distances, axis=0)
+        cumsum_distances = np.cumsum(avg_distances)
+        avg_accuracies = np.mean(agg_accuracies, axis=0)
+        avg_reward = np.mean(rewards)
+        avg_steps = np.mean(episode_steps)
+        avg_distance = np.mean(sum_distances)
+        avg_accuracy = np.mean(max_accuracies)
+        return avg_reward, avg_steps, avg_distance, avg_accuracy, cumsum_distances, avg_accuracies
+
+    def evaluate_generation(self, generation_number):
+        if self.num_tests:
+            avg_reward, avg_steps, avg_distance, max_acc, cumsum_dist, avg_acc = self.evaluate_model(self.num_tests)
+
+            dur = self._get_generation_duration()
+            self.generation_reward.append(np.array([avg_reward, avg_steps, avg_distance, max_acc]))
+            self.sm.write(("Gen {}\t Avg Reward: {:.5}, Duration {:.1f}s, SpE {:.1f}, " +
+                           "AvgDistance: {:.1f}, AvgAccuracy: {:.3f}")
+                          .format(generation_number, avg_reward, dur, avg_steps, avg_distance, max_acc))
+
+    def evaluate_solution(self, num_runs):
+        if num_runs:
+            avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc = self.evaluate_model(num_runs)
+            self.sm.print_evaluation(num_runs, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc)
+
+    def get_model(self):
+        return self.model
+
+    def close_environment(self):
+        self.env.close()
 
     def sigmoid(self, x):
         return 1 / (1 + np.exp(-x))

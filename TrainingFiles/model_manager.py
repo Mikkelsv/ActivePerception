@@ -5,7 +5,7 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 
 class ModelManager:
 
-    def __init__(self, load=False, num_input=2, num_views=121, num_output=4, learning_rate=0.01,
+    def __init__(self, load=False, num_input=32, num_views=121, num_output=121, learning_rate=0.01,
                  model_name="default_model"):
         self.learning_rate = learning_rate
         self.num_input = num_input
@@ -57,12 +57,13 @@ class ModelManager:
         pool = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), name="pooling_layer")(c2)
         conv_output = tf.keras.layers.Flatten(name="flatten_conv_output")(pool)
 
+        fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(conv_output)
+
         auxiliary_inputs = tf.keras.layers.Input(shape=(self.num_views, 1), name="views")
         aux_output = tf.keras.layers.Flatten(name="flatten_views")(auxiliary_inputs)
-        merged = tf.keras.layers.Concatenate()([conv_output, aux_output])
+        merged = tf.keras.layers.Concatenate()([fc1, aux_output])
 
-        fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(merged)
-        outputs = tf.keras.layers.Dense(self.num_output, activation="tanh", name="actions")(fc1)
+        outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(merged)
 
         self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
 
@@ -73,6 +74,7 @@ class ModelManager:
         print("TensorFlow version: " + tf.__version__)
         print("TF Keras version: " + tf.keras.__version__)
         self.model.summary()
+        d = self.model.get_weights()
         return self.model
 
     def save_model(self, name="", keep_var_names=None, clear_devices=True):
@@ -126,14 +128,16 @@ class ModelManager:
         self.compile_model()
 
         print("Loaded Model -" + model_name + ".h5- from " + self.folder)
+        self.model.summary()
         return self.model
 
     def compile_model(self):
         opt = tf.keras.optimizers.Adam(lr=self.learning_rate)
         # self.model.compile(optimizer=tf.train.AdamOptimizer(self.learning_rate),
         self.model.compile(optimizer=opt,
-                           loss='categorical_crossentropy',
+                           loss='mean_squared_error',
                            metrics=['accuracy'])
+
 
     def _generate_auxiliary_input_model(self):
 
@@ -165,14 +169,24 @@ if __name__ == "__main__":
 
     print(tf.test.is_gpu_available())
 
-    num_inputs = 2
-    num_outputs = 2
-    mm = ModelManager(False, num_inputs, num_outputs, model_name="generated_test_model")
+    num_inputs = 32*32*32
+    num_views = 242
 
-    data = np.random.random((1000, num_inputs))
-    labels = np.random.random((1000, num_outputs))
+    mm = ModelManager(model_name="generated_test_model")
 
-    mm.model.fit([data, data], labels, epochs=10, batch_size=32)
+    obs = np.random.randint(2, size=num_inputs).reshape((1,32,32,32,1))
+    views = np.random.randint(2, size=num_views).reshape((1,242,1))
+
+    p = mm.model.predict([obs,views])
+    pmean = np.mean(p)
+    p2std = np.std(p)
+
+    obs2 = np.random.randint(1, size=num_inputs).reshape((1, 32, 32, 32, 1))
+    views2 = np.random.randint(1, size=num_views).reshape((1, 242, 1))
+
+    p2 = mm.model.predict([obs2, views2])
+    p2mean = np.mean(p2)
+    p2std = np.std(p2)
 
     tf.keras.backend.set_learning_phase(0)
     # tf.keras.backend.get_session(),

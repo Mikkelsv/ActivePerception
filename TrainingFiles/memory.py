@@ -3,16 +3,20 @@ import numpy as np
 
 class Memory:
 
-    def __init__(self, shape_input,num_output, buffer_size=500):
+    def __init__(self, shape_input, num_output, buffer_size=500, replay=True):
         self.num_actions = num_output
 
-        self.observations = np.zeros(((buffer_size,) + shape_input[0]))
-        self.views = np.zeros(((buffer_size,) + shape_input[1]))
+        self.observations_shape = shape_input[0]
+        self.views_shape = shape_input[1]
+
+        self.observations = np.zeros(((buffer_size,) + self.observations_shape))
+        self.views = np.zeros(((buffer_size,) + self.views_shape))
         self.actions = np.zeros((buffer_size, num_output))
 
         self.memory_index = 0
         self.buffer_size = buffer_size
         self.memory_full = False
+        self.replay = replay
 
     def add(self, state_observations, state_views, reward):
         # new_info = np.hstack((state, reward))
@@ -35,7 +39,6 @@ class Memory:
             self.views[m:, :] = state_views[:fit_count]
             self.actions[m:, :] = reward[:fit_count]
 
-
             # Fit start of buffer
             self.observations[:overflow_count, :] = state_observations[fit_count:]
             self.views[:overflow_count, :] = state_views[fit_count:]
@@ -50,14 +53,18 @@ class Memory:
             indices = np.random.randint(0, self.buffer_size, batch_size)
         else:
             indices = np.random.randint(0, self.memory_index, batch_size)
-        # batch = self.memory[indices]
-        # batch_observations = batch[:, :self.num_observations]
-        # batch_actions = batch[:, self.num_observations:]
         batch_observations = self.observations[indices]
         batch_views = self.views[indices]
         batch_actions = self.actions[indices]
+        if not self.replay:
+            self.reset_buffers()
+
         return batch_observations, batch_views, batch_actions
 
+    def reset_buffers(self):
+        self.observations = np.zeros(((self.buffer_size,) + self.observations_shape))
+        self.views = np.zeros(((self.buffer_size,) + self.views_shape))
+        self.actions = np.zeros((self.buffer_size, self.num_actions))
 
 def main():
     d = 2
