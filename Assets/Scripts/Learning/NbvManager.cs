@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class NbvManager
 {
-    private int _maxStep = 10;
+    private int _maxStep = 20;
     private int _currentStep = 0;
     private SystemInterface _si;
 

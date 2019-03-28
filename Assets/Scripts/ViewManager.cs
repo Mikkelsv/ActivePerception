@@ -22,11 +22,11 @@ public class ViewManager {
 
     private GameObject _viewSphereObject;
 
-	public ViewManager(int viewLayers, float viewRadius)
+	public ViewManager(int viewLayers, float viewRadius, int numberViews=100)
     {
         _viewLayers = viewLayers;
         _viewRadius = viewRadius;
-        _views = GenerateViews();
+        _views = GenerateViews(numberViews);
         _viewCount = _views.Length;
         _viewDistances = GenerateViewNeighbourhood();
         Reset();
@@ -51,6 +51,7 @@ public class ViewManager {
         if(_visitedViews[view] == 0f)
         {
             _visitedViews[view] = 1.0f;
+            _revisited = false;
         }
         else
         {
@@ -101,12 +102,61 @@ public class ViewManager {
         }
     }
 
-    private Vector3[] GenerateViews()
+    private Vector3[] GenerateViews(int numberViews)
     {
-        HashSet<Vector3> viewsUnsorted = GenerateViewSphere();
+        HashSet<Vector3> viewsUnsorted = GenerateViewSphereAntipodally(numberViews);
         Vector3[] viewsSorted = SortViews(viewsUnsorted);
         Debug.Log(viewsSorted.Length.ToString() + " views created");
         return viewsSorted;
+    }
+
+    private HashSet<Vector3> GenerateViewSphereAntipodally(int numberViews)
+    {
+
+        /*
+         * https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3223966/
+         */
+
+        HashSet<Vector3> views = new HashSet<Vector3>();
+
+        float pi = Mathf.PI;
+
+        int K = numberViews;
+        int n = (int)Math.Round(Math.Sqrt(K * pi / 8f));
+        int ksum = 0;
+        int ki;
+
+        for (int i=1; i<=n; i++)
+        {
+            float theta = (float)((i - 0.5f) * pi / 2f / n);
+
+            if (i == n)
+            {
+                ki = K - ksum;
+            }
+            else
+            {
+                ki = (int)Mathf.Round(2 * pi * Mathf.Sin(theta) / (Mathf.PI * (1f / Mathf.Sin(pi / (4 * n)))) * K);
+                ksum += ki;
+            }
+          
+            for(int j=1; j<=ki; j++)
+            {
+                float phi = (float)((j - 0.5f) * 2 * pi / (ki));
+
+                float x = Mathf.Sin(theta) * Mathf.Cos(phi);
+                float z = -Mathf.Sin(theta) * Mathf.Sin(phi);
+                float y = Mathf.Cos(theta);
+                Vector3 vector = new Vector3(x, y, z);
+                vector.Normalize();
+                Vector3 scaledVector = vector * this._viewRadius;
+                views.Add(scaledVector);
+            }
+        }
+
+
+
+        return views;
     }
 
     private HashSet<Vector3> GenerateViewSphere()
@@ -217,5 +267,10 @@ public class ViewManager {
     public float GetDistance(int from, int to)
     {
         return _viewDistances[from][to];
+    }
+
+    public bool GetRevisited()
+    {
+        return _revisited;
     }
 }

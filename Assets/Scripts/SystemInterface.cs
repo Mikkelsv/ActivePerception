@@ -33,6 +33,7 @@ public class SystemInterface {
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
     private float _studyGridSize = 1.2f;
+    private float requiredAccuracy = 0.99f;
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
 
@@ -65,7 +66,7 @@ public class SystemInterface {
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
-        _rm = new RewardManager(_gtg, _ogm, _som, _vm);
+        _rm = new RewardManager(_gtg, _ogm, _som, _vm, requiredAccuracy);
 
 
         Reset();
@@ -107,10 +108,13 @@ public class SystemInterface {
             _rm.ComputeAccuracy()
         };
 
+        float[] rewards = _rm.ComputeRewardArray();
+
         var obs = _ogm.GetGrid()
             .Concat(_vm.GetCurrentViews())
             .Concat(_vm.GetVisitedViews())
-            .Concat(distanceAndCount);
+            .Concat(distanceAndCount)
+            .Concat(rewards);
 
         return obs.ToArray();
     }

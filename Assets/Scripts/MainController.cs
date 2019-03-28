@@ -68,7 +68,7 @@ public class MainController : MonoBehaviour
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
-        _rm = new RewardManager(_gtg, _ogm, _som, _vm);
+        _rm = new RewardManager(_gtg, _ogm, _som, _vm, 0.99f);
 
         Vector3 v = _vm.GetView(0);
         _drm.SetCameraView(v);
