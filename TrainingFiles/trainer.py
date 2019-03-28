@@ -10,7 +10,7 @@ import time
 
 class Trainer:
 
-    def __init__(self, model, env):
+    def __init__(self, model, env, max_step=20):
         self.model = model
         self.env = env
         self.exploration = 0.9
@@ -18,11 +18,18 @@ class Trainer:
         self.exploration_minimum = 0.5
         self.gamma = 0.0  # Future reward discount
 
+        # Reward variables
+        self.alpha_accuracy = 1.0
+        self.alpha_distance = 0.0
+        self.alpha_steps = 0.0
+        self.normalize_reward_alphas()
+
+        self.alpha_views = 0.0
+
         # Setup environment dependant variables
         self.default_brain = self.env.brain_names[0]
         env_info = self.env.reset(train_mode=False)[self.default_brain]
-
-        # self.observation_shape = len(env_info.vector_observations[0])
+        self.max_step = max_step
         self.num_actions = len(env_info.action_masks[0])
         self.num_views = self.num_actions * 2  # Both current and visited views
         self.g = 32
@@ -145,7 +152,7 @@ class Trainer:
             env_info = self.env.step(action_indexed)[self.default_brain]
             self.update_time_keeper(self.duration_environment, time.time() - now)
 
-            reward = env_info.rewards[0]
+            reward = env_info.vector_observations[0, -3:]
 
             # Update memory
             observations = np.vstack([observations, observation])
@@ -157,6 +164,7 @@ class Trainer:
             # If end of episode
             if env_info.local_done[0]:
                 # Update Memory
+                rewards = self.compute_rewards(rewards)
                 predictions_corrected, discounted_rewards = self.get_corrected_predictions(predictions,
                                                                                            action_indexes, rewards)
                 if train:
@@ -185,7 +193,8 @@ class Trainer:
                 prior = new_r
         else:
             discounted_rewards = rewards
-        discounted_activated_rewards = self.sigmoid(np.array(discounted_rewards))
+        #discounted_activated_rewards = self.sigmoid(np.array(discounted_rewards))
+        discounted_activated_rewards = discounted_rewards
 
         # Update chosen action prediction to match reward
         for i in range(len(predictions)):
@@ -196,9 +205,28 @@ class Trainer:
     def reshape_input(self, observations):
         grid = observations[0, :self.gCubed].reshape((-1, 32, 32, 32, 1))
         views = observations[0, self.gCubed:self.gCubed + self.num_views].reshape((-1, self.num_views, 1))
-        distance = observations[0, -2]
-        accuracy = observations[0, -1]
+        # Account for added rewards
+        distance = observations[0, -2 - 3]
+        accuracy = observations[0, -1 - 3]
         return grid, views, distance, accuracy
+
+    def compute_rewards(self, rewards):
+        rewards = np.asarray(rewards)
+        accuracy_reward = rewards[:, 0]
+        distance_reward = rewards[:, 1]
+        view_reward = rewards[:, 2]
+        l = len(accuracy_reward)
+        step_reward = (self.max_step - l) / self.max_step
+        computed_rewards = np.zeros(l)
+        for i in range(l):
+            if view_reward[i] > 0:
+                computed_rewards[i] = self.alpha_views
+            else:
+                computed_rewards[i] = self.alpha_accuracy * accuracy_reward[i] \
+                                      + self.alpha_distance * distance_reward[i] \
+                                      + self.alpha_steps * step_reward
+
+        return computed_rewards
 
     def fill_memory(self):
 
@@ -239,7 +267,7 @@ class Trainer:
 
             dur = self._get_generation_duration()
             self.generation_reward.append(np.array([avg_reward, avg_steps, avg_distance, max_acc]))
-            self.sm.write(("Gen {}\t Avg Reward: {:.5}, Duration {:.1f}s, SpE {:.1f}, " +
+            self.sm.write(("Gen {}\t Avg Reward: {:.4}, Duration {:.1f}s, SpE {:.1f}, " +
                            "AvgDistance: {:.1f}, AvgAccuracy: {:.3f}")
                           .format(generation_number, avg_reward, dur, avg_steps, avg_distance, max_acc))
 
@@ -267,3 +295,10 @@ class Trainer:
     def update_time_keeper(keeper, duration):
         keeper[0] += duration
         keeper[1] += 1
+
+    def normalize_reward_alphas(self):
+        alphas = np.array([self.alpha_accuracy, self.alpha_distance, self.alpha_steps])
+        alphas = alphas / np.sum(alphas)
+        self.alpha_accuracy = alphas[0]
+        self.alpha_distance = alphas[1]
+        self.alpha_steps = alphas[2]

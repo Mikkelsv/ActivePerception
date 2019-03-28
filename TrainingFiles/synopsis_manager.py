@@ -4,7 +4,7 @@ import numpy as np
 
 class SynopsisManager:
 
-    def __init__(self, trainer, run_name="defaultRun"):
+    def __init__(self, trainer, run_name="defaultRun", max_step=15):
         self.t = trainer
         self.t.set_synopsis_manager(self)
 
@@ -12,6 +12,7 @@ class SynopsisManager:
         self.folder = "Summaries/"
         self.file_path = ""
         self.name = ""
+        self.max_step = max_step
 
         self.summary = []
         self.n = "\n"
@@ -21,7 +22,7 @@ class SynopsisManager:
     def create_summary_file(self):
         import datetime
         suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-        self.name = self.folder + "_".join([self.run_name, suffix])  # e.g. 'mylogfile_120508_171442'
+        self.name = self.folder + "_".join([self.run_name, suffix])
         self.file_path = self.name + ".txt"
         f = open(self.file_path, "w+")
         f.write("{}".format(self.run_name))
@@ -30,6 +31,7 @@ class SynopsisManager:
     def print_training_config(self):
         a = []
         a.append("\n-------------------- Training --------------------")
+
         a.append("{} generations, {} batches, {} episodes, {} tests".format(
             self.t.num_generations, self.t.num_batches, self.t.batch_size, self.t.num_tests))
         a.append("\t - In total {} training episodes".format(self.t.num_episodes))
@@ -39,6 +41,12 @@ class SynopsisManager:
         else:
             a.append("No replay - {} buffer size, {} batch training size".format(
                 self.t.buffer_size, self.t.batch_training_size))
+        a.append("Reward alphas:")
+        a.append("\t Accuracy: {:.2f}".format(self.t.alpha_accuracy))
+        a.append("\t Distance: {:.2f}".format(self.t.alpha_distance))
+        a.append("\t Steps: {:.2f}".format(self.t.alpha_steps))
+        a.append("\t Visited Views: {:.2f}".format(self.t.alpha_views))
+        a.append("\n")
         self.writelines(a)
 
     def print_training_summary(self):
@@ -63,7 +71,7 @@ class SynopsisManager:
         a = []
         a.append("\n-------------------- Results --------------------")
         a.append("Number of tests: {}".format(num_runs))
-        a.append("Mean reward: {:.3f},\t Mean steps: {:1f},\t Mean distance: {:1f},\t Avg Accuracy: {:.3f}"
+        a.append("Mean reward: {:.3f},\t Mean steps: {:.1f},\t Mean distance: {:.1f},\t Avg Accuracy: {:.3f}"
                  .format(avg_reward, avg_steps, avg_distance, avg_accuracy))
         a.append("Distances: ")
         a.append(np.array2string(np.asarray(distances), separator=', ', precision=1))
@@ -100,27 +108,29 @@ class SynopsisManager:
         rewards = generation_reward[:, 0]
         steps = generation_reward[:, 1]
         distance = generation_reward[:, 2]
+        accuracy = generation_reward[:, 3]
 
-        plt.figure(figsize=(6,12))
-
+        plt.figure(figsize=(6, 12))
 
         plt.subplot(411)
         plt.title("Average Reward")
-        plt.ylim([0,1])
+        plt.ylim([0, 1])
         plt.plot(rewards)
 
         plt.subplot(412)
         plt.title("Steps")
-        plt.ylim([0,10])
+        plt.ylim([0, self.t.max_step])
         plt.plot(steps)
 
         plt.subplot(413)
         plt.title("Distance")
-        plt.ylim([0,2000])
+        plt.ylim([0, 3000])
         plt.plot(distance)
 
         plt.subplot(414)
-        plt.plot(self.t.loss)
+        plt.title("Accuracy")
+        plt.ylim([0, 1.1])
+        plt.plot(accuracy)
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.2)
         plt.savefig(self.name + "_training")
@@ -131,12 +141,14 @@ class SynopsisManager:
 
         plt.subplot(211)
         plt.title("Average Cumulative Distance")
-        plt.ylim([0, 1000])
+        plt.ylim([0, 2000])
+        plt.xlim([0, self.max_step])
         plt.plot(dist)
 
         plt.subplot(212)
         plt.title("Completion Accuracy")
-        plt.ylim([0, 1])
+        plt.ylim([0, 1.1])
+        plt.xlim([0, self.max_step])
         plt.plot(acc)
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.5)

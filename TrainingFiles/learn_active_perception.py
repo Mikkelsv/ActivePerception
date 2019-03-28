@@ -6,7 +6,7 @@ from synopsis_manager import SynopsisManager
 
 
 def main():
-    use_executable = False
+    use_executable = True
 
     env_name = "Env/ActivePerception"
     if use_executable:
@@ -30,11 +30,12 @@ def main():
     model = model_manager.get_model()
 
     # Train
+    max_step = 20
     trainer = Trainer(model, env)
-    synopsis = SynopsisManager(trainer, run_name=model_name)
-    trainer.train(10, 10, 5, 2)
+    synopsis = SynopsisManager(trainer, run_name=model_name, max_step=max_step)
+    trainer.train(1000, 50, 5, 5)
     synopsis.print_training_summary()
-    trainer.evaluate_solution(5)
+    trainer.evaluate_solution(10)
 
     # Close environment
     env.close()
