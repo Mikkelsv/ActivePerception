@@ -154,6 +154,7 @@ class SynopsisManager:
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.5)
         plt.savefig(self.name + "_evaluation")
         print("[Evaluation plotted]")
+        plt.close()
 
     @staticmethod
     def get_time_keeper_average(keeper):

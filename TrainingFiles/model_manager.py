@@ -9,7 +9,7 @@ class ModelManager:
                  model_name="default_model"):
         self.learning_rate = learning_rate
         self.num_input = num_input
-        self.num_views = num_views*2  # Both current and visited
+        self.num_views = num_views * 2  # Both current and visited
         self.num_output = num_output
         self.model_name = model_name
         self.folder = "Models/"
@@ -77,7 +77,7 @@ class ModelManager:
         d = self.model.get_weights()
         return self.model
 
-    def save_model(self, name="", keep_var_names=None, clear_devices=True):
+    def save_model(self, name="", store_binaries=False, keep_var_names=None, clear_devices=True):
         """
             Freezes the state of a session into a pruned computation graph.
             Commonly called through  --- save_session(tf.keras.backend.get_session()) ----
@@ -101,21 +101,22 @@ class ModelManager:
 
         self.model.save(self.folder + name + ".h5")
 
-        session = tf.keras.backend.get_session()
-        graph = session.graph
-        with graph.as_default():
-            freeze_var_names = list(
-                set(v.op.name for v in tf.global_variables()).difference(keep_var_names or []))
-            output_names = output_names or []
-            output_names += [v.op.name for v in tf.global_variables()]
-            input_graph_def = graph.as_graph_def()
-            if clear_devices:
-                for node in input_graph_def.node:
-                    node.device = ""
-            frozen_graph = tf.compat.v1.graph_util.convert_variables_to_constants(
-                session, input_graph_def, output_names, freeze_var_names)
+        if store_binaries:
+            session = tf.keras.backend.get_session()
+            graph = session.graph
+            with graph.as_default():
+                freeze_var_names = list(
+                    set(v.op.name for v in tf.global_variables()).difference(keep_var_names or []))
+                output_names = output_names or []
+                output_names += [v.op.name for v in tf.global_variables()]
+                input_graph_def = graph.as_graph_def()
+                if clear_devices:
+                    for node in input_graph_def.node:
+                        node.device = ""
+                frozen_graph = tf.compat.v1.graph_util.convert_variables_to_constants(
+                    session, input_graph_def, output_names, freeze_var_names)
 
-        tf.train.write_graph(frozen_graph, "", self.folder + name + ".bytes", as_text=False)
+            tf.train.write_graph(frozen_graph, "", self.folder + name + ".bytes", as_text=False)
         print("Model saved as " + self.folder + name)
         # session.close()
 
@@ -137,7 +138,6 @@ class ModelManager:
         self.model.compile(optimizer=opt,
                            loss='mean_squared_error',
                            metrics=['accuracy'])
-
 
     def _generate_auxiliary_input_model(self):
 
@@ -169,15 +169,15 @@ if __name__ == "__main__":
 
     print(tf.test.is_gpu_available())
 
-    num_inputs = 32*32*32
+    num_inputs = 32 * 32 * 32
     num_views = 242
 
     mm = ModelManager(model_name="generated_test_model")
 
-    obs = np.random.randint(2, size=num_inputs).reshape((1,32,32,32,1))
-    views = np.random.randint(2, size=num_views).reshape((1,242,1))
+    obs = np.random.randint(2, size=num_inputs).reshape((1, 32, 32, 32, 1))
+    views = np.random.randint(2, size=num_views).reshape((1, 242, 1))
 
-    p = mm.model.predict([obs,views])
+    p = mm.model.predict([obs, views])
     pmean = np.mean(p)
     p2std = np.std(p)
 

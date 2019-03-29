@@ -302,3 +302,10 @@ class Trainer:
         self.alpha_accuracy = alphas[0]
         self.alpha_distance = alphas[1]
         self.alpha_steps = alphas[2]
+
+    def set_reward_values(self, alpha_accuracy, alpha_distance, alpha_steps, alpha_views):
+        self.alpha_accuracy = alpha_accuracy
+        self.alpha_distance = alpha_distance
+        self.alpha_steps = alpha_steps
+        self.normalize_reward_alphas()
+        self.alpha_views = alpha_views
