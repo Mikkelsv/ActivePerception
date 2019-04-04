@@ -24,7 +24,7 @@ public class SystemInterface {
     private float _nearClipPlane = 0.2f;
     private float _farClipPlane = 5f;
     private float _depthSawOff = 0.01f;
-    private int _textureResolution = 128;
+    private int _textureResolution = 256;
 
     //View Sphere Settings
     private int _viewGridLayers = 4;
@@ -82,8 +82,7 @@ public class SystemInterface {
 
     public void RenderView(int viewIndex)
     {
-        Vector3 newView = _vm.SetView(viewIndex);
-        _drm.SetCameraView(newView);
+        SetView(viewIndex);
         _currentRendering = _drm.GetDepthRendering();
         HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
         _ogm.AddPoints(pointCloud);
@@ -110,12 +109,18 @@ public class SystemInterface {
 
         float[] rewards = _rm.ComputeRewardArray();
 
-        var obs = _ogm.GetGrid()
+        var obs = _ogm.GetOccupancyGridFloated()
             .Concat(_vm.GetCurrentViews())
             .Concat(_vm.GetVisitedViews())
             .Concat(distanceAndCount)
             .Concat(rewards);
 
         return obs.ToArray();
+    }
+
+    private void SetView(int viewIndex)
+    {
+        Vector3 newView = _vm.SetView(viewIndex);
+        _drm.SetCameraView(newView);
     }
 }

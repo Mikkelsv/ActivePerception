@@ -20,7 +20,7 @@ public class OccupancyGridManager {
 
     private int _gridCount;
     private int _gridCountSquared;
-    private int _gridCountCubed;
+    public int gridCountCubed;
 
     public int occupiedCount;
     public int increasedOccupiedCount;
@@ -45,39 +45,53 @@ public class OccupancyGridManager {
         _inverseGridScale = _gridCount / _gridSize;
 
         _gridCountSquared = _gridCount * _gridCount;
-        _gridCountCubed = _gridCountSquared * _gridCount;
+        gridCountCubed = _gridCountSquared * _gridCount;
     }
 
     public void ClearGrid()
     {
-        _grid = new int[_gridCountCubed];
-        _occupancyGrid = new float[_gridCountCubed] ;
-        _builtGrid = new bool[_gridCountCubed];
+        _grid = new int[gridCountCubed];
+        _occupancyGrid = new float[gridCountCubed] ;
+        _builtGrid = new bool[gridCountCubed];
         occupiedCount = 0;
     }
 
-    public float[] GetGrid()
+    public float[] GetOccupancyGridFloated()
     {
         return _occupancyGrid;
     }
 
+    public int[] GetGrid()
+    {
+        return _grid;
+    }
 
-    public void AddPoints(HashSet<Vector3> points)
+
+    public void AddPoints(HashSet<Vector3> points, bool binary=true)
     {
         increasedOccupiedCount = 0;
         int[] newPoints = GenerateNewGrid(points);
         
         for(int i=0; i<_grid.Length; i++)
         {
-            _grid[i] += newPoints[i];
-            if (newPoints[i] > 0 && _occupancyGrid[i] == 0)
-            {
-                _occupancyGrid[i] = 1f;
-                increasedOccupiedCount++;
+            if (newPoints[i] > 0) {
+                _grid[i] += 1;
+                if (_occupancyGrid[i] == 0)
+                {
+                    _occupancyGrid[i] = 1f;
+                    increasedOccupiedCount++;
+                }
+                else if (newPoints[i] > 0 && !binary)
+                {
+                    _occupancyGrid[i] += 1;
+                }
             }
+               
         }
         occupiedCount += increasedOccupiedCount;
     }
+
+
 
     public void UpdateGridObject()
     {
@@ -112,8 +126,12 @@ public class OccupancyGridManager {
     {
         return _occupancyGrid;
     }
+    public void BuildGrid()
+    {
+        BuildGrid(_grid);
+    }
 
-    public void BuildGrid(float[] grid)
+    public void BuildGrid(int[] grid)
     {
         Vector3 scale = new Vector3(_gridSize / _gridCount, _gridSize / _gridCount, _gridSize / _gridCount);
         for (int z = 0; z < _gridCount; z++)
@@ -138,7 +156,34 @@ public class OccupancyGridManager {
                 }
             }
         }
+    }
 
+    public void BuildGridVisualized(int[] grid)
+    {
+        Vector3 scale = new Vector3(_gridSize / _gridCount, _gridSize / _gridCount, _gridSize / _gridCount);
+        for (int z = 0; z < _gridCount; z++)
+        {
+            for (int y = 0; y < _gridCount; y++)
+            {
+                for (int x = 0; x < _gridCount; x++)
+                {
+                    int i = z * _gridCount * _gridCount + y * _gridCount + x;
+                    if (grid[i] > 0)
+                    {
+
+                        GameObject c = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                        c.transform.parent = _gridObject.transform;
+
+                        Vector3 pointPosition = new Vector3(x - _gridCount / 2f, y - _gridCount / 2f, z - _gridCount / 2f);
+                        c.transform.localPosition = Vector3.Scale(pointPosition, scale);
+                        c.transform.localScale = scale;
+
+                        c.name = x.ToString() + "-" + y.ToString() + "-" + z.ToString();
+                        c.GetComponent<Renderer>().material.color = SelectColor(grid[i]);
+                    }
+                }
+            }
+        }
     }
 
     public void GenerateExampleGrid(Vector3 position)
@@ -170,7 +215,7 @@ public class OccupancyGridManager {
 
     private int[] GenerateNewGrid(HashSet<Vector3> points)
     {
-        int[] grid = new int[_gridCountCubed];
+        int[] grid = new int[gridCountCubed];
         int x, y, z, i;
         foreach(Vector3 p0 in points)
         {
@@ -195,5 +240,30 @@ public class OccupancyGridManager {
             int z = Mathf.FloorToInt(p.z * _inverseGridScale) * _gridCountSquared;
             _grid[x + y + z] += 1;
         }
+    }
+
+    private Color SelectColor(int c)
+    {
+        if (c > 10)
+        {
+            return Color.blue;
+        }
+        if(c > 5)
+        {
+            return Color.cyan;
+        }
+        if (c > 3)
+        {
+            return Color.green;
+        }
+        if (c > 2)
+        {
+            return Color.yellow;
+        }
+        if (c > 1)
+        {
+            return Color.red;
+        }
+        return Color.white;
     }
 }

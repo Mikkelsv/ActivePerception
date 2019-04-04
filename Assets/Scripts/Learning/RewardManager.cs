@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class RewardManager {
@@ -10,6 +11,8 @@ public class RewardManager {
     private ViewManager _vm;
     private readonly float requiredAccuracy;
 
+    private int prediscovered;
+
     public RewardManager(GroundTruthGenerator gtg, OccupancyGridManager ogm, StudyObjectMamanger som, ViewManager vm, float requiredAccuracy)
     {
         _gtg = gtg;
@@ -17,6 +20,13 @@ public class RewardManager {
         _som = som;
         _vm = vm;
         this.requiredAccuracy = requiredAccuracy;
+        prediscovered = 0;
+
+    }
+
+    public void Reset()
+    {
+        prediscovered = 0;
     }
 
     public float ComputeReward()
@@ -54,9 +64,12 @@ public class RewardManager {
 
     public float ComputeGlobalIncreasedAccuracy()
     {
-        int prediscovered = _ogm.occupiedCount - _ogm.increasedOccupiedCount;
         int undiscovered = _gtg.gridCount[_som.CurrentObject()] - prediscovered;
-        float increasedAccuracy = _ogm.increasedOccupiedCount * 1f / undiscovered;
+        int occupied = EvaluateGrid();
+        int discovered = occupied - prediscovered;
+        float increasedAccuracy = discovered / undiscovered;
+        prediscovered = occupied;
+     
         return increasedAccuracy;
     } 
 
@@ -73,5 +86,20 @@ public class RewardManager {
     public static float Sigmoid(double value)
     {
         return 1.0f / (1.0f + (float)System.Math.Exp(-value));
+    }
+
+    public int EvaluateGrid()
+    {
+        int[] grid = _ogm.GetGrid();
+        int[] gt = _gtg._grids[_som.CurrentObject()];
+        int c = 0;
+        Parallel.For(0, _ogm.gridCountCubed, i =>
+        {
+            if (grid[i] > 0 && gt[i] > 0)
+            {
+                c++;
+            }
+        });
+        return c;
     }
 }

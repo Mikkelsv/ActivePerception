@@ -12,11 +12,11 @@ class Supervisor:
         self.use_executable = True
         self.load_model = False
         self.env_name = "Env/ActivePerception"
-        self.max_step = 20
+        self.max_step = 15
 
-        self.num_generations = 2
-        self.num_batches = 2
-        self.batch_size = 5
+        self.num_generations = 100
+        self.num_batches = 50
+        self.batch_size = 1
         self.test_size = 5
         self.evaluation_size = 10
 
@@ -24,6 +24,9 @@ class Supervisor:
         self.learning_rate = 0.001
 
     def run(self):
+        self.execute_session("moderateNBV", 1, 0.0, 0.0, self.alpha_views, self.learning_rate)
+
+    def run_multiple_variations(self):
         runs = self.fetch_runs()
         print("-Commensing learning of {} models-".format(len(runs)))
         for acc, dist, step in runs:
@@ -48,9 +51,9 @@ class Supervisor:
         model = model_manager.get_model()
 
         # Train
-        trainer = Trainer(model, env)
+        trainer = Trainer(model, env, self.max_step)
         trainer.set_reward_values(alpha_acc, alpha_dist, alpha_steps, alpha_views)
-        synopsis = SynopsisManager(trainer, run_name=model_name, max_step=self.max_step)
+        synopsis = SynopsisManager(trainer, model_manager, run_name=model_name, max_step=self.max_step)
         trainer.train(self.num_generations, self.num_batches, self.batch_size, self.test_size)
         synopsis.print_training_summary()
         trainer.evaluate_solution(self.evaluation_size)
@@ -62,7 +65,7 @@ class Supervisor:
         model_manager.save_model()
 
         # Cleanup
-        del trainer.memory
+        #del trainer.memory
         del trainer
         del synopsis
         del model_manager

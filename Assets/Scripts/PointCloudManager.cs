@@ -38,6 +38,7 @@ public class PointCloudManager
     {
         int h = rTex.height;
         int w = rTex.width;
+        Debug.Log(String.Format("Depth Resolution: {0}, {0}", h, w));
         Vector3[] array = new Vector3[w * h];
         for (int j = 0; j < w; j++)
         {

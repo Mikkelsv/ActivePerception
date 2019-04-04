@@ -13,41 +13,28 @@ class ModelManager:
         self.num_output = num_output
         self.model_name = model_name
         self.folder = "Models/"
+        self.activation_function = "sigmoid"
+        self.load = load
 
         if load:
             self.model = self.load_model()
         else:
             self.model = self.generate_conv_model()
+        self.compile_model()
 
     def get_model(self):
         return self.model
 
-    def generate_model(self, print_version=True):
-        """
-            Generates cumstome made models specific for slam ball implementation, thus lacking in generatlization.
-            Notice naming of 'observation' inputlayer and 'actions' output layer
-        :param print_version: Print TF keras version number
-        :param num_input: Number of inputs (observations) in model
-        :param num_output: Number of outputs (action predictions) in model
-        :return: TensorFlow Model
-        """
-        if print_version:
-            print("TensorFlow version: " + tf.__version__)
-            print("TF Keras version: " + tf.keras.__version__)
+    def get_summary(self):
+        a = []
+        a.append("\n---------------------------- Model ----------------------")
+        a.append("TensorFlow version: " + tf.__version__)
+        a.append("TF Keras version: " + tf.keras.__version__)
+        a.append("Model Loaded: {}".format(self.load))
+        a.append("Learning Rate: {}".format(self.learning_rate))
+        a.append("Activation Function: {}".format(self.activation_function))
+        return a
 
-        observations = tf.keras.layers.Input(shape=(self.num_input,), name="observations")
-        n1 = tf.keras.layers.Dense(200, activation="relu", name="hidden_layer_1")(observations)
-
-        outputs = tf.keras.layers.Dense(self.num_output, activation="sigmoid", name="actions")(n1)
-
-        self.model = tf.keras.Model(inputs=inputs, outputs=outputs)
-
-        self.compile_model()
-
-        print("New Model Generated")
-        print("Using Learning Rate: {}".format(self.learning_rate))
-        print(self.model.summary())
-        return self.model
 
     def generate_conv_model(self):
 
@@ -63,18 +50,9 @@ class ModelManager:
         aux_output = tf.keras.layers.Flatten(name="flatten_views")(auxiliary_inputs)
         merged = tf.keras.layers.Concatenate()([fc1, aux_output])
 
-        outputs = tf.keras.layers.Dense(self.num_output, activation="relu", name="actions")(merged)
+        outputs = tf.keras.layers.Dense(self.num_output, activation=self.activation_function, name="actions")(merged)
 
         self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
-
-        self.compile_model()
-        print("\n---------------------------- Model ----------------------")
-        print("New Convolutional Model Generated")
-        print("Using Learning Rate: {}".format(self.learning_rate))
-        print("TensorFlow version: " + tf.__version__)
-        print("TF Keras version: " + tf.keras.__version__)
-        self.model.summary()
-        d = self.model.get_weights()
         return self.model
 
     def save_model(self, name="", store_binaries=False, keep_var_names=None, clear_devices=True):
@@ -160,6 +138,9 @@ class ModelManager:
         print("Using Learning Rate: {}".format(self.learning_rate))
         print(self.model.summary())
         return self.model
+
+    def print_model(self):
+        self.model.summary()
 
 
 if __name__ == "__main__":

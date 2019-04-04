@@ -4,9 +4,10 @@ import numpy as np
 
 class SynopsisManager:
 
-    def __init__(self, trainer, run_name="defaultRun", max_step=15):
+    def __init__(self, trainer, model_manager, run_name="defaultRun", max_step=15):
         self.t = trainer
         self.t.set_synopsis_manager(self)
+        self.mm = model_manager
 
         self.run_name = run_name
         self.folder = "Summaries/"
@@ -18,6 +19,8 @@ class SynopsisManager:
         self.n = "\n"
 
         self.create_summary_file()
+        self.writelines(self.mm.get_summary())
+        self.mm.print_model()
 
     def create_summary_file(self):
         import datetime

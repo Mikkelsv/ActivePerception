@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 public class MainController : MonoBehaviour
 {
@@ -21,7 +22,7 @@ public class MainController : MonoBehaviour
     private float _nearClipPlane = 0.2f;
     private float _farClipPlane = 5f;
     private float _depthSawOff = 0.01f;
-    private int _textureResolution = 128;
+    private int _textureResolution = 256;
     
     //View Sphere Settings
     private int _viewGridLayers = 4;
@@ -77,53 +78,55 @@ public class MainController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            RenderView();
-        }
+       
 
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            AddView();
-        } 
-
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            BuildViewSphere();
-        }
         if (Input.GetKeyDown(KeyCode.I))
         {
-            Vector3 v = _vm.SetNeighbouringView();
-            _drm.SetCameraView(v);
+            NextView();
+        } 
+
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            NextObject();
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            SetView();
         }
         if (Input.GetKeyDown(KeyCode.K))
         {
             Vector3 v = _vm.SetNeighbouringView(10);
             _drm.SetCameraView(v);
         }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            Texture2D _currentRendering = _drm.GetDepthRendering();
+            HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
+            _ogm.AddPoints(pointCloud);
+        }
         if (Input.GetKeyDown(KeyCode.X))
         {
-            _pcm.BuildPointCloudObject(_meshPosition, _pointCloudScale);
+            _ogm.BuildGrid();
         }
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.C))
         {
-            _som.PrepareNextStudyObject();
-            _ogm.ClearGrid();
+            RenderView();
         }
+
         if (Input.GetKeyDown(KeyCode.G))
         {
-            float[][] grids = _gtg.Grids();
-            _ogm.BuildGrid(grids[_som.CurrentObject()]);
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            Vector3 v = _vm.SetView(_setView);
-            _drm.SetCameraView(v);
+            VisualizeGrountTruth();
         }
         if (Input.GetKeyDown(KeyCode.Y))
         {
             UnityEngine.Debug.Log(_vm.GetDistance(_vm.GetCurrentViewIndex(), _compareViewWith).ToString());
         }
+    }
+
+    private void VisualizeGrountTruth()
+    {
+        int[] gt = _gtg.Grids()[_som.CurrentObject()];
+        _ogm.BuildGridVisualized(gt);
     }
 
     private void RenderView()
@@ -151,6 +154,22 @@ public class MainController : MonoBehaviour
         _timer.Stop();
     }
 
+    private void NextView()
+    {
+        Vector3 v = _vm.SetNeighbouringView();
+        _drm.SetCameraView(v);
+    }
+
+    private void SetView()
+    {
+        Vector3 newView = _vm.SetView(_setView);
+        _drm.SetCameraView(newView);
+    }
+
+    private void NextObject()
+    {
+        _som.PrepareNextStudyObject();
+    }
 
     private void CreateGameObject(Mesh m)
     {

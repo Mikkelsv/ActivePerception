@@ -10,21 +10,21 @@ import time
 
 class Trainer:
 
-    def __init__(self, model, env, max_step=20):
+    def __init__(self, model, env, max_step):
         self.model = model
         self.env = env
         self.exploration = 0.9
         self.exploration_decay = 0.999
         self.exploration_minimum = 0.5
         self.gamma = 0.0  # Future reward discount
+        self.top_n_actions = 3
 
         # Reward variables
         self.alpha_accuracy = 1.0
         self.alpha_distance = 0.0
         self.alpha_steps = 0.0
         self.normalize_reward_alphas()
-
-        self.alpha_views = 0.0
+        self.alpha_views = -0.3
 
         # Setup environment dependant variables
         self.default_brain = self.env.brain_names[0]
@@ -46,7 +46,7 @@ class Trainer:
 
         # Init Memory
         input_shape = (self.observation_shape, self.views_shape)
-        self.memory = Memory(input_shape, self.num_actions, self.buffer_size, replay=self.replay)
+        # self.memory = Memory(input_shape, self.num_actions, self.buffer_size, replay=self.replay)
 
         # Runtime variables
         self.step_count = 0
@@ -99,20 +99,20 @@ class Trainer:
         self.duration_total = time.time()
         self.generation_time_stamp = time.time()
 
-        if self.replay:
-            self.fill_memory()
+        # if self.replay:
+        #   self.fill_memory()
 
         while episode < self.num_episodes:
             episode += 1
             self.run_episode()
 
-            if episode % self.batch_size == 0:
-                # Train model on batch
-                now = time.time()
-                o, v, a = self.memory.get_random_batch(self.batch_training_size)
-                loss = self.model.train_on_batch([o, v], a)
-                self.update_time_keeper(self.duration_training, time.time() - now)
-                self.loss.append(loss)
+            # if episode % self.batch_size == 0:
+            # Train model on batch
+            #   now = time.time()
+            #  o, v, a = self.memory.get_random_batch(self.batch_training_size)
+            # loss = self.model.train_on_batch([o, v], a)
+            # self.update_time_keeper(self.duration_training, time.time() - now)
+            # self.loss.append(loss)
 
             if episode % self.generation_size == 0:
                 self.evaluate_generation(generation)
@@ -136,7 +136,8 @@ class Trainer:
         steps = 0
         distances = []
         accuracies = []
-        env_info = self.env.reset(train_mode=False)[self.default_brain]
+        # env_info = self.env.reset(train_mode=False)[self.default_brain]
+        env_info = self.env.step(0)[self.default_brain]
         while True:
             steps += 1
 
@@ -168,7 +169,11 @@ class Trainer:
                 predictions_corrected, discounted_rewards = self.get_corrected_predictions(predictions,
                                                                                            action_indexes, rewards)
                 if train:
-                    self.memory.add(observations, views, predictions_corrected)
+                    # self.memory.add(observations, views, predictions_corrected)
+                    now = time.time()
+                    loss = self.model.train_on_batch([observations, views], predictions_corrected)
+                    self.update_time_keeper(self.duration_training, time.time() - now)
+                    self.loss.append(loss)
                 return steps, distances, accuracies, discounted_rewards
 
     def get_action(self, observation, training, stochastic):
@@ -177,7 +182,8 @@ class Trainer:
             action_index = np.random.randint(0, self.num_actions)
         else:
             now = time.time()
-            action_index = np.argmax(predictions)
+            top_n = np.asarray(predictions).argsort()[-self.top_n_actions:][::-1]
+            action_index = np.random.choice(top_n)
             self.update_time_keeper(self.duration_selecting_action, time.time() - now)
         return action_index, predictions
 
@@ -193,8 +199,8 @@ class Trainer:
                 prior = new_r
         else:
             discounted_rewards = rewards
-        #discounted_activated_rewards = self.sigmoid(np.array(discounted_rewards))
-        discounted_activated_rewards = discounted_rewards
+        discounted_activated_rewards = self.sigmoid(np.array(discounted_rewards))
+        # discounted_activated_rewards = discounted_rewards
 
         # Update chosen action prediction to match reward
         for i in range(len(predictions)):
@@ -229,7 +235,6 @@ class Trainer:
         return computed_rewards
 
     def fill_memory(self):
-
         for i in range(self.fill_memory_runs):
             print("\rFilling buffer - {}/{} episodes".format(i + 1, self.fill_memory_runs), end="")
             self.run_episode(stochastic=True)
@@ -240,18 +245,16 @@ class Trainer:
         sum_distances = np.zeros(num_runs)
         episode_steps = np.zeros(num_runs)
         max_accuracies = np.zeros(num_runs)
-        agg_distances = []
-        agg_accuracies = []
+        agg_distances = np.zeros((num_runs, self.max_step))
+        agg_accuracies = np.zeros((num_runs, self.max_step))
         for i in range(num_runs):
             steps, distances, accuracies, discounted_rewards = self.run_episode(train=False)
-            rewards.append(discounted_rewards)
+            rewards.append(np.mean(discounted_rewards))
             sum_distances[i] = np.sum(distances)
             episode_steps[i] = steps
             max_accuracies[i] = np.max(accuracies)
-            agg_distances.append(distances)
-            agg_accuracies.append(accuracies)
-        agg_distances = np.asarray(agg_distances)
-        agg_accuracies = np.asarray(agg_accuracies)
+            agg_distances[i, :len(distances)] = distances[:]
+            agg_accuracies[i, :len(accuracies)] = accuracies[:]
         avg_distances = np.mean(agg_distances, axis=0)
         cumsum_distances = np.cumsum(avg_distances)
         avg_accuracies = np.mean(agg_accuracies, axis=0)
@@ -303,9 +306,10 @@ class Trainer:
         self.alpha_distance = alphas[1]
         self.alpha_steps = alphas[2]
 
-    def set_reward_values(self, alpha_accuracy, alpha_distance, alpha_steps, alpha_views):
+    def set_reward_values(self, alpha_accuracy, alpha_distance, alpha_steps, alpha_views, normalize=False):
         self.alpha_accuracy = alpha_accuracy
         self.alpha_distance = alpha_distance
         self.alpha_steps = alpha_steps
-        self.normalize_reward_alphas()
+        if normalize:
+            self.normalize_reward_alphas()
         self.alpha_views = alpha_views
