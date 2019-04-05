@@ -149,8 +149,8 @@ public class MainController : MonoBehaviour
         UnityEngine.Debug.Log("Add to occupancy grid - " + _timer.Elapsed);
         _ogm.UpdateGridObject();
         UnityEngine.Debug.Log("Update Grid - " + _timer.Elapsed);
-        UnityEngine.Debug.Log(_rm.ComputeGlobalIncreasedAccuracy().ToString());
-        UnityEngine.Debug.Log(_rm.ComputeDistanceReward().ToString());
+        UnityEngine.Debug.Log(_rm.increasedAccuracy.ToString());
+        UnityEngine.Debug.Log(_rm.distance.ToString());
         _timer.Stop();
     }
 

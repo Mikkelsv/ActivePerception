@@ -145,8 +145,12 @@ class Trainer:
             observation, view, distance, accuracy = self.reshape_input(observation)
             distances.append(distance)
             accuracies.append(accuracy)
+            observations = np.vstack([observations, observation])
+            views = np.vstack([views, view])
 
             action_indexed, prediction = self.get_action([observation, view], train, stochastic)
+            predictions = np.vstack([predictions, prediction])
+            action_indexes.append(action_indexed)
 
             # Fetch next environment and reward, track the time
             now = time.time()
@@ -154,13 +158,9 @@ class Trainer:
             self.update_time_keeper(self.duration_environment, time.time() - now)
 
             reward = env_info.vector_observations[0, -3:]
-
-            # Update memory
-            observations = np.vstack([observations, observation])
-            views = np.vstack([views, view])
-            predictions = np.vstack([predictions, prediction])
-            action_indexes.append(action_indexed)
             rewards.append(reward)
+
+            # Fetch next scene
 
             # If end of episode
             if env_info.local_done[0]:
@@ -246,7 +246,7 @@ class Trainer:
         episode_steps = np.zeros(num_runs)
         max_accuracies = np.zeros(num_runs)
         agg_distances = np.zeros((num_runs, self.max_step))
-        agg_accuracies = np.zeros((num_runs, self.max_step))
+        agg_accuracies = np.ones((num_runs, self.max_step))
         for i in range(num_runs):
             steps, distances, accuracies, discounted_rewards = self.run_episode(train=False)
             rewards.append(np.mean(discounted_rewards))
@@ -256,7 +256,7 @@ class Trainer:
             agg_distances[i, :len(distances)] = distances[:]
             agg_accuracies[i, :len(accuracies)] = accuracies[:]
         avg_distances = np.mean(agg_distances, axis=0)
-        cumsum_distances = np.cumsum(avg_distances)
+        cumsum_distances = np.cumsum(avg_distances)/num_runs
         avg_accuracies = np.mean(agg_accuracies, axis=0)
         avg_reward = np.mean(rewards)
         avg_steps = np.mean(episode_steps)

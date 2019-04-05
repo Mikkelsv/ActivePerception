@@ -129,7 +129,7 @@ public class GroundTruthGenerator
     private int CountGrid(int[] grid)
     {
         int count = 0;
-        foreach(float g in grid)
+        foreach(int g in grid)
         {
             if (g > 0)
             {

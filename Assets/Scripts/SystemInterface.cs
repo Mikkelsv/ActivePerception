@@ -77,6 +77,7 @@ public class SystemInterface {
         _ogm.ClearGrid();
         _som.PrepareRandomStudyObject();
         _vm.Reset();
+        _rm.Reset();
         RenderView(0);
     }
 
@@ -86,12 +87,13 @@ public class SystemInterface {
         _currentRendering = _drm.GetDepthRendering();
         HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
         _ogm.AddPoints(pointCloud);
+        _rm.ComputeRewards();
     }
 
     public float GetScore()
     {
         //Compute score of last rendering
-        return _rm.ComputeReward();
+        return _rm.increasedAccuracy;
     }
     public bool GetDoneOnAccuracy()
     {
@@ -103,11 +105,11 @@ public class SystemInterface {
 
         float[] distanceAndCount = new float[]
         {
-            _vm.distanceTravelled,
-            _rm.ComputeAccuracy()
+            _rm.prediscovered, //_vm.distanceTravelled
+            _rm.accuracy
         };
 
-        float[] rewards = _rm.ComputeRewardArray();
+        float[] rewards = _rm.GetRewardArray();
 
         var obs = _ogm.GetOccupancyGridFloated()
             .Concat(_vm.GetCurrentViews())

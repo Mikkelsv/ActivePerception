@@ -11,7 +11,13 @@ public class RewardManager {
     private ViewManager _vm;
     private readonly float requiredAccuracy;
 
-    private int prediscovered;
+    public int prediscovered;
+
+    public float reward;
+    public float distance;
+    public float accuracy;
+    public float increasedAccuracy;
+    public float viewReward;
 
     public RewardManager(GroundTruthGenerator gtg, OccupancyGridManager ogm, StudyObjectMamanger som, ViewManager vm, float requiredAccuracy)
     {
@@ -21,28 +27,35 @@ public class RewardManager {
         _vm = vm;
         this.requiredAccuracy = requiredAccuracy;
         prediscovered = 0;
-
+        distance = 0f;
+        accuracy = 0f;
+        increasedAccuracy = 0f;
+        viewReward = 0f;
     }
 
     public void Reset()
     {
         prediscovered = 0;
+        distance = 0f;
+        accuracy = 0f;
+        increasedAccuracy = 0f;
+        viewReward = 0f;
     }
 
-    public float ComputeReward()
+    public void ComputeRewards()
     {
-        // Should be casted to 0-1 using Sidmoid function, done in python
-        float r = ComputeDistanceReward() + ComputeGlobalIncreasedAccuracy();
-        return r;
+        ComputeAccuracy();
+        distance = ComputeDistanceReward();
+        viewReward = ComputeViewReward();
     }
 
-    public float[] ComputeRewardArray()
+    public float[] GetRewardArray()
     {
         float[] rewards = new float[]
         {
-            ComputeGlobalIncreasedAccuracy(),
-            ComputeDistanceReward(),
-            ComputeViewReward()
+            increasedAccuracy,
+            distance,
+            viewReward
         };
         return rewards;
     }
@@ -56,50 +69,46 @@ public class RewardManager {
         return 0f;
     }
 
-    public float ComputeAccuracy()
-    {
-        float acc = _ogm.occupiedCount *1f/ _gtg.gridCount[_som.CurrentObject()];
-        return acc;
-    }
-
-    public float ComputeGlobalIncreasedAccuracy()
+    private void ComputeAccuracy()
     {
         int undiscovered = _gtg.gridCount[_som.CurrentObject()] - prediscovered;
         int occupied = EvaluateGrid();
-        int discovered = occupied - prediscovered;
-        float increasedAccuracy = discovered / undiscovered;
-        prediscovered = occupied;
-     
-        return increasedAccuracy;
-    } 
+        accuracy = occupied * 1f / _gtg.gridCount[_som.CurrentObject()];
 
-    public float ComputeDistanceReward()
+        int discovered = occupied - prediscovered;
+        increasedAccuracy= discovered * 1f / undiscovered;
+
+        prediscovered = occupied;
+    }
+
+    private float ComputeDistanceReward()
     {
          return (180f -_vm.distanceTravelled) / 180f;
     }
 
     public bool DetermineDone()
     {
-        return ComputeAccuracy() >= this.requiredAccuracy;
+        return accuracy >= this.requiredAccuracy;
     }
 
-    public static float Sigmoid(double value)
+    private static float Sigmoid(double value)
     {
         return 1.0f / (1.0f + (float)System.Math.Exp(-value));
     }
 
-    public int EvaluateGrid()
+    private int EvaluateGrid()
     {
         int[] grid = _ogm.GetGrid();
         int[] gt = _gtg._grids[_som.CurrentObject()];
         int c = 0;
-        Parallel.For(0, _ogm.gridCountCubed, i =>
+        //Parallel.For(0, _ogm.gridCountCubed, i =>
+        for(int i=0;i<_ogm.gridCountCubed; i++)
         {
             if (grid[i] > 0 && gt[i] > 0)
             {
                 c++;
             }
-        });
+        };
         return c;
     }
 }
