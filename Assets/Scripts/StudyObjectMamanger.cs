@@ -16,6 +16,7 @@ public class StudyObjectMamanger
 
     private static System.Random _rnd = new System.Random();
     private int _countObjects;
+    private bool _randomOrientation;
 
     public StudyObjectMamanger(Vector3 objectPosition)
     {

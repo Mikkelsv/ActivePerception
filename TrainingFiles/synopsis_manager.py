@@ -117,17 +117,17 @@ class SynopsisManager:
 
         plt.subplot(411)
         plt.title("Average Reward")
-        plt.ylim([0, 1])
+        plt.ylim([-0.5, 0.5])
         plt.plot(rewards)
 
         plt.subplot(412)
         plt.title("Steps")
-        plt.ylim([0, self.t.max_step])
+        plt.ylim([0, self.t.max_step+1])
         plt.plot(steps)
 
         plt.subplot(413)
         plt.title("Distance")
-        plt.ylim([0, 3000])
+        plt.ylim([0, 1500])
         plt.plot(distance)
 
         plt.subplot(414)
@@ -144,7 +144,7 @@ class SynopsisManager:
 
         plt.subplot(211)
         plt.title("Average Cumulative Distance")
-        plt.ylim([0, 2000])
+        plt.ylim([0, 1500])
         plt.xlim([0, self.max_step])
         plt.plot(dist)
 

@@ -166,6 +166,7 @@ class Trainer:
             if env_info.local_done[0]:
                 # Update Memory
                 rewards = self.compute_rewards(rewards)
+                mean_reward = np.mean(rewards)
                 predictions_corrected, discounted_rewards = self.get_corrected_predictions(predictions,
                                                                                            action_indexes, rewards)
                 if train:
@@ -174,7 +175,7 @@ class Trainer:
                     loss = self.model.train_on_batch([observations, views], predictions_corrected)
                     self.update_time_keeper(self.duration_training, time.time() - now)
                     self.loss.append(loss)
-                return steps, distances, accuracies, discounted_rewards
+                return steps, distances, accuracies, discounted_rewards, mean_reward
 
     def get_action(self, observation, training, stochastic):
         predictions = self.model.predict(observation)[0]
@@ -245,24 +246,28 @@ class Trainer:
         sum_distances = np.zeros(num_runs)
         episode_steps = np.zeros(num_runs)
         max_accuracies = np.zeros(num_runs)
-        agg_distances = np.zeros((num_runs, self.max_step))
+        agg_distances = np.empty((num_runs, self.max_step))
+        agg_distances.fill(np.nan)
         agg_accuracies = np.ones((num_runs, self.max_step))
+        mean_rewards = np.zeros(num_runs)
         for i in range(num_runs):
-            steps, distances, accuracies, discounted_rewards = self.run_episode(train=False)
+            steps, distances, accuracies, discounted_rewards, mean_reward = self.run_episode(train=False)
             rewards.append(np.mean(discounted_rewards))
             sum_distances[i] = np.sum(distances)
             episode_steps[i] = steps
             max_accuracies[i] = np.max(accuracies)
             agg_distances[i, :len(distances)] = distances[:]
             agg_accuracies[i, :len(accuracies)] = accuracies[:]
-        avg_distances = np.mean(agg_distances, axis=0)
-        cumsum_distances = np.cumsum(avg_distances)/num_runs
+            mean_rewards[i] = mean_reward
+        avg_distances = np.nanmean(agg_distances, axis=0)
+        cumsum_distances = np.cumsum(avg_distances)
         avg_accuracies = np.mean(agg_accuracies, axis=0)
-        avg_reward = np.mean(rewards)
+        avg_reward = np.mean(mean_rewards)
         avg_steps = np.mean(episode_steps)
         avg_distance = np.mean(sum_distances)
         avg_accuracy = np.mean(max_accuracies)
-        return avg_reward, avg_steps, avg_distance, avg_accuracy, cumsum_distances, avg_accuracies
+        mean_reward = np.mean(mean_rewards)
+        return mean_reward, avg_steps, avg_distance, avg_accuracy, cumsum_distances, avg_accuracies
 
     def evaluate_generation(self, generation_number):
         if self.num_tests:

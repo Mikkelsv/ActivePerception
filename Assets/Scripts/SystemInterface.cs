@@ -105,7 +105,7 @@ public class SystemInterface {
 
         float[] distanceAndCount = new float[]
         {
-            _rm.prediscovered, //_vm.distanceTravelled
+            _vm.distanceTravelled,
             _rm.accuracy
         };
 

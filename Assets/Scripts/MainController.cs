@@ -121,6 +121,10 @@ public class MainController : MonoBehaviour
         {
             UnityEngine.Debug.Log(_vm.GetDistance(_vm.GetCurrentViewIndex(), _compareViewWith).ToString());
         }
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            _vm.BuildSphere(Vector3.zero);
+        }
     }
 
     private void VisualizeGrountTruth()
@@ -164,6 +168,7 @@ public class MainController : MonoBehaviour
     {
         Vector3 newView = _vm.SetView(_setView);
         _drm.SetCameraView(newView);
+        UnityEngine.Debug.Log(_vm.distanceTravelled);
     }
 
     private void NextObject()

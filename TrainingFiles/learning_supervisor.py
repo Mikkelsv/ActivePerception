@@ -14,17 +14,17 @@ class Supervisor:
         self.env_name = "Env/ActivePerception"
         self.max_step = 15
 
-        self.num_generations = 100
-        self.num_batches = 5
+        self.num_generations = 1000
+        self.num_batches = 50
         self.batch_size = 1
-        self.test_size = 5
+        self.test_size = 20
         self.evaluation_size = 100
 
         self.alpha_views = 0.0
         self.learning_rate = 0.001
 
     def run(self):
-        self.execute_session("moderateNBV_test", 1, 0.0, 0.0, self.alpha_views, self.learning_rate)
+        self.execute_session("moderateNBV_test", 1, 0.4, 0.2, self.alpha_views, self.learning_rate)
 
     def run_multiple_variations(self):
         runs = self.fetch_runs()
