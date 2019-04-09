@@ -23,6 +23,7 @@ class Trainer:
         self.alpha_accuracy = 1.0
         self.alpha_distance = 0.0
         self.alpha_steps = 0.0
+        self.mean_steps = 10
         self.normalize_reward_alphas()
         self.alpha_views = -0.3
 
@@ -223,14 +224,14 @@ class Trainer:
         distance_reward = rewards[:, 1]
         view_reward = rewards[:, 2]
         l = len(accuracy_reward)
-        step_reward = (self.max_step - l) / self.max_step
+        step_reward = (self.mean_steps - l) / self.max_step
         computed_rewards = np.zeros(l)
         for i in range(l):
             if view_reward[i] > 0:
                 computed_rewards[i] = self.alpha_views
             else:
                 computed_rewards[i] = self.alpha_accuracy * accuracy_reward[i] \
-                                      + self.alpha_distance * distance_reward[i] \
+                                      - self.alpha_distance * distance_reward[i] \
                                       + self.alpha_steps * step_reward
 
         return computed_rewards

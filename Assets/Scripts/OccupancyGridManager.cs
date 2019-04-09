@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class OccupancyGridManager {
 
-    
-    private int[] _grid;
+
+    private int[] _pointGrid;
+    private int[] _viewGrid;
     private float[] _occupancyGrid;
     private bool[] _builtGrid;
     private float _gridSize;
@@ -28,7 +29,8 @@ public class OccupancyGridManager {
     public OccupancyGridManager(int g, float gridSize, Vector3 position)
     {
       
-        _grid = new int[g * g * g];
+        _pointGrid = new int[g * g * g];
+        _viewGrid = new int[g * g * g];
         _occupancyGrid = new float[g * g * g + 3];
         _builtGrid = new bool[g * g * g];
         
@@ -50,7 +52,8 @@ public class OccupancyGridManager {
 
     public void ClearGrid()
     {
-        _grid = new int[gridCountCubed];
+        _pointGrid = new int[gridCountCubed];
+        _viewGrid = new int[gridCountCubed];
         _occupancyGrid = new float[gridCountCubed] ;
         _builtGrid = new bool[gridCountCubed];
         occupiedCount = 0;
@@ -61,29 +64,32 @@ public class OccupancyGridManager {
         return _occupancyGrid;
     }
 
-    public int[] GetGrid()
+    public int[] GetPointGrid()
     {
-        return _grid;
+        return _pointGrid;
+    }
+
+    public int[] GetViewGrid()
+    {
+        return _viewGrid;
     }
 
 
-    public void AddPoints(HashSet<Vector3> points, bool binary=true)
+    public void AddPoints(HashSet<Vector3> points)
     {
         increasedOccupiedCount = 0;
         int[] newPoints = GenerateNewGrid(points);
         
-        for(int i=0; i<_grid.Length; i++)
+        for(int i=0; i<_pointGrid.Length; i++)
         {
             if (newPoints[i] > 0) {
-                _grid[i] += 1;
+                _pointGrid[i] += newPoints[i];
+                _viewGrid[i]++;
+
                 if (_occupancyGrid[i] == 0)
                 {
                     _occupancyGrid[i] = 1f;
                     increasedOccupiedCount++;
-                }
-                else if (newPoints[i] > 0 && !binary)
-                {
-                    _occupancyGrid[i] += 1;
                 }
             }
                
@@ -91,11 +97,8 @@ public class OccupancyGridManager {
         occupiedCount += increasedOccupiedCount;
     }
 
-
-
     public void UpdateGridObject()
     {
-        //Vector3 scale = new Vector3(1f / _gridCount, 1f / _gridCount, 1f / _gridCount);
         Vector3 scale = new Vector3(_gridSize / _gridCount, _gridSize / _gridCount, _gridSize / _gridCount);
         for (int z = 0; z < _gridCount; z++)
         {
@@ -104,7 +107,7 @@ public class OccupancyGridManager {
                 for (int x = 0; x < _gridCount; x++)
                 {
                     int i = z * _gridCount * _gridCount + y * _gridCount + x;
-                    if (_grid[i] > 0 && !_builtGrid[i])
+                    if (_pointGrid[i] > 0 && !_builtGrid[i])
                     {
 
                         GameObject c = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -122,13 +125,9 @@ public class OccupancyGridManager {
         }
     }
 
-    public float[] GetObservations()
-    {
-        return _occupancyGrid;
-    }
     public void BuildGrid()
     {
-        BuildGrid(_grid);
+        BuildGrid(_pointGrid);
     }
 
     public void BuildGrid(int[] grid)
@@ -238,7 +237,7 @@ public class OccupancyGridManager {
             int x = Mathf.FloorToInt(p.x * _inverseGridScale);
             int y = Mathf.FloorToInt(p.y * _inverseGridScale) * _gridCount;
             int z = Mathf.FloorToInt(p.z * _inverseGridScale) * _gridCountSquared;
-            _grid[x + y + z] += 1;
+            _pointGrid[x + y + z] += 1;
         }
     }
 

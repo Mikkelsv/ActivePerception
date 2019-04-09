@@ -14,7 +14,7 @@ class Supervisor:
         self.env_name = "Env/ActivePerception"
         self.max_step = 15
 
-        self.num_generations = 1000
+        self.num_generations = 200
         self.num_batches = 50
         self.batch_size = 1
         self.test_size = 20
@@ -24,7 +24,7 @@ class Supervisor:
         self.learning_rate = 0.001
 
     def run(self):
-        self.execute_session("moderateNBV_test", 1, 0.4, 0.2, self.alpha_views, self.learning_rate)
+        self.execute_session("moderateNBV_distance", 1, 0.4, 0.2, self.alpha_views, self.learning_rate)
 
     def run_multiple_variations(self):
         runs = self.fetch_runs()
@@ -35,7 +35,7 @@ class Supervisor:
 
     def execute_session(self, model_name, alpha_acc, alpha_dist, alpha_steps, alpha_views, learning_rate):
         print("\n==================== New Session {} ============================".format(model_name))
-        print("acc: {}, dest: {}, steps{}, views: {}, LR: {}\n".format(alpha_acc, alpha_dist,
+        print("acc: {}, dist: {}, steps{}, views: {}, LR: {}\n".format(alpha_acc, alpha_dist,
                                                                        alpha_steps, alpha_views, learning_rate))
         if self.use_executable:
             env = UnityEnvironment(file_name=self.env_name)

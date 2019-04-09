@@ -98,7 +98,7 @@ public class RewardManager {
 
     private int EvaluateGrid()
     {
-        int[] grid = _ogm.GetGrid();
+        int[] grid = _ogm.GetPointGrid();
         int[] gt = _gtg._grids[_som.CurrentObject()];
         int c = 0;
         //Parallel.For(0, _ogm.gridCountCubed, i =>

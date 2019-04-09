@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using System.Linq;
 
 public class GroundTruthGenerator
 {
@@ -22,7 +23,8 @@ public class GroundTruthGenerator
     public int[] requiredCount;
     public float requiredAccuracy;
 
-    private int gridRequirement = 10;
+    private int viewRequirement = 10;
+    private int pointRequirement = 20;
 
 
     public GroundTruthGenerator(DepthRenderingManager drm, ViewManager vm, PointCloudManager pcm, OccupancyGridManager ogm, StudyObjectMamanger som, float requiredAccuracy = 0.99f)
@@ -34,7 +36,7 @@ public class GroundTruthGenerator
         _ogm = ogm;
         _som = som;
         this.requiredAccuracy = requiredAccuracy;
-        Generate();
+        Generate(true); // Do not count tallies
     }
 
     public int[][] Grids()
@@ -47,25 +49,95 @@ public class GroundTruthGenerator
         return gridCount[_som.CurrentObject()];
     }
 
-    public int[][] Generate()
+    public int[][] Generate(bool document = true)
+    {
+        if (document)
+        {
+            return GenerateWithDocumentation();
+        }
+
+        int[][] grids = new int[_som.Count()][];
+        for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
+        {
+            _som.PrepareStudyObject(objectIndex);
+            _ogm.ClearGrid();
+            RenderAllViews();
+
+            int[] viewGrid = _ogm.GetViewGrid();
+            int[] pointGrid = _ogm.GetPointGrid();
+
+            ReduceGrid(viewGrid, pointGrid);
+
+            grids[objectIndex] = viewGrid;
+        }
+        _grids = grids;
+        _ogm.ClearGrid();
+        CountGrids();
+        Debug.Log("Generated grids of " + _som.Count() + " objects");
+        return grids;
+    }
+
+    private int[][] GenerateWithDocumentation()
     {
         int[][] grids = new int[_som.Count()][];
+
+
+        int[][] talliesPoints = new int[_som.Count()][];
+        int[][] talliesReducedPoints = new int[_som.Count()][];
+        int[][] talliesRemovedPoints = new int[_som.Count()][];
+
+        int[][] talliesViews = new int[_som.Count()][];
+        int[][] talliesReducedViews = new int[_som.Count()][];
+        int[][] talliesRemovedViews = new int[_som.Count()][];
+
+        int[] pointsRemovedGrid;
+        int[] viewsRemovedGrid;
 
         for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
         {
             _som.PrepareStudyObject(objectIndex);
             _ogm.ClearGrid();
             RenderAllViews();
-            int[] g = _ogm.GetGrid();
-            ReduceGrid(g);
-            grids[objectIndex] = g;
-            EvaluateGrid(g);
+            int[] pointGrid = _ogm.GetPointGrid();
+            int[] viewGrid = _ogm.GetViewGrid();
 
+            int[] tallyPoints = TallyGrid(pointGrid, 2000);
+            int[] tallyViews = TallyGrid(viewGrid, _vm.Count());
+
+            pointsRemovedGrid = new int[pointGrid.Length];
+            viewsRemovedGrid = new int[viewGrid.Length];
+
+            ReduceGrid(viewGrid, pointGrid, viewsRemovedGrid, pointsRemovedGrid);
+
+            int[] tallyReducedPoints = TallyGrid(pointGrid, 2000);
+            int[] tallyReducedViews = TallyGrid(viewGrid, _vm.Count());
+
+            int[] tallyRemovedPoints = TallyGrid(pointsRemovedGrid, pointRequirement);
+            int[] tallyRemovedViews = TallyGrid(viewsRemovedGrid, viewRequirement);
+
+            talliesPoints[objectIndex] = tallyPoints;
+            talliesReducedPoints[objectIndex] = tallyReducedPoints;
+            talliesRemovedPoints[objectIndex] = tallyRemovedPoints;
+
+            talliesViews[objectIndex] = tallyViews;
+            talliesReducedViews[objectIndex] = tallyReducedViews;
+            talliesRemovedViews[objectIndex] = tallyRemovedViews;
+
+            grids[objectIndex] = viewGrid;
         }
+
+        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_points_raw.csv", talliesPoints);
+        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_points_reduced.csv", talliesReducedPoints);
+        WriteIntsToFile("TrainingFiles/Tallies/tally_of_removed_points.csv", talliesRemovedPoints);
+
+        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_views_raw.csv", talliesViews);
+        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_views_reduced.csv", talliesReducedViews);
+        WriteIntsToFile("TrainingFiles/Tallies/tally_of_removed_views.csv", talliesRemovedViews);
+
         _grids = grids;
         _ogm.ClearGrid();
         CountGrids();
-        Debug.Log("Generated grids of " + _som.Count() + " objects");
+        Debug.Log("Generated grids and tallies of " + _som.Count() + " objects");
         return grids;
     }
 
@@ -97,7 +169,7 @@ public class GroundTruthGenerator
         _drm.SetCameraView(newView);
         _currentRendering = _drm.GetDepthRendering();
         HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
-        _ogm.AddPoints(pointCloud, false);
+        _ogm.AddPoints(pointCloud);
     }
 
     private void Save()
@@ -139,57 +211,76 @@ public class GroundTruthGenerator
         return count;
     }
 
-    private void ReduceGrid(int[] grid)
+    private void ReduceGrid(int[] viewGrid, int[] pointGrid)
     {
-        for(int i=0; i<grid.Length; i++)
+        for (int i = 0; i < viewGrid.Length; i++)
         {
-            if (grid[i] < gridRequirement)
+            if (viewGrid[i] < viewRequirement && pointGrid[i] < pointRequirement && viewGrid[i] > 0)
             {
-                grid[i] = 0;
+                viewGrid[i] = 0;
             }
         }
     }
 
-    private void EvaluateGrid(int[] grid)
+    private void ReduceGrid(int[] viewGrid, int[] pointGrid, int[] removedViewsGrid, int[] removedPointsGrid)
     {
-        int g10 = 0;
-        int o5 = 0;
-        int o4 = 0;
-        int o3 = 0;
-        int o2 = 0;
-        int o1 = 0;
-        int count = CountGrid(grid);
-        foreach (float g in grid)
+        for(int i=0; i<viewGrid.Length; i++)
         {
-            if (g > 10)
+            if (viewGrid[i] < viewRequirement && pointGrid[i] < pointRequirement && viewGrid[i]>0)
             {
-                g10++;
-            }
-            else if (g > 4)
-            {
-                o5++;
-            }
-            else if (g > 3)
-            {
-                o4++;
-            }
-            else if (g > 2)
-            {
-                o3++;
-            }
-            else if (g > 1)
-            {
-                o2++;
-            }
-            else if (g > 0)
-            {
-                o1++;
+                removedViewsGrid[i] = viewGrid[i];
+                removedPointsGrid[i] = pointGrid[i];
+                pointGrid[i] = 0;
+                viewGrid[i] = 0;
             }
         }
-        Debug.Log(String.Format("{0} object - {1}: {2}, {3}, {4}, {5}, {6}, {7}", _som.CurrentObject(), count, g10, o5, o4, o3, o2, o1));
+    }
 
+    private int[] TallyGrid(int[] grid, int tallyLength)
+    {
+        // Takes in count of the different voxels.
+        // Returns a tally of the counted voxels, i.e. how many times they have been seen
+        
+        int[] tally = new int[tallyLength];
+        foreach (int i in grid)
+        {
+            if (i > 0)
+            {
+                if (i >= tallyLength)
+                {
+                    tally[tallyLength-1]++;
+                }
+                else
+                {
+                    tally[i]++;
+                }
+            }
+        }
+
+        return tally;
+    }
+
+    private void WriteIntsToFile(string path, int[][] lines)
+    {
+        using (var outf = new StreamWriter(path))
+        {
+            foreach(int[] ints in lines)
+            {
+                string[] strings = Array.ConvertAll(ints, x => x.ToString());
+                string s = string.Join(", ", strings);
+                outf.WriteLine(s);
+            }
+        }
     }
     
+    private void WriteToFile(string path, string[] lines)
+    {
+        using (var outf = new StreamWriter(path))
+            foreach(string s in lines)
+            {
+                outf.WriteLine(s);
+            }
+    }
 
     
 }
