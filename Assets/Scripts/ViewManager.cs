@@ -23,7 +23,7 @@ public class ViewManager {
     private GameObject _viewSphereObject;
     private Quaternion _sceneRotation;
 
-    private int defaultView = 0;
+    private int defaultView = 31;
 
 	public ViewManager(int viewLayers, float viewRadius, int numberViews=100)
     {
@@ -52,7 +52,7 @@ public class ViewManager {
             _sceneRotation = Quaternion.identity;
             _currentView = 0;
         }
-        return SetView(_currentView);
+        return SetView(defaultView);
     }
 
     public Vector3 SetView(int view)

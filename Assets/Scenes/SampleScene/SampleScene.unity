@@ -472,7 +472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a07ba85a99109ef4bbbd316557ed5911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enable: 0
+  enable: 1
   agent: {fileID: 1120863360}
   acadamy: {fileID: 1858238373}
   testWithModel: 0
@@ -497,7 +497,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1178625764}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ba2e98913104ab346a62650dcc4b33eb, type: 3}
   m_Name: 

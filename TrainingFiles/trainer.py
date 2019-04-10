@@ -30,6 +30,7 @@ class Trainer:
         self.alpha_views = -0.3
 
         # Setup environment dependant variables
+        self.default_action = 31
         self.default_brain = self.env.brain_names[0]
         env_info = self.env.reset(train_mode=False)[self.default_brain]
         self.max_step = max_step
@@ -140,7 +141,7 @@ class Trainer:
         accuracies = []
         distances = []
         # env_info = self.env.reset(train_mode=False)[self.default_brain]
-        env_info = self.env.step(0)[self.default_brain]
+        env_info = self.env.step(self.default_action)[self.default_brain]
         while True:
             steps += 1
 

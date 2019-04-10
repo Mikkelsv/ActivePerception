@@ -22,7 +22,6 @@ class SynopsisManager:
         self.writelines(self.mm.get_summary())
         self.mm.print_model()
 
-        self.default_action = 0
 
     def create_summary_file(self):
         import datetime
@@ -112,7 +111,7 @@ class SynopsisManager:
     def process_actions(self, actions):
         views = np.zeros(self.t.num_actions)
         for a in actions:
-            views[self.default_action] += 1
+            views[self.t.default_action] += 1
             for v in a:
                 views[v] += 1
         views = views / len(actions)

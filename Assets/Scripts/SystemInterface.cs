@@ -78,7 +78,7 @@ public class SystemInterface {
         _som.PrepareRandomStudyObject();
         _vm.Reset();
         _rm.Reset();
-        RenderView(0);
+        RenderView(_vm.GetCurrentViewIndex());
     }
 
     public void RenderView(int viewIndex)
