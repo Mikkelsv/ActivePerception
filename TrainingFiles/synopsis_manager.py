@@ -22,6 +22,8 @@ class SynopsisManager:
         self.writelines(self.mm.get_summary())
         self.mm.print_model()
 
+        self.default_action = 0
+
     def create_summary_file(self):
         import datetime
         suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
@@ -70,18 +72,21 @@ class SynopsisManager:
         self.generation_reward_summary()
         self.plot_reward_summary()
 
-    def print_evaluation(self, num_runs, avg_reward, avg_steps, avg_distance, avg_accuracy, distances, accuracies):
+    def print_evaluation(self, num_runs, avg_reward, avg_steps, avg_dist, avg_acc, distances, accuracies, actions):
         a = []
         a.append("\n-------------------- Results --------------------")
         a.append("Number of tests: {}".format(num_runs))
         a.append("Mean reward: {:.3f},\t Mean steps: {:.1f},\t Mean distance: {:.1f},\t Avg Accuracy: {:.3f}"
-                 .format(avg_reward, avg_steps, avg_distance, avg_accuracy))
+                 .format(avg_reward, avg_steps, avg_dist, avg_acc))
         a.append("Distances: ")
         a.append(np.array2string(np.asarray(distances), separator=', ', precision=1))
         a.append("Accuracy:")
         a.append(np.array2string(np.asarray(accuracies), separator=', ', precision=3))
+        views = self.process_actions(actions)
+        a.append("View Distribution")
+        a.append(np.array2string(np.asarray(views), separator=', ', precision=3))
         self.writelines(a)
-        self.plot_evaluation_summary(distances, accuracies)
+        self.plot_evaluation_summary(distances, accuracies, views)
 
     def write(self, string):
         print(string)
@@ -104,6 +109,15 @@ class SynopsisManager:
             f.write("\n{:.4f}, {:.1f}, {:.1f}, {:.3f}".format(reward, steps, distance, acc))
         f.close()
 
+    def process_actions(self, actions):
+        views = np.zeros(self.t.num_actions)
+        for a in actions:
+            views[self.default_action] += 1
+            for v in a:
+                views[v] += 1
+        views = views / len(actions)
+        return views
+
     def plot_reward_summary(self):
 
         generation_reward = np.asarray(self.t.generation_reward)
@@ -122,7 +136,7 @@ class SynopsisManager:
 
         plt.subplot(412)
         plt.title("Steps")
-        plt.ylim([0, self.t.max_step+1])
+        plt.ylim([0, self.t.max_step + 1])
         plt.plot(steps)
 
         plt.subplot(413)
@@ -139,20 +153,26 @@ class SynopsisManager:
         plt.savefig(self.name + "_training")
         print("[Training Summary plotted]")
 
-    def plot_evaluation_summary(self, dist, acc):
-        plt.figure()
+    def plot_evaluation_summary(self, dist, acc, views):
+        plt.figure(figsize=(12, 12))
 
-        plt.subplot(211)
+        plt.subplot(311)
         plt.title("Average Cumulative Distance")
         plt.ylim([0, 1500])
         plt.xlim([0, self.max_step])
         plt.plot(dist)
 
-        plt.subplot(212)
+        plt.subplot(312)
         plt.title("Completion Accuracy")
         plt.ylim([0, 1.1])
         plt.xlim([0, self.max_step])
         plt.plot(acc)
+
+        plt.subplot(313)
+        plt.title("View Distribution")
+        x_pos = np.arange(len(views))
+        plt.ylim([0, max(1,int(np.amax(views)+1))])
+        plt.bar(x_pos, views, 0.4)
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.5)
         plt.savefig(self.name + "_evaluation")

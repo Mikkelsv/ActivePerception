@@ -23,6 +23,8 @@ public class ViewManager {
     private GameObject _viewSphereObject;
     private Quaternion _sceneRotation;
 
+    private int defaultView = 0;
+
 	public ViewManager(int viewLayers, float viewRadius, int numberViews=100)
     {
         _viewLayers = viewLayers;
@@ -40,16 +42,17 @@ public class ViewManager {
         _visitedViews = new float[_viewCount];
         _currentViewArray = new float[_viewCount];
         _revisited = false;
-        _currentView = 0;
         if (rotation)
         {
             _sceneRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
+            _currentView = defaultView;
         }
         else
         {
             _sceneRotation = Quaternion.identity;
+            _currentView = 0;
         }
-        return SetView(0);
+        return SetView(_currentView);
     }
 
     public Vector3 SetView(int view)
