@@ -41,6 +41,7 @@ def plot_tallies(views, points, name="tallies"):
         plt.plot(point_cumsum[i], label=models[i])
 
     plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    #plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), shadow=True, ncol=3)
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.2)
     plt.savefig("Tallies/" + name)
     plt.show()
