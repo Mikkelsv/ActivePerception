@@ -40,7 +40,7 @@ class Supervisor:
 
     def execute_session(self, model_name, alpha_acc, exp_acc, alpha_dist, exp_dist):
         print("\n==================== New Session {} ============================".format(model_name))
-        print("acc: {} - {}, dist: {} - {}, steps {}, views: {}, LR: {}\n" \
+        print("acc: {} - {}, dist: {} - {}, steps {}, views: {}, LR: {}\n"
               .format(alpha_acc, exp_acc, alpha_dist, exp_dist, self.alpha_steps, self.alpha_views, self.learning_rate))
 
         if self.use_executable:
@@ -82,10 +82,10 @@ class Supervisor:
 
     def fetch_runs(self):
         runs = []
-        acc = [0.25, 0.5]
-        exp_acc = [0.5]
-        dist = [0.25, 0.5, ]
-        exp_dist = [2.0]
+        acc = [0.25, 0.5, 1.0]
+        exp_acc = [0.5, 1.0]
+        dist = [0.25, 0.5, 1.0]
+        exp_dist = [1.0, 2.0]
         for a in acc:
             for e_a in exp_acc:
                 for d in dist:
