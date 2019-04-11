@@ -14,11 +14,11 @@ class Supervisor:
         self.env_name = "Env/ActivePerception"
         self.max_step = 15
 
-        self.num_generations = 2
-        self.num_batches = 5
+        self.num_generations = 200
+        self.num_batches = 50
         self.batch_size = 1
-        self.test_size = 2
-        self.evaluation_size = 5
+        self.test_size = 20
+        self.evaluation_size = 100
 
         self.alpha_views = -0.3
         self.alpha_steps = 0.2
@@ -77,7 +77,8 @@ class Supervisor:
         del model_manager
 
     def generate_name(self, acc, exp_acc, dist, exp_dist):
-        return "model_{:.0f}_{:.0f}_{:.0f}_{:.0f}".format(acc * 100, exp_acc * 100, dist * 100, exp_dist * 100)
+        return "{}model_{:.0f}_{:.0f}_{:.0f}_{:.0f}".format(self.num_generations, acc * 100, exp_acc * 100, dist * 100,
+                                                            exp_dist * 100)
 
     def fetch_runs(self):
         runs = []
