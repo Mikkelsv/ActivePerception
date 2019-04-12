@@ -83,7 +83,7 @@ public class RewardManager {
 
     private float ComputeDistanceReward()
     {
-         return (180f -_vm.distanceTravelled) / 180f;
+         return _vm.distanceTravelled / 180f;
     }
 
     public bool DetermineDone()
