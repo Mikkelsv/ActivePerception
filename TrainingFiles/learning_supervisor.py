@@ -13,7 +13,7 @@ class Supervisor:
         self.load_model = False
 
         # REBUILD ENVIRONMENT FOR LEARNING
-        self.env_name = "Env/ActivePerception"
+        self.env_name = "Env/ActivePerceptionTraining"
 
         self.max_step = 15
         self.num_generations = 200

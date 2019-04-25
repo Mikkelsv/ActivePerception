@@ -34,7 +34,7 @@ public class SystemInterface {
     private float _requiredAccuracy = 0.99f;
 
     // Evaluation setup
-    private bool _deterministicReset = true;
+    private bool _deterministicReset = false;
     private int _numEvaluations = 120;
     private int _evaluateEveryObject;
     private float _evaluateRotationIncremet;

@@ -13,7 +13,7 @@ class Tester:
         self.path_to_models = "Models/Test_models/"
 
         # REBUILD ENVIRONMENT FOR TESTING
-        self.env_name = "Env/ActivePerception"
+        self.env_name = "Env/ActivePerceptionEvaluation"
 
         self.max_step = 15
         self.evaluation_size = 120
