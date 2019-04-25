@@ -5,7 +5,7 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 
 class ModelManager:
 
-    def __init__(self, load=False, num_input=32, num_views=121, num_output=121, learning_rate=0.01,
+    def __init__(self, load=False, num_input=32, num_views=121, num_output=121, learning_rate=0.001,
                  model_name="default_model"):
         self.learning_rate = learning_rate
         self.num_input = num_input
@@ -17,7 +17,7 @@ class ModelManager:
         self.load = load
 
         if load:
-            self.model = self.load_model()
+            self.model = self.load_model(model_name)
         else:
             self.model = self.generate_conv_model()
         self.compile_model()
@@ -101,12 +101,12 @@ class ModelManager:
     def load_model(self, model_name=""):
         if model_name == "":
             model_name = self.model_name
-        loaded_model = tf.keras.models.load_model(self.folder + model_name + ".h5")
+        loaded_model = tf.keras.models.load_model(model_name)
         self.model = loaded_model
 
         self.compile_model()
 
-        print("Loaded Model -" + model_name + ".h5- from " + self.folder)
+        print("Loaded Model -" + model_name)
         self.model.summary()
         return self.model
 

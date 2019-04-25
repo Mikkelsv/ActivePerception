@@ -11,9 +11,11 @@ class Supervisor:
     def __init__(self):
         self.use_executable = True
         self.load_model = False
-        self.env_name = "Env/ActivePerception"
-        self.max_step = 15
 
+        # REBUILD ENVIRONMENT FOR LEARNING
+        self.env_name = "Env/ActivePerception"
+
+        self.max_step = 15
         self.num_generations = 200
         self.num_batches = 50
         self.batch_size = 1
@@ -34,14 +36,18 @@ class Supervisor:
     def run_multiple_variations(self):
         runs = self.fetch_runs()
         print("-Commensing learning of {} models-".format(len(runs)))
-        for acc, exp_acc, dist, exp_dist in runs:
-            model_name = self.generate_name(acc, exp_acc, dist, exp_dist)
-            self.execute_session(model_name, acc, exp_acc, dist, exp_dist)
+        for acc, exp_acc, dist, exp_dist, steps in runs:
+            model_name = self.generate_name(acc, exp_acc, dist, exp_dist, steps)
+            print(model_name)
 
-    def execute_session(self, model_name, alpha_acc, exp_acc, alpha_dist, exp_dist):
+        for acc, exp_acc, dist, exp_dist, steps in runs:
+            model_name = self.generate_name(acc, exp_acc, dist, exp_dist, steps)
+            self.execute_session(model_name, acc, exp_acc, dist, exp_dist, steps)
+
+    def execute_session(self, model_name, alpha_acc, exp_acc, alpha_dist, exp_dist, alpha_steps):
         print("\n==================== New Session {} ============================".format(model_name))
         print("acc: {} - {}, dist: {} - {}, steps {}, views: {}, LR: {}\n"
-              .format(alpha_acc, exp_acc, alpha_dist, exp_dist, self.alpha_steps, self.alpha_views, self.learning_rate))
+              .format(alpha_acc, exp_acc, alpha_dist, exp_dist, alpha_steps, self.alpha_views, self.learning_rate))
 
         if self.use_executable:
             env = UnityEnvironment(file_name=self.env_name)
@@ -58,7 +64,7 @@ class Supervisor:
 
         # Train
         trainer = Trainer(model, env, self.max_step)
-        trainer.set_reward_values(alpha_acc, exp_acc, alpha_dist, exp_dist, self.alpha_steps, self.alpha_views)
+        trainer.set_reward_values(alpha_acc, exp_acc, alpha_dist, exp_dist, alpha_steps, self.alpha_views)
         synopsis = SynopsisManager(trainer, model_manager, run_name=model_name, max_step=self.max_step)
         trainer.train(self.num_generations, self.num_batches, self.batch_size, self.test_size)
         synopsis.print_training_summary()
@@ -76,21 +82,23 @@ class Supervisor:
         del synopsis
         del model_manager
 
-    def generate_name(self, acc, exp_acc, dist, exp_dist):
-        return "{}model_{:.0f}_{:.0f}_{:.0f}_{:.0f}".format(self.num_generations, acc * 100, exp_acc * 100, dist * 100,
-                                                            exp_dist * 100)
+    def generate_name(self, acc, exp_acc, dist, exp_dist, steps):
+        return "{}model_{:.0f}_{:.0f}_{:.0f}_{:.0f}_{:0f}".format(self.num_generations, acc * 10, exp_acc * 10,
+                                                                  dist * 10, exp_dist * 10, steps * 10)
 
     def fetch_runs(self):
         runs = []
-        acc = [0.25, 0.5, 1.0]
+        acc = [0.5, 1.0]
         exp_acc = [0.5, 1.0]
-        dist = [0.25, 0.5, 1.0]
+        dist = [0.5, 1.0]
         exp_dist = [1.0, 2.0]
+        steps = [0.5, 1.0]
         for a in acc:
             for e_a in exp_acc:
                 for d in dist:
                     for e_d in exp_dist:
-                        runs.append((a, e_a, d, e_d))
+                        for s in steps:
+                            runs.append((a, e_a, d, e_d, s))
         return runs
 
 
