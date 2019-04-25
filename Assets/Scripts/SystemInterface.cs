@@ -16,8 +16,6 @@ public class SystemInterface {
     private GameObject _studyObject;
     private GameObject[] _studyObjects;
 
-
-
     private Vector3 _objectPosition = new Vector3(0, 0, 0);
 
     //Depth Camera Settings
@@ -33,7 +31,15 @@ public class SystemInterface {
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
     private float _studyGridSize = 1.2f;
-    private float requiredAccuracy = 0.99f;
+    private float _requiredAccuracy = 0.99f;
+
+    // Evaluation setup
+    private bool _deterministicReset = true;
+    private int _numEvaluations = 120;
+    private int _evaluateEveryObject;
+    private float _evaluateRotationIncremet;
+    private float _currentEvaluationRotation = 0f;
+    private int _currentEvaluationObject= 0;
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
 
@@ -66,19 +72,48 @@ public class SystemInterface {
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
-        _rm = new RewardManager(_gtg, _ogm, _som, _vm, requiredAccuracy);
+        _rm = new RewardManager(_gtg, _ogm, _som, _vm, _requiredAccuracy);
 
+        _evaluateEveryObject = _numEvaluations / _som.Count();
+        _evaluateRotationIncremet = 360f / _evaluateEveryObject;
 
         Reset();
     }
 
     public void Reset()
     {
+        if (_deterministicReset)
+        {
+            DeterministicReset();
+        }
+        else
+        {
+            StochasticReset();
+        }
+    }
+
+    private void StochasticReset()
+    {
         _ogm.ClearGrid();
         _som.PrepareRandomStudyObject();
         _vm.Reset();
         _rm.Reset();
         RenderView(_vm.GetCurrentViewIndex());
+    }
+
+    private void DeterministicReset()
+    {
+        _ogm.ClearGrid();
+        _som.PrepareStudyObject(_currentEvaluationObject);
+        _vm.Reset(true, _currentEvaluationRotation);
+        _rm.Reset();
+        RenderView(_vm.GetCurrentViewIndex());
+
+        _currentEvaluationRotation += _evaluateRotationIncremet;
+        if(_currentEvaluationRotation >= 360f) {
+            _currentEvaluationRotation = _currentEvaluationRotation % 360;
+            _currentEvaluationObject = (_currentEvaluationObject + 1) % _som.Count();
+        }
     }
 
     public void RenderView(int viewIndex)

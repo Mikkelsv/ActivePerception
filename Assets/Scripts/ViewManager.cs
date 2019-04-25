@@ -36,13 +36,18 @@ public class ViewManager {
         Reset();
     }
 
-    public Vector3 Reset(bool rotation = true)
+    public Vector3 Reset(bool rotation = true, float rotationValue = -1f)
     {
         distanceTravelled = 0f;
         _visitedViews = new float[_viewCount];
         _currentViewArray = new float[_viewCount];
         _revisited = false;
-        if (rotation)
+        if(rotation && rotationValue > 0)
+        {
+            _sceneRotation = Quaternion.Euler(0, rotationValue, 0);
+            _currentView = defaultView;
+        }
+        else if (rotation)
         {
             _sceneRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
             _currentView = defaultView;

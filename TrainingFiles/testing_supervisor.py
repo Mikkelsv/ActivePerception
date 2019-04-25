@@ -16,7 +16,7 @@ class Tester:
         self.env_name = "Env/ActivePerception"
 
         self.max_step = 15
-        self.evaluation_size = 10
+        self.evaluation_size = 120
 
     def run(self):
         # self.execute_session("moderateNBV_views_2", 1, 0.25, 1.0, 0.5)

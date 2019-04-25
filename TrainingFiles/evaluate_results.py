@@ -116,7 +116,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.ylabel("Model")
     plt.tight_layout(pad=4.0)
     plt.savefig(folder + suffix + "_Results_Reward")
-    
+
     plt.show()
     plt.close()
 
