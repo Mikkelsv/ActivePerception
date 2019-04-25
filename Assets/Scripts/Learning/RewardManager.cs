@@ -19,6 +19,8 @@ public class RewardManager {
     public float increasedAccuracy;
     public float viewReward;
 
+    private float _distanceLimit = 90f;
+
     public RewardManager(GroundTruthGenerator gtg, OccupancyGridManager ogm, StudyObjectMamanger som, ViewManager vm, float requiredAccuracy)
     {
         _gtg = gtg;
@@ -62,7 +64,7 @@ public class RewardManager {
 
     private float ComputeViewReward()
     {
-        if (_vm.GetRevisited())
+        if (_vm.GetRevisited() || _vm.distanceTravelled > _distanceLimit)
         {
             return 1f;
         }
