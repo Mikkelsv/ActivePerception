@@ -83,7 +83,7 @@ class Supervisor:
         del model_manager
 
     def generate_name(self, acc, exp_acc, dist, exp_dist, steps):
-        return "{}model_{:.0f}_{:.0f}_{:.0f}_{:.0f}_{:0f}".format(self.num_generations, acc * 10, exp_acc * 10,
+        return "{}model_{:.0f}_{:.0f}_{:.0f}_{:.0f}_{:.0f}".format(self.num_generations, acc * 10, exp_acc * 10,
                                                                   dist * 10, exp_dist * 10, steps * 10)
 
     def fetch_runs(self):

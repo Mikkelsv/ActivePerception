@@ -5,20 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tallies_reduced.png" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tallies_reduced.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tallies_removed.png" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tallies_removed.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_raw.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_raw.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_reduced.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_reduced.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_raw.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_raw.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_reduced.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_reduced.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_removed_points.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_removed_points.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_removed_views.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_removed_views.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/UnitySDK.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/evaluate_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluate_results.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/learning_supervisor.py" beforeDir="false" afterPath="$PROJECT_DIR$/learning_supervisor.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -28,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="15" column="53" selection-start-line="15" selection-start-column="53" selection-end-line="15" selection-end-column="53" />
+            <state relative-caret-position="1082">
+              <caret line="96" column="31" lean-forward="true" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
@@ -82,7 +70,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1010">
@@ -154,8 +142,8 @@
       <find>memory</find>
       <find>reset</find>
       <find>distance</find>
-      <find>name</find>
       <find>learning_ra</find>
+      <find>name</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -178,8 +166,8 @@
         <option value="$PROJECT_DIR$/illustrate_rewards.py" />
         <option value="$PROJECT_DIR$/model_manager.py" />
         <option value="$PROJECT_DIR$/testing_supervisor.py" />
-        <option value="$PROJECT_DIR$/learning_supervisor.py" />
         <option value="$PROJECT_DIR$/evaluate_results.py" />
+        <option value="$PROJECT_DIR$/learning_supervisor.py" />
       </list>
     </option>
   </component>
@@ -229,7 +217,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.plot_tallies">
+  <component name="RunManager" selected="Python.learning_supervisor">
     <configuration name="evaluate_results" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TrainingFiles" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -337,10 +325,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.learning_supervisor" />
         <item itemvalue="Python.plot_tallies" />
         <item itemvalue="Python.evaluate_results" />
         <item itemvalue="Python.testing_supervisor" />
-        <item itemvalue="Python.learning_supervisor" />
         <item itemvalue="Python.model_manager" />
       </list>
     </recent_temporary>
@@ -600,26 +588,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="15" column="53" selection-start-line="15" selection-start-column="53" selection-end-line="15" selection-end-column="53" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/testing_supervisor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="55" selection-start-line="15" selection-start-column="55" selection-end-line="15" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#42#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/evaluate_results.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="629">
@@ -653,6 +621,26 @@
           <caret line="117" selection-start-line="117" selection-end-line="117" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/testing_supervisor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" column="55" selection-start-line="15" selection-start-column="55" selection-end-line="15" selection-end-column="55" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1082">
+          <caret line="96" column="31" lean-forward="true" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
           </folding>
         </state>
       </provider>
