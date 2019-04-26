@@ -20,21 +20,22 @@ public class SystemInterface {
 
     //Depth Camera Settings
     private float _nearClipPlane = 0.2f;
-    private float _farClipPlane = 5f;
-    private float _depthSawOff = 0.01f;
+    private float _farClipPlane = 10f;
+    private float _depthSawOff = 0.75f;
     private int _textureResolution = 256;
 
     //View Sphere Settings
     private int _viewGridLayers = 4;
     private float _sphereRadius = 1.8f;
+    private int _numberViews = 100;
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
     private float _studyGridSize = 1.2f;
-    private float _requiredAccuracy = 0.99f;
+    private float _requiredAccuracy = 0.95f;
 
     // Evaluation setup
-    private bool _deterministicReset = false;
+    private bool _evaluationReset = true;
     private int _numEvaluations = 120;
     private int _evaluateEveryObject;
     private float _evaluateRotationIncremet;
@@ -66,7 +67,7 @@ public class SystemInterface {
         rTex.height = _textureResolution;
 
         //Setup Managers
-        _vm = new ViewManager(_viewGridLayers, _sphereRadius);
+        _vm = new ViewManager(_viewGridLayers, _sphereRadius, _numberViews);
         _som = new StudyObjectMamanger(_objectPosition);
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
@@ -82,7 +83,7 @@ public class SystemInterface {
 
     public void Reset()
     {
-        if (_deterministicReset)
+        if (_evaluationReset)
         {
             DeterministicReset();
         }

@@ -9,6 +9,7 @@ from random import randint
 
 folder = "Summaries/Stored/"
 
+
 def parse_results(results):
     a = results[2].replace(",", "").split()
     s = []
@@ -40,7 +41,7 @@ def fetch_evaluation_files(p):
 
 
 def plot_1(names, distances, accuracies):
-    plt.figure("Distance & Accuracy Comparison", figsize=(8, 6))
+    plt.figure("Distance & Accuracy Comparison", figsize=(12, 16))
     l = len(accuracies)
     plt.subplot(211)
     plt.title("Accuracy")
@@ -58,10 +59,10 @@ def plot_1(names, distances, accuracies):
     for i in range(l):
         plt.plot(distances[i], label=names[i])
 
-    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.3), shadow=True, ncol=3)
+    plt.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1), shadow=True, ncol=3)
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.2)
     suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-    plt.savefig(folder + suffix +  "Progress_Comparison")
+    plt.savefig(folder + suffix + "Progress_Comparison")
     plt.show()
     plt.close()
     print("[Training Summary plotted]")
@@ -75,7 +76,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
               (170, 110, 40), (255, 250, 200), (128, 0, 0), (170, 255, 195), (128, 128, 0), (255, 215, 180),
               (0, 0, 128), (128, 128, 128), (0, 0, 0)]
 
-    colors = np.asarray(colors)/255
+    colors = np.asarray(colors) / 255
 
     suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
     plt.figure("Result Comparison - Distance", figsize=(8, 6))
@@ -86,7 +87,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.xlim([0, 1500])
     plt.ylabel("Model")
     plt.tight_layout(pad=4.0)
-    plt.savefig(folder + suffix+"_Results_Distance")
+    plt.savefig(folder + suffix + "_Results_Distance")
 
     plt.figure("Result Comparison - Steps", figsize=(8, 6))
     plt.barh(y_pos, steps, 0.4, align='center', alpha=0.5, color=colors)
@@ -95,7 +96,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.xlim([0, 16])
     plt.ylabel("Model")
     plt.tight_layout(pad=4.0)
-    plt.savefig(folder + suffix+"_Results_Steps")
+    plt.savefig(folder + suffix + "_Results_Steps")
 
     plt.figure("Result Comparison - Accuracy", figsize=(8, 6))
     plt.barh(y_pos, mean_acc, 0.4, align='center', alpha=0.5, color=colors)
@@ -104,8 +105,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.xlim([0, 1.1])
     plt.ylabel("Model")
     plt.tight_layout(pad=4.0)
-    plt.savefig(folder + suffix+"_Results_Accuracy")
-
+    plt.savefig(folder + suffix + "_Results_Accuracy")
 
     plt.figure("Result Comparison - Reward", figsize=(8, 6))
     plt.barh(y_pos, rewards, 0.4, align='center', alpha=0.5, color=colors)
@@ -117,7 +117,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.tight_layout(pad=4.0)
     plt.savefig(folder + suffix + "_Results_Reward")
 
-    plt.show()
+    # plt.show()
     plt.close()
 
 
@@ -130,14 +130,15 @@ def evaluate(path, full=True):
     mean_acc = []
     dist = []
     acc = []
+    i = 0
     for p in files:
         p = path + p
         f = open(p, "r")
         content = f.readlines()
         name = content[0]
         names.append(name)
-
-        if(full):
+        print(p)
+        if (full):
             size = content[10]
             generations, batches, episodes, tests = parse_size(size)
 

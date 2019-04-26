@@ -20,13 +20,14 @@ public class MainController : MonoBehaviour
 
     //Depth Camera Settings
     private float _nearClipPlane = 0.2f;
-    private float _farClipPlane = 5f;
-    private float _depthSawOff = 0.01f;
+    private float _farClipPlane = 10f;
+    private float _depthSawOff = 0.75f;
     private int _textureResolution = 256;
     
     //View Sphere Settings
     private int _viewGridLayers = 4;
-    private float _sphereRadius = 1.8f;   
+    private float _sphereRadius = 1.8f;
+    private int _numberViews = 70;
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
@@ -63,13 +64,13 @@ public class MainController : MonoBehaviour
         rTex.height = _textureResolution;
        
         //Setup Managers
-        _vm = new ViewManager(_viewGridLayers, _sphereRadius);
+        _vm = new ViewManager(_viewGridLayers, _sphereRadius, _numberViews);
         _som = new StudyObjectMamanger(_objectPosition);
         _drm = new DepthRenderingManager(_depthCamera, _nearClipPlane, _farClipPlane);
         _pcm = new PointCloudManager(rTex, _depthSawOff, _depthCamera);
         _ogm = new OccupancyGridManager(_occupancyGridCount, _studyGridSize, _gridPosition);
         _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
-        _rm = new RewardManager(_gtg, _ogm, _som, _vm, 0.99f);
+        _rm = new RewardManager(_gtg, _ogm, _som, _vm, 0.95f);
 
         Vector3 v = _vm.GetView(0);
         _drm.SetCameraView(v);
@@ -98,19 +99,26 @@ public class MainController : MonoBehaviour
             Vector3 v = _vm.SetNeighbouringView(10);
             _drm.SetCameraView(v);
         }
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.Z)) // Add View
         {
             Texture2D _currentRendering = _drm.GetDepthRendering();
             HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
             _ogm.AddPoints(pointCloud);
         }
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X)) // Generate Grid
         {
             _ogm.BuildGrid();
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
             RenderView();
+        }
+        if (Input.GetKeyDown(KeyCode.B)){
+            Texture2D _currentRendering = _drm.GetDepthRendering();
+            HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
+            _pcm.BuildPointCloudObjectFromCloud(new Vector3(4, 0, 0), pointCloud, Vector3.one);
+            _ogm.AddPoints(pointCloud);
+            _ogm.BuildGrid();
         }
 
         if (Input.GetKeyDown(KeyCode.G))

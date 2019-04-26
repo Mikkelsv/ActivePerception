@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/evaluate_results.py" line="15" />
+    <bookmark url="file://$PROJECT_DIR$/evaluate_results.py" line="16" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/GroundTruthGeberator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/MainController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/OccupancyGridManager.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tallies_reduced.png" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tallies_reduced.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tallies_removed.png" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tallies_removed.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_raw.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_raw.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_reduced.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_points_reduced.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_raw.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_raw.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_reduced.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_ground_truth_views_reduced.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_removed_points.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_removed_points.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Tallies/tally_of_removed_views.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Tallies/tally_of_removed_views.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/UnitySDK.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learning_supervisor.py" beforeDir="false" afterPath="$PROJECT_DIR$/learning_supervisor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/testing_supervisor.py" beforeDir="false" afterPath="$PROJECT_DIR$/testing_supervisor.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/evaluate_results.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluate_results.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -30,7 +40,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testing_supervisor.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
@@ -72,10 +82,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="398">
+            <state relative-caret-position="1010">
               <caret line="117" selection-start-line="117" selection-end-line="117" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
@@ -99,8 +109,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evaluate_results.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="411">
-              <caret line="137" selection-start-line="137" selection-end-line="137" />
+            <state relative-caret-position="629">
+              <caret line="61" column="61" selection-start-line="61" selection-start-column="61" selection-end-line="61" selection-end-column="61" />
               <folding>
                 <element signature="e#0#15#0" expanded="true" />
               </folding>
@@ -144,8 +154,8 @@
       <find>memory</find>
       <find>reset</find>
       <find>distance</find>
-      <find>learning_ra</find>
       <find>name</find>
+      <find>learning_ra</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -167,9 +177,9 @@
         <option value="$PROJECT_DIR$/trainer.py" />
         <option value="$PROJECT_DIR$/illustrate_rewards.py" />
         <option value="$PROJECT_DIR$/model_manager.py" />
-        <option value="$PROJECT_DIR$/evaluate_results.py" />
         <option value="$PROJECT_DIR$/testing_supervisor.py" />
         <option value="$PROJECT_DIR$/learning_supervisor.py" />
+        <option value="$PROJECT_DIR$/evaluate_results.py" />
       </list>
     </option>
   </component>
@@ -219,7 +229,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.testing_supervisor">
+  <component name="RunManager" selected="Python.plot_tallies">
     <configuration name="evaluate_results" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TrainingFiles" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -233,27 +243,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluate_results.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="illustrate_rewards" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="TrainingFiles" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/illustrate_rewards.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -304,6 +293,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="plot_tallies" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="TrainingFiles" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/plot_tallies.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="testing_supervisor" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TrainingFiles" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -327,11 +337,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.plot_tallies" />
+        <item itemvalue="Python.evaluate_results" />
         <item itemvalue="Python.testing_supervisor" />
         <item itemvalue="Python.learning_supervisor" />
-        <item itemvalue="Python.evaluate_results" />
         <item itemvalue="Python.model_manager" />
-        <item itemvalue="Python.illustrate_rewards" />
       </list>
     </recent_temporary>
   </component>
@@ -350,6 +360,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" weight="0.14228936" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -366,8 +377,8 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-      <window_info active="true" anchor="right" x="1292" y="485" width="1256" height="436" id="Run" order="3" visible="true" weight="0.22575517" />
-      <window_info anchor="right" id="Debug" order="4" weight="0.42058346" />
+      <window_info active="true" anchor="right" x="1292" y="485" width="1256" height="436" id="Run" order="3" visible="true" weight="0.3255167" />
+      <window_info anchor="right" id="Debug" order="4" weight="0.42050874" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14228936" />
@@ -441,6 +452,11 @@
           <url>file://$PROJECT_DIR$/trainer.py</url>
           <line>144</line>
           <option name="timeStamp" value="173" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/evaluate_results.py</url>
+          <line>13</line>
+          <option name="timeStamp" value="175" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -550,23 +566,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plot_tallies.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="731">
-          <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="84" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/model_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="98" selection-start-line="7" selection-start-column="98" selection-end-line="7" selection-end-column="98" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/memory.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -584,30 +583,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/evaluate_results.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="411">
-          <caret line="137" selection-start-line="137" selection-end-line="137" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mlagents/envs/rpc_communicator.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="878">
           <caret line="96" selection-start-line="96" selection-end-line="96" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="117" selection-start-line="117" selection-end-line="117" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -637,6 +616,43 @@
           <caret line="15" column="55" selection-start-line="15" selection-start-column="55" selection-end-line="15" selection-end-column="55" />
           <folding>
             <element signature="e#0#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/evaluate_results.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="629">
+          <caret line="61" column="61" selection-start-line="61" selection-start-column="61" selection-end-line="61" selection-end-column="61" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plot_tallies.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="731">
+          <caret line="43" column="5" selection-start-line="43" selection-start-column="5" selection-end-line="43" selection-end-column="84" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/model_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="7" column="98" selection-start-line="7" selection-start-column="98" selection-end-line="7" selection-end-column="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1010">
+          <caret line="117" selection-start-line="117" selection-end-line="117" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
           </folding>
         </state>
       </provider>

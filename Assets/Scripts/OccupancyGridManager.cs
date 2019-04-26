@@ -243,19 +243,19 @@ public class OccupancyGridManager {
 
     private Color SelectColor(int c)
     {
-        if (c > 10)
+        if (c > 25)
         {
             return Color.blue;
         }
-        if(c > 5)
+        if(c > 10)
         {
             return Color.cyan;
         }
-        if (c > 3)
+        if (c > 6)
         {
             return Color.green;
         }
-        if (c > 2)
+        if (c > 3)
         {
             return Color.yellow;
         }

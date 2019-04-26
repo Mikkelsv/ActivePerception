@@ -23,8 +23,8 @@ public class GroundTruthGenerator
     public int[] requiredCount;
     public float requiredAccuracy;
 
-    private int viewRequirement = 10;
-    private int pointRequirement = 20;
+    private int viewRequirement = 4;
+    private int pointRequirement = 12;
 
 
     public GroundTruthGenerator(DepthRenderingManager drm, ViewManager vm, PointCloudManager pcm, OccupancyGridManager ogm, StudyObjectMamanger som, float requiredAccuracy = 0.99f)
@@ -215,7 +215,7 @@ public class GroundTruthGenerator
     {
         for (int i = 0; i < viewGrid.Length; i++)
         {
-            if (viewGrid[i] < viewRequirement && pointGrid[i] < pointRequirement && viewGrid[i] > 0)
+            if (viewGrid[i] <= viewRequirement && pointGrid[i] <= pointRequirement && viewGrid[i] > 0)
             {
                 viewGrid[i] = 0;
             }
