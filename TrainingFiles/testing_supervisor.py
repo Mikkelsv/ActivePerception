@@ -6,6 +6,7 @@ from synopsis_manager import SynopsisManager
 import numpy as np
 import os
 
+
 class Tester:
 
     def __init__(self):
@@ -41,14 +42,16 @@ class Tester:
         num_output = len(env_info.action_masks[0])
 
         # Fetching model
-        model_path = self.path_to_models + model_name+".h5"
+        model_path = self.path_to_models + model_name + ".h5"
         model_manager = ModelManager(load=True, num_views=num_output, num_output=num_output,
                                      model_name=model_path)
-        model = model_manager.get_model()
-        model_name = "evaluation_" + model_name.split("_", 1)[1]
+        if "_" in model_name:
+            model_name = "evaluation_" + model_name.split("_", 1)[1]
+        else:
+            model_name = "evaluation_" + model_name
 
         # Train
-        trainer = Trainer(model, env, self.max_step)
+        trainer = Trainer(model_manager, env, self.max_step)
         synopsis = SynopsisManager(trainer, model_manager, run_name=model_name, max_step=self.max_step)
         trainer.evaluate_solution(self.evaluation_size)
 

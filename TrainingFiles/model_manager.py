@@ -8,6 +8,7 @@ class ModelManager:
     def __init__(self, load=False, num_input=32, num_views=121, num_output=121, learning_rate=0.001,
                  model_name="default_model"):
         self.learning_rate = learning_rate
+        self.learning_decay = 0.99
         self.num_input = num_input
         self.num_views = num_views * 2  # Both current and visited
         self.num_output = num_output
@@ -34,7 +35,6 @@ class ModelManager:
         a.append("Learning Rate: {}".format(self.learning_rate))
         a.append("Activation Function: {}".format(self.activation_function))
         return a
-
 
     def generate_conv_model(self):
 
@@ -141,6 +141,10 @@ class ModelManager:
 
     def print_model(self):
         self.model.summary()
+
+    def decrement_learning_rate(self):
+        self.learning_rate = self.learning_rate * self.learning_decay
+        tf.keras.backend.set_value(self.model.optimizer.lr, self.learning_rate)
 
 
 if __name__ == "__main__":

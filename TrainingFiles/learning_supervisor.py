@@ -30,8 +30,8 @@ class Supervisor:
         self.exp_dist = 1
 
     def run(self):
-        # self.execute_session("moderateNBV_views_2", 1, 0.25, 1.0, 0.5)
-        self.run_multiple_variations()
+        self.execute_session("changeLRmodel", 1, 1, 0.5, 1, 0.5)
+        #self.run_multiple_variations()
 
     def run_multiple_variations(self):
         runs = self.fetch_runs()
@@ -60,10 +60,9 @@ class Supervisor:
         # Fetching model
         model_manager = ModelManager(load=self.load_model, num_views=num_output, num_output=num_output,
                                      model_name=model_name, learning_rate=self.learning_rate)
-        model = model_manager.get_model()
 
         # Train
-        trainer = Trainer(model, env, self.max_step)
+        trainer = Trainer(model_manager, env, self.max_step)
         trainer.set_reward_values(alpha_acc, exp_acc, alpha_dist, exp_dist, alpha_steps, self.alpha_views)
         synopsis = SynopsisManager(trainer, model_manager, run_name=model_name, max_step=self.max_step)
         trainer.train(self.num_generations, self.num_batches, self.batch_size, self.test_size)

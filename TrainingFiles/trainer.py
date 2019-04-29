@@ -10,8 +10,9 @@ import time
 
 class Trainer:
 
-    def __init__(self, model, env, max_step):
-        self.model = model
+    def __init__(self, model_manager, env, max_step):
+        self.model_manager = model_manager
+        self.model = model_manager.model
         self.env = env
         self.exploration = 0.9
         self.exploration_decay = 0.999
@@ -120,9 +121,12 @@ class Trainer:
 
             if episode % self.generation_size == 0:
                 self.evaluate_generation(generation)
+
                 # Update runtime variables
                 generation += 1
                 self.exploration = max(self.exploration_decay * self.exploration_decay, self.exploration_minimum)
+                self.model_manager.decrement_learning_rate()
+        # Track Time
         self.duration_total = time.time() - self.duration_total
 
     def run_episode(self, train=True, stochastic=False):
@@ -140,7 +144,7 @@ class Trainer:
         steps = 0
         accuracies = []
         distances = []
-        # env_info = self.env.reset(train_mode=False)[self.default_brain]
+
         env_info = self.env.step(self.default_action)[self.default_brain]
         while True:
             steps += 1
@@ -183,7 +187,9 @@ class Trainer:
 
     def get_action(self, observation, training, stochastic):
         predictions = self.model.predict(observation)[0]
-        if (training and random.random() < self.exploration) or stochastic:  # Either training or filling memory
+        if (not training) and False:
+            action_index = np.asarray(predictions).argmax()
+        elif training and random.random() < self.exploration:  # Either training or filling memory
             action_index = np.random.randint(0, self.num_actions)
         else:
             now = time.time()
