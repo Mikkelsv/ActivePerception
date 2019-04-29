@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/UnitySDK.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learning_supervisor.py" beforeDir="false" afterPath="$PROJECT_DIR$/learning_supervisor.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,7 +19,7 @@
         <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1082">
-              <caret line="96" column="31" lean-forward="true" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
+              <caret line="96" column="31" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
               </folding>
@@ -638,7 +637,7 @@
     <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1082">
-          <caret line="96" column="31" lean-forward="true" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
+          <caret line="96" column="31" selection-start-line="96" selection-start-column="31" selection-end-line="96" selection-end-column="31" />
           <folding>
             <element signature="e#0#42#0" expanded="true" />
           </folding>

@@ -35,7 +35,7 @@ public class SystemInterface {
     private float _requiredAccuracy = 0.95f;
 
     // Evaluation setup
-    private bool _evaluationReset = false;
+    private bool _evaluationReset = true;
     private int _numEvaluations = 120;
     private int _evaluateEveryObject;
     private float _evaluateRotationIncremet;

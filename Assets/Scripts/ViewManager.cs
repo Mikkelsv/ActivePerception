@@ -22,6 +22,7 @@ public class ViewManager {
 
     private GameObject _viewSphereObject;
     private Quaternion _sceneRotation;
+    private System.Random _rnd;
 
     private int defaultView = 31;
 
@@ -33,6 +34,7 @@ public class ViewManager {
         _viewCount = _views.Length;
         _viewDistances = GenerateViewNeighbourhood();
         _sceneRotation = Quaternion.identity;
+        _rnd = new System.Random();
         Reset();
     }
 
@@ -49,7 +51,7 @@ public class ViewManager {
         }
         else if (rotation)
         {
-            _sceneRotation = Quaternion.Euler(0, UnityEngine.Random.Range(0, 360), 0);
+            _sceneRotation = Quaternion.Euler(0, _rnd.Next(12) * 30f , 0);
             _currentView = defaultView;
         }
         else
