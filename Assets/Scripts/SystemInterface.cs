@@ -105,16 +105,12 @@ public class SystemInterface {
     private void DeterministicReset()
     {
         _ogm.ClearGrid();
-        _som.PrepareStudyObject(_currentEvaluationObject);
-        _vm.Reset(true, _currentEvaluationRotation);
+        _som.PrepareNextStudyObject();
+        _vm.Reset();
         _rm.Reset();
         RenderView(_vm.GetCurrentViewIndex());
 
         _currentEvaluationRotation += _evaluateRotationIncremet;
-        if(_currentEvaluationRotation >= 360f) {
-            _currentEvaluationRotation = _currentEvaluationRotation % 360;
-            _currentEvaluationObject = (_currentEvaluationObject + 1) % _som.Count();
-        }
     }
 
     public void RenderView(int viewIndex)

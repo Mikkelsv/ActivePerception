@@ -36,7 +36,9 @@ public class GroundTruthGenerator
         _ogm = ogm;
         _som = som;
         this.requiredAccuracy = requiredAccuracy;
-        Generate(false); // Do not count tallies
+        // Generate(false); // Do not count tallies
+        // Save();
+        _grids = Load();
     }
 
     public int[][] Grids()
@@ -179,7 +181,7 @@ public class GroundTruthGenerator
             {
                 outf.WriteLine(string.Join(",", _grids[i]));
             }
-        Debug.Log("Ground truth stoed in " + _path);
+        Debug.Log("Ground truth stored in " + _path);
 
     }
 
@@ -194,7 +196,7 @@ public class GroundTruthGenerator
             _grids[i] = Array.ConvertAll(s.Split(','), int.Parse);
             i++;
         }
-        Debug.Log("Loaded grids of " + lines.Length + " objects");
+        Debug.Log("Loaded grids of " + lines.Length + " objects from " + _path);
         return _grids;
     }  
 

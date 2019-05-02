@@ -21,7 +21,6 @@ public class ViewManager {
     private bool _revisited = false;
 
     private GameObject _viewSphereObject;
-    private Quaternion _sceneRotation;
     private System.Random _rnd;
 
     private int defaultView = 31;
@@ -33,32 +32,17 @@ public class ViewManager {
         _views = GenerateViews(numberViews);
         _viewCount = _views.Length;
         _viewDistances = GenerateViewNeighbourhood();
-        _sceneRotation = Quaternion.identity;
         _rnd = new System.Random();
         Reset();
     }
 
-    public Vector3 Reset(bool rotation = true, float rotationValue = -1f)
+    public Vector3 Reset()
     {
         distanceTravelled = 0f;
         _visitedViews = new float[_viewCount];
         _currentViewArray = new float[_viewCount];
         _revisited = false;
-        if(rotation && rotationValue > 0)
-        {
-            _sceneRotation = Quaternion.Euler(0, rotationValue, 0);
-            _currentView = defaultView;
-        }
-        else if (rotation)
-        {
-            _sceneRotation = Quaternion.Euler(0, _rnd.Next(12) * 30f , 0);
-            _currentView = defaultView;
-        }
-        else
-        {
-            _sceneRotation = Quaternion.identity;
-            _currentView = 0;
-        }
+        _currentView = defaultView;
         return SetView(defaultView);
     }
 
@@ -77,7 +61,7 @@ public class ViewManager {
         {
             _revisited = true;
         }
-        return _sceneRotation * _views[view];
+        return _views[view];
     }
 
 

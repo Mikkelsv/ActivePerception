@@ -18,12 +18,16 @@ public class StudyObjectMamanger
     private int _countObjects;
     private bool _randomOrientation;
 
-    public StudyObjectMamanger(Vector3 objectPosition)
+    public int RotationVariations { get; }
+
+    public StudyObjectMamanger(Vector3 objectPosition, int rotationVariations=12)
     {
         _objectPosition = objectPosition;
+        RotationVariations = rotationVariations;
         LoadStudyObjects();
         _countObjects = _studyObjects.Count();
-        PrepareRandomStudyObject();
+        Debug.Log(_countObjects +" prepared");
+        PrepareStudyObject(0);
     }
 
     public void PrepareRandomStudyObject()
@@ -71,20 +75,26 @@ public class StudyObjectMamanger
         _studyObjectsManager = new GameObject("StudyObjectsManager");
         _studyObjectsManager.transform.position = _position;
         GameObject[] modelPrefabs = Resources.LoadAll("Models", typeof(GameObject)).Cast<GameObject>().ToArray();
-        _studyObjects = new GameObject[modelPrefabs.Length];
-
-        int i = 0;
+        _studyObjects = new GameObject[modelPrefabs.Length * RotationVariations];
+        int c = 0;
         foreach (GameObject g in modelPrefabs)
         {
-            GameObject studyObject = GameObject.Instantiate(g, _studyObjectsManager.transform);
+            for(int i=0; i<RotationVariations; i++)
+            {
+                float rot = 360f / RotationVariations * i;
 
-            Vector3 boundaries = studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size;
-            studyObject.transform.localScale = Vector3.one / GetMaxElement(boundaries);
-            studyObject.name = "StudyObject_" + i.ToString();
+                GameObject studyObject = GameObject.Instantiate(g, _studyObjectsManager.transform);
 
-            _studyObjects[i] = studyObject;
-            studyObject.SetActive(false);
-            i++;
+                Vector3 boundaries = studyObject.GetComponentInChildren<MeshFilter>().mesh.bounds.size;
+                studyObject.transform.localScale = Vector3.one / (GetMaxElement(boundaries) * 1.224f);
+                studyObject.transform.rotation = Quaternion.Euler(new Vector3(0, rot, 0));
+                studyObject.name = g.name + i.ToString();
+
+                _studyObjects[c] = studyObject;
+                studyObject.SetActive(false);
+                c++;
+            }
+         
         }
     }
 
