@@ -1,7 +1,10 @@
-4/29/2019 3:08:00 PM
+5/2/2019 12:40:57 PM
  
 Log
 100 views created
+
+Log
+120 prepared
 
 Log
 Depth Resolution: 256, 256
@@ -10,5 +13,5 @@ Log
 LowResSphere used as point cloud representation object
 
 Log
-Generated grids of 10 objects
+Loaded grids of 120 objects from OccupancyGrids/saved_occupancy_grids.txt
 

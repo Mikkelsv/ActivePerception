@@ -7,7 +7,9 @@ using System.Linq;
 
 public class GroundTruthGenerator
 {
-    private readonly string _path = "TrainingFiles/OccupancyGrids/saved_occupancy_grids.txt";
+    //Add trainingTiles/ if testing in environment!
+    //private readonly string _path = "TrainingFiles/OccupancyGrids/saved_occupancy_grids.txt";
+    private readonly string _path = "OccupancyGrids/saved_occupancy_grids.txt";
 
     private DepthRenderingManager _drm;
     private ViewManager _vm;
@@ -39,6 +41,7 @@ public class GroundTruthGenerator
         //Generate(false); // Do not count tallies
         //Save();
         _grids = Load();
+        CountGrids();
     }
 
     public int[][] Grids()
@@ -74,7 +77,6 @@ public class GroundTruthGenerator
         }
         _grids = grids;
         _ogm.ClearGrid();
-        CountGrids();
         Debug.Log("Generated grids of " + _som.Count() + " objects");
         return grids;
     }

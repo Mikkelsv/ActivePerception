@@ -20,8 +20,8 @@ public class MainController : MonoBehaviour
 
     //Depth Camera Settings
     private float _nearClipPlane = 0.2f;
-    private float _farClipPlane = 10f;
-    private float _depthSawOff = 0.75f;
+    private float _farClipPlane = 5f;
+    private float _depthSawOff = 0.5f;
     private int _textureResolution = 256;
     
     //View Sphere Settings

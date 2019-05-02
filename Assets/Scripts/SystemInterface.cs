@@ -35,7 +35,7 @@ public class SystemInterface {
     private float _requiredAccuracy = 0.95f;
 
     // Evaluation setup
-    private bool _evaluationReset = false;
+    private bool _evaluationReset = true;
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
 

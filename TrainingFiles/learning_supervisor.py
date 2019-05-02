@@ -30,8 +30,8 @@ class Supervisor:
         self.exp_dist = 1
 
     def run(self):
-        self.execute_session("changeLRmodel", 1, 1, 0.5, 1, 0.5)
-        #self.run_multiple_variations()
+        # self.execute_session("changeLRmodel", 1, 1, 0.5, 1, 0.5)
+        self.run_multiple_variations()
 
     def run_multiple_variations(self):
         runs = self.fetch_runs()

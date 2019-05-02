@@ -1,20 +1,28 @@
-4/4/2019 5:31:43 PM
+5/2/2019 12:31:34 PM
  
 Log
 100 views created
 UnityEngine.Debug:Log(Object)
-ViewManager:GenerateViews(Int32) (at Assets/Scripts/ViewManager.cs:109)
-ViewManager:.ctor(Int32, Single, Int32) (at Assets/Scripts/ViewManager.cs:29)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:63)
+ViewManager:GenerateViews(Int32) (at Assets/Scripts/ViewManager.cs:110)
+ViewManager:.ctor(Int32, Single, Int32) (at Assets/Scripts/ViewManager.cs:31)
+SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:65)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
 NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
 Log
-Depth Resolution: 128, 128
+120 prepared
+UnityEngine.Debug:Log(Object)
+StudyObjectMamanger:.ctor(Vector3, Int32) (at Assets/Scripts/StudyObjectMamanger.cs:29)
+SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:66)
+NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
+NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
+
+Log
+Depth Resolution: 256, 256
 UnityEngine.Debug:Log(Object)
 PointCloudManager:CreateViewPortArray(RenderTexture, Single) (at Assets/Scripts/PointCloudManager.cs:41)
 PointCloudManager:.ctor(RenderTexture, Single, Camera) (at Assets/Scripts/PointCloudManager.cs:25)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:66)
+SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
 NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
@@ -22,116 +30,16 @@ Log
 LowResSphere used as point cloud representation object
 UnityEngine.Debug:Log(Object)
 PointCloudManager:.ctor(RenderTexture, Single, Camera) (at Assets/Scripts/PointCloudManager.cs:34)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:66)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-0 object - 4630: 3878, 467, 137, 38, 50, 60
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
 NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
 Log
-1 object - 3700: 3700, 0, 0, 0, 0, 0
+Loaded grids of 120 objects from TrainingFiles/OccupancyGrids/saved_occupancy_grids.txt
 UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-2 object - 3231: 2463, 441, 77, 61, 86, 103
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-3 object - 2428: 2089, 43, 46, 67, 83, 100
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-4 object - 2340: 1908, 152, 37, 58, 78, 107
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-5 object - 2940: 2386, 145, 127, 133, 99, 50
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-6 object - 2709: 2151, 235, 59, 70, 77, 117
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-7 object - 3584: 2824, 392, 80, 112, 93, 83
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-8 object - 903: 798, 30, 15, 17, 25, 18
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-9 object - 968: 830, 47, 12, 21, 22, 36
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:EvaluateGrid(Int32[]) (at Assets/Scripts/GroundTruthGeberator.cs:176)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:60)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
-NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
-NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
-
-Log
-Generated grids of 10 objects
-UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:Generate() (at Assets/Scripts/GroundTruthGeberator.cs:66)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:36)
-SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:68)
+GroundTruthGenerator:Load() (at Assets/Scripts/GroundTruthGeberator.cs:199)
+GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:41)
+SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:70)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
 NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
