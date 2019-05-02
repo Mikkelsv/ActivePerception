@@ -36,8 +36,8 @@ public class GroundTruthGenerator
         _ogm = ogm;
         _som = som;
         this.requiredAccuracy = requiredAccuracy;
-        // Generate(false); // Do not count tallies
-        // Save();
+        //Generate(false); // Do not count tallies
+        //Save();
         _grids = Load();
     }
 

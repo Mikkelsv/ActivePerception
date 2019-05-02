@@ -21,7 +21,6 @@ public class ViewManager {
     private bool _revisited = false;
 
     private GameObject _viewSphereObject;
-    private System.Random _rnd;
 
     private int defaultView = 31;
 
@@ -32,7 +31,6 @@ public class ViewManager {
         _views = GenerateViews(numberViews);
         _viewCount = _views.Length;
         _viewDistances = GenerateViewNeighbourhood();
-        _rnd = new System.Random();
         Reset();
     }
 

@@ -35,12 +35,7 @@ public class SystemInterface {
     private float _requiredAccuracy = 0.95f;
 
     // Evaluation setup
-    private bool _evaluationReset = true;
-    private int _numEvaluations = 120;
-    private int _evaluateEveryObject;
-    private float _evaluateRotationIncremet;
-    private float _currentEvaluationRotation = 0f;
-    private int _currentEvaluationObject= 0;
+    private bool _evaluationReset = false;
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
 
@@ -75,9 +70,6 @@ public class SystemInterface {
         _gtg = new GroundTruthGenerator(_drm, _vm, _pcm, _ogm, _som);
         _rm = new RewardManager(_gtg, _ogm, _som, _vm, _requiredAccuracy);
 
-        _evaluateEveryObject = _numEvaluations / _som.Count();
-        _evaluateRotationIncremet = 360f / _evaluateEveryObject;
-
         Reset();
     }
 
@@ -109,8 +101,6 @@ public class SystemInterface {
         _vm.Reset();
         _rm.Reset();
         RenderView(_vm.GetCurrentViewIndex());
-
-        _currentEvaluationRotation += _evaluateRotationIncremet;
     }
 
     public void RenderView(int viewIndex)
