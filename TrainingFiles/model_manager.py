@@ -48,7 +48,9 @@ class ModelManager:
 
         auxiliary_inputs = tf.keras.layers.Input(shape=(self.num_views, 1), name="views")
         aux_output = tf.keras.layers.Flatten(name="flatten_views")(auxiliary_inputs)
-        merged = tf.keras.layers.Concatenate()([fc1, aux_output])
+        aux_fcn = tf.keras.layers.Dense(100, activation="relu", name="aux_fc_layer")(aux_output)
+
+        merged = tf.keras.layers.Concatenate()([fc1, aux_fcn])
 
         outputs = tf.keras.layers.Dense(self.num_output, activation=self.activation_function, name="actions")(merged)
 
