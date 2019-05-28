@@ -75,6 +75,9 @@ class Trainer:
         self.sm: SynopsisManager = None
         self.generation_reward = []
         self.loss = []
+        self.generation_loss = []
+        self.accuracy = []
+        self.generation_acc = []
 
     def set_synopsis_manager(self, sm: SynopsisManager):
         self.sm = sm
@@ -120,7 +123,14 @@ class Trainer:
             # self.loss.append(loss)
 
             if episode % self.generation_size == 0:
+                # Fetch Loss from Generation
                 self.evaluate_generation(generation)
+                gen_loss = np.mean(self.loss)
+                gen_acc = np.mean(self.accuracy)
+                self.generation_loss.append(gen_loss)
+                self.generation_acc.append(gen_acc)
+                self.loss = []
+                self.accuracy = []
 
                 # Update runtime variables
                 generation += 1
@@ -182,7 +192,8 @@ class Trainer:
                     now = time.time()
                     loss = self.model.train_on_batch([observations, views], predictions_corrected)
                     self.update_time_keeper(self.duration_training, time.time() - now)
-                    self.loss.append(loss)
+                    self.loss.append(loss[0])
+                    self.accuracy.append(loss[1])
                 return action_indexes, steps, distances, accuracies, discounted_rewards, mean_reward
 
     def get_action(self, observation, training, stochastic):

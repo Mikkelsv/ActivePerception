@@ -7,9 +7,9 @@ using System.Linq;
 
 public class GroundTruthGenerator
 {
-    //Add trainingTiles/ if testing in environment!
-    //private readonly string _path = "TrainingFiles/OccupancyGrids/saved_occupancy_grids.txt";
-    private readonly string _path = "OccupancyGrids/saved_occupancy_grids.txt";
+    private readonly string _basePath = "TrainingFiles/OccupancyGrids/saved_occupancy_grids"; //for running in environment
+    //private readonly string _basePath = "OccupancyGrids/saved_occupancy_grids"; //for runinng executeable
+    private string _path;
 
     private DepthRenderingManager _drm;
     private ViewManager _vm;
@@ -32,6 +32,7 @@ public class GroundTruthGenerator
     public GroundTruthGenerator(DepthRenderingManager drm, ViewManager vm, PointCloudManager pcm, OccupancyGridManager ogm, StudyObjectMamanger som, float requiredAccuracy = 0.99f)
     {
         // Save function messes up executable file, must make due without it
+        _path = _basePath + "_" + vm.Count().ToString() + ".txt";
         _drm = drm;
         _vm = vm;
         _pcm = pcm;

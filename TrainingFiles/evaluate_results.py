@@ -63,7 +63,7 @@ def plot_1(names, distances, accuracies):
     plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.2)
     suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
     plt.savefig(folder + suffix + "Progress_Comparison")
-    plt.show()
+    # plt.show()
     plt.close()
     print("[Training Summary plotted]")
 
@@ -84,7 +84,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.barh(y_pos, mean_dist, 0.4, align='center', alpha=0.5, color=colors)
     plt.yticks(y_pos, names)
     plt.xlabel('Mean Distance')
-    plt.xlim([0, 1500])
+    plt.xlim([0, 600])
     plt.ylabel("Model")
     plt.tight_layout(pad=4.0)
     plt.savefig(folder + suffix + "_Results_Distance")
@@ -93,7 +93,7 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.barh(y_pos, steps, 0.4, align='center', alpha=0.5, color=colors)
     plt.yticks(y_pos, names)
     plt.xlabel('Mean Steps')
-    plt.xlim([0, 16])
+    plt.xlim([8, 16])
     plt.ylabel("Model")
     plt.tight_layout(pad=4.0)
     plt.savefig(folder + suffix + "_Results_Steps")
@@ -121,6 +121,47 @@ def plot_2(names, mean_dist, mean_acc, steps, rewards):
     plt.close()
 
 
+def plot_3(names, dist, steps):
+    y_pos = np.arange(len(names))
+    t = "Deterministic Models"
+
+    colors = [(230, 25, 75), (60, 180, 75), (255, 225, 25), (0, 130, 200), (245, 130, 48), (145, 30, 180),
+              (70, 240, 240), (240, 50, 230), (210, 245, 60), (250, 190, 190), (0, 128, 128), (230, 190, 255),
+              (170, 110, 40), (255, 250, 200), (128, 0, 0), (170, 255, 195), (128, 128, 0), (255, 215, 180),
+              (0, 0, 128), (128, 128, 128), (0, 0, 0)]
+
+    colors = np.asarray(colors) / 255
+
+    dist_indices = np.flip(np.argsort(dist))
+    dist_sorted = np.flip(np.sort(dist))
+    names_sorted = return_from_indices(names,dist_indices)
+    colors_sorted = return_from_indices(colors, dist_indices)
+
+    suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+    plt.figure("Result Comparison - Distance Sorted", figsize=(8, 6))
+    plt.barh(y_pos, dist_sorted, 0.4, align='center', alpha=0.5, color=colors_sorted)
+    plt.yticks(y_pos, names_sorted)
+    plt.xlabel('Mean Distance')
+    plt.xlim([0, 600])
+    plt.ylabel("Model")
+    plt.tight_layout(pad=1.0)
+    plt.savefig(folder + suffix + "_Results_Distance_Sorted")
+    plt.close()
+
+    indices = np.flip(np.argsort(steps))
+    steps = np.flip(np.sort(steps))
+    names_sorted = return_from_indices(names, indices)
+    colors_sorted = return_from_indices(colors, indices)
+    plt.figure("Result Comparison - Steps Sorted", figsize=(8, 6))
+    plt.barh(y_pos, steps, 0.4, align='center', alpha=0.5, color=colors_sorted)
+    plt.yticks(y_pos, names_sorted)
+    plt.xlabel('Mean Steps')
+    plt.xlim([6, 12])
+    plt.ylabel("Model")
+    plt.tight_layout(pad=1.0)
+    plt.savefig(folder + suffix + "_Results_Steps_Sorted")
+
+
 def evaluate(path, full=True):
     files = fetch_evaluation_files(path)
     names = []
@@ -132,11 +173,14 @@ def evaluate(path, full=True):
     acc = []
     i = 0
     for p in files:
-        p = path + p
-        f = open(p, "r")
+        fp = path + p
+        f = open(fp, "r")
         content = f.readlines()
-        name = content[0]
+        #name = content[0]
+        name = p.split("_")
+        name = '_'.join(name[:-2])
         names.append(name)
+
         print(p)
         if (full):
             size = content[10]
@@ -153,8 +197,9 @@ def evaluate(path, full=True):
         mean_acc.append(accuracy)
         dist.append(distances)
         acc.append(accuracies)
-    plot_1(names, dist, acc)
-    plot_2(names, mean_dist, mean_acc, steps, rewards)
+    # plot_1(names, dist, acc)
+    # plot_2(names, mean_dist, mean_acc, steps, rewards)
+    plot_3(names, mean_dist, steps)
 
 
 def is_number(s):
@@ -174,6 +219,20 @@ def parse_array_from_string(a, add_zero=False):
         if is_number(i):
             f.append(float(i))
     return f
+
+
+def return_from_indices(a, indices):
+    b = []
+    for i in indices:
+        b.append(a[i%len(a)])
+    return b
+
+def print_loss(path):
+    files = fetch_evaluation_files(path)
+    for p in files:
+        p = path + p
+        f = open(p, "r")
+        content = f.readlines()
 
 
 def main():

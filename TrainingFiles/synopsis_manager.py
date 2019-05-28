@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import datetime
 
 
 class SynopsisManager:
@@ -22,9 +23,8 @@ class SynopsisManager:
         self.writelines(self.mm.get_summary())
         self.mm.print_model()
 
-
     def create_summary_file(self):
-        import datetime
+
         suffix = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
         self.name = self.folder + "_".join([self.run_name, suffix])
         self.file_path = self.name + ".txt"
@@ -70,6 +70,7 @@ class SynopsisManager:
         self.writelines(a)
         self.generation_reward_summary()
         self.plot_reward_summary()
+        self.plot_loss()
 
     def print_evaluation(self, num_runs, avg_reward, avg_steps, avg_dist, avg_acc, distances, accuracies, actions):
         a = []
@@ -152,6 +153,20 @@ class SynopsisManager:
         plt.savefig(self.name + "_training")
         print("[Training Summary plotted]")
 
+    def plot_loss(self):
+        plt.figure(figsize=(6, 12))
+        plt.title("Loss Development")
+        plt.plot(self.t.generation_loss)
+
+        plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.2)
+        plt.savefig(self.name + "_loss_development")
+        print("[Training Summary plotted]")
+        p = self.folder = "{}_loss_development_{}.txt".format(self.name,
+                                                              datetime.datetime.now().strftime("%y%m%d_%H%M%S"))
+        f = open(p, "w")
+        for i in range(len(self.t.generation_loss)):
+            f.write("{},{}\n".format(self.t.generation_loss[i],self.t.generation_acc[i]))
+
     def plot_evaluation_summary(self, dist, acc, views):
         plt.figure(figsize=(12, 12))
 
@@ -170,7 +185,7 @@ class SynopsisManager:
         plt.subplot(313)
         plt.title("View Distribution")
         x_pos = np.arange(len(views))
-        plt.ylim([0, max(1,int(np.amax(views)+1))])
+        plt.ylim([0, max(1, int(np.amax(views) + 1))])
         plt.bar(x_pos, views, 0.4)
 
         plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=1.5)

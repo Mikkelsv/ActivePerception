@@ -27,15 +27,15 @@ public class SystemInterface {
     //View Sphere Settings
     private int _viewGridLayers = 4;
     private float _sphereRadius = 1.8f;
-    private int _numberViews = 100;
+    private int _numberViews = 50;
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
     private float _studyGridSize = 1.2f;
     private float _requiredAccuracy = 0.95f;
 
-    // Evaluation setup
-    private bool _evaluationReset = true;
+    // Evaluation setup used when testing
+    private bool _evaluationReset = false;
 
     private Vector3 _gridPosition = new Vector3(8, 0, 0);
 

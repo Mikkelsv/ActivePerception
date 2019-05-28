@@ -1,7 +1,7 @@
-5/2/2019 12:31:34 PM
+5/24/2019 4:13:12 PM
  
 Log
-100 views created
+50 views created
 UnityEngine.Debug:Log(Object)
 ViewManager:GenerateViews(Int32) (at Assets/Scripts/ViewManager.cs:110)
 ViewManager:.ctor(Int32, Single, Int32) (at Assets/Scripts/ViewManager.cs:31)
@@ -35,10 +35,10 @@ NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
 NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)
 
 Log
-Loaded grids of 120 objects from TrainingFiles/OccupancyGrids/saved_occupancy_grids.txt
+Loaded grids of 120 objects from TrainingFiles/OccupancyGrids/saved_occupancy_grids_50.txt
 UnityEngine.Debug:Log(Object)
-GroundTruthGenerator:Load() (at Assets/Scripts/GroundTruthGeberator.cs:199)
-GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:41)
+GroundTruthGenerator:Load() (at Assets/Scripts/GroundTruthGeberator.cs:202)
+GroundTruthGenerator:.ctor(DepthRenderingManager, ViewManager, PointCloudManager, OccupancyGridManager, StudyObjectMamanger, Single) (at Assets/Scripts/GroundTruthGeberator.cs:44)
 SystemInterface:.ctor(Camera) (at Assets/Scripts/SystemInterface.cs:70)
 NbvManager:.ctor(Camera) (at Assets/Scripts/Learning/NbvManager.cs:12)
 NbvAgent:Start() (at Assets/Scripts/Learning/NbvAgent.cs:16)

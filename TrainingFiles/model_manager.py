@@ -5,12 +5,13 @@ tf.logging.set_verbosity(tf.logging.ERROR)
 
 class ModelManager:
 
-    def __init__(self, load=False, num_input=32, num_views=121, num_output=121, learning_rate=0.001,
-                 model_name="default_model"):
+    def __init__(self, load=False, num_input=32, num_views=100, num_output=121, learning_rate=0.001,
+                 model_name="default_model", variation=0):
         self.learning_rate = learning_rate
-        self.learning_decay = 0.99
+        self.learning_decay = 0.995
         self.num_input = num_input
-        self.num_views = num_views * 2  # Both current and visited
+        self.num_views = num_views
+        self.aux_info = num_views * 2  # Both current and visited
         self.num_output = num_output
         self.model_name = model_name
         self.folder = "Models/"
@@ -20,7 +21,15 @@ class ModelManager:
         if load:
             self.model = self.load_model(model_name)
         else:
-            self.model = self.generate_conv_model()
+            if variation == 0:
+                self.model = self.generate_conv_model()
+            elif variation == 1:
+                self.model = self.generate_first_variation_model()
+            elif variation == 2:
+                self.model = self.generate_second_variation_model()
+            else:
+                print("No valid model variation set")
+                return
         self.compile_model()
 
     def get_model(self):
@@ -46,13 +55,60 @@ class ModelManager:
 
         fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(conv_output)
 
-        auxiliary_inputs = tf.keras.layers.Input(shape=(self.num_views, 1), name="views")
+        auxiliary_inputs = tf.keras.layers.Input(shape=(self.aux_info, 1), name="views")
         aux_output = tf.keras.layers.Flatten(name="flatten_views")(auxiliary_inputs)
         aux_fcn = tf.keras.layers.Dense(100, activation="relu", name="aux_fc_layer")(aux_output)
 
         merged = tf.keras.layers.Concatenate()([fc1, aux_fcn])
 
-        outputs = tf.keras.layers.Dense(self.num_output, activation=self.activation_function, name="actions")(merged)
+        outputs = tf.keras.layers.Dense(self.num_views, activation=self.activation_function, name="actions")(merged)
+
+        self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
+        return self.model
+
+    def generate_first_variation_model(self):
+
+        inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
+        c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
+        c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
+        pool = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), name="pooling_layer")(c2)
+        conv_output = tf.keras.layers.Flatten(name="flatten_conv_output")(pool)
+
+        fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(conv_output)
+
+        auxiliary_inputs = tf.keras.layers.Input(shape=(self.aux_info, 1), name="views")
+        aux_output = tf.keras.layers.Flatten(name="flatten_views")(auxiliary_inputs)
+        aux_fcn = tf.keras.layers.Dense(100, activation="relu", name="aux_fc_layer")(aux_output)
+
+        merged = tf.keras.layers.Concatenate()([fc1, aux_fcn])
+
+        merged_fcn = tf.keras.layers.Dense(128, activation="relu", name="additional_fcn")(merged)
+
+        outputs = tf.keras.layers.Dense(self.num_views, activation=self.activation_function, name="actions")(
+            merged_fcn)
+
+        self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
+        return self.model
+
+    def generate_second_variation_model(self):
+
+        inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
+        c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
+        c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
+        pool = tf.keras.layers.MaxPool3D(pool_size=(2, 2, 2), name="pooling_layer")(c2)
+        conv_output = tf.keras.layers.Flatten(name="flatten_conv_output")(pool)
+
+        fc1 = tf.keras.layers.Dense(128, activation="relu", name="fc_layer")(conv_output)
+
+        auxiliary_inputs = tf.keras.layers.Input(shape=(self.aux_info, 1), name="views")
+        aux_output = tf.keras.layers.Flatten(name="flatten_views")(auxiliary_inputs)
+
+        merged = tf.keras.layers.Concatenate()([fc1, aux_output])
+
+        merged_fcn = tf.keras.layers.Dense(128, activation="relu", name="additional_fcn")(merged)
+
+        outputs = tf.keras.layers.Dense(self.num_views, activation=self.activation_function, name="actions")(
+            merged_fcn)
 
         self.model = tf.keras.Model(inputs=[inputs, auxiliary_inputs], outputs=outputs)
         return self.model
@@ -147,6 +203,7 @@ class ModelManager:
     def decrement_learning_rate(self):
         self.learning_rate = self.learning_rate * self.learning_decay
         tf.keras.backend.set_value(self.model.optimizer.lr, self.learning_rate)
+        # print("learning rate decayd to: {}".format(tf.keras.backend.eval(self.model.optimizer.lr)))
 
 
 if __name__ == "__main__":

@@ -14,7 +14,7 @@ class Tester:
         self.path_to_models = "Models/Test_models/"
 
         # REBUILD ENVIRONMENT FOR TESTING
-        self.env_name = "Env/ActivePerceptionEvaluation"
+        self.env_name = "Env/ActivePerceptionEvaluation50"
 
         self.max_step = 15
         self.evaluation_size = 120
@@ -45,10 +45,10 @@ class Tester:
         model_path = self.path_to_models + model_name + ".h5"
         model_manager = ModelManager(load=True, num_views=num_output, num_output=num_output,
                                      model_name=model_path)
-        if "_" in model_name:
+        if "_" in model_name and False:
             model_name = "evaluation_" + model_name.split("_", 1)[1]
         else:
-            model_name = "evaluation_" + model_name
+            model_name = "eval_" + model_name
 
         # Train
         trainer = Trainer(model_manager, env, self.max_step)
