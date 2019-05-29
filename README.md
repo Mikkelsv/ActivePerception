@@ -42,9 +42,34 @@ The project is structured as most Unity Projects, with the highly essential **Ml
 
 ### Unity Files
  The following files are of the most importance once in regards to the simulated environment, and is breifly introduced. For further information, see the comments within the code:
-* **MainController** -
+* **NbvAgent** - Interface for the simulated environment seen by the learning system of python. The functions for interaction is discussed below.
+* **NbvManager** - Manages the learning agent by interacting with the system interface
+* **SystemInferface** - Abstraction of the system components use by the learning agent
+* **MainController** - Allows to interact with the simulated environment inside of Unity
 
 
+All the essential components of the simulated environments used by the **SystemInferface** and **MainController**:
+* **ViewManager** - Generates the view candidate views (vectors) of the view sphere and manages the candidate views.
+* **StudyObjectManager** - Imports and manages the 3d model objets to be used in the environment.
+* **DepthRenderingManager** - Generates a 2DTexture (depth-image) from the virtual depth-camera.
+* **PointCloudManager** - Generates and manages point clouds generated from the depth images.
+* **OccupancyGridManager** - Generates and manages occupancy grids generated from the point clouds.
+* **GroundTruthManager** - Generates and manages the ground truth of all the 3d study object models.
+* **RewardManager** - Computes the reward for the current state and chosen action.
+
+## Environment Interaction
+The **Trainer** interacts with the simulated environment trough a **Env**-object created by mlagents.
+The main functions and properties called are:
+* **Step**(actions) - Passed the actions to apply onto the environment. Actions are on the format of a binary list of the candidate views, where 1 indicate which view to be selected.
+* **Vector_observations** - Array of the collected observations from the NbvAgent. The list are (concatenated) on the format:
+  * **Occupancy grid** - 32768 indices, binary format (32x32x32)
+  * **Current View** - 100 indices, binary format
+  * **visited Views** - 100 indices, binary format
+  * **Distance** - single indice, float (distance travelled)
+  * **Coverage** - single indice, float (current coverage)
+  * **Reward** - 3 indices, floats (coverage reward, distance reward, step reward)
+* **Reset** - Resets the environment, though not necessary as its automatically resets within the environment  
+See Unities [Python API page](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Python-API.md) for further information
 
 
 ## Authors
