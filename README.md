@@ -69,7 +69,9 @@ The main functions and properties called are:
   * **Coverage** - single indice, float (current coverage)
   * **Reward** - 3 indices, floats (coverage reward, distance reward, step reward)
 * **Reset** - Resets the environment, though not necessary as its automatically resets within the environment  
-See Unities [Python API page](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Python-API.md) for further information
+
+See Unities [Python API page](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Python-API.md) for further information.
+The environment either interacts through an Executeable of the Unity Solution or through Unity itself. Using an executeable gives up to 40% better performance.
 
 
 ## Authors
