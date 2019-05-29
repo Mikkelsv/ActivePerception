@@ -24,7 +24,8 @@ This section gives a breif introduction to each file:
 * **Testing_Supervisor** - Manages the evaluation of multiple models.
 * **Synopsys_Manager** - Responsible for writing, printing and illustrating the progress and evaluations.
 
-Other subsidiary python-files are stored in **OtherScripts/**, but they have nothing to do with the training.
+Other subsidiary python-files are stored in **TrainingFiles/OtherScripts/**, but they have nothing to do with the training.
+Furthermore, the executables generated from Unity should be stored within **TrainingFiles/Env/**, and the library of mlagents in **TrainingFiles/mlagents/**.  
 The entry file should be either the **Trainer** or the **Learning_Supervisor** to get a good graps of the system.
 To run the training or evaluation sessions when everything is correctly downloaded and structured should be as simple as:  
 
