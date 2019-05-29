@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Manages the occupancy grids, including generating the occupancy grids from the point clouds
+/// </summary>
 public class OccupancyGridManager {
 
 
@@ -74,9 +77,10 @@ public class OccupancyGridManager {
         return _viewGrid;
     }
 
-
+    
     public void AddPoints(HashSet<Vector3> points)
     {
+        //Adds points to occupancy grid
         increasedOccupiedCount = 0;
         int[] newPoints = GenerateNewGrid(points);
         

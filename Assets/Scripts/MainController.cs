@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
+/// <summary>
+/// A controller to manipulate the program outside of the learning system.
+/// Incorporates all the most valuable functions of the probram, while illustrating their effect on the scene
+/// See the update loop for the commands
+/// </summary>
 public class MainController : MonoBehaviour
 {
 
@@ -81,39 +86,39 @@ public class MainController : MonoBehaviour
     {
        
 
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I)) //Changes the camera view
         {
-            NextView();
+            NextView(); 
         } 
 
-        if(Input.GetKeyDown(KeyCode.O))
+        if(Input.GetKeyDown(KeyCode.O)) //Changes the study object
         {
             NextObject();
         }
-        if (Input.GetKeyDown(KeyCode.L))
+        if (Input.GetKeyDown(KeyCode.L)) //Sets the view to the index of the serialized field
         {
-            SetView();
+            SetView(); 
         }
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K))//Skips 10 candidate view indices forward
         {
             Vector3 v = _vm.SetNeighbouringView(10);
             _drm.SetCameraView(v);
         }
-        if (Input.GetKeyDown(KeyCode.Z)) // Add View
+        if (Input.GetKeyDown(KeyCode.Z)) // Renders and adds current view to pointcloud
         {
             Texture2D _currentRendering = _drm.GetDepthRendering();
             HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
             _ogm.AddPoints(pointCloud);
         }
-        if (Input.GetKeyDown(KeyCode.X)) // Generate Grid
+        if (Input.GetKeyDown(KeyCode.X)) // Generates a occupancy grid object on the scene
         {
             _ogm.BuildGrid();
         }
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C)) //Renders the view from image to point cloud to occupancy grid
         {
             RenderView();
         }
-        if (Input.GetKeyDown(KeyCode.B)){
+        if (Input.GetKeyDown(KeyCode.B)){ //Builds the occupancy grid of the current view
             Texture2D _currentRendering = _drm.GetDepthRendering();
             HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
             _pcm.BuildPointCloudObjectFromCloud(new Vector3(4, 0, 0), pointCloud, Vector3.one);
@@ -121,15 +126,15 @@ public class MainController : MonoBehaviour
             _ogm.BuildGrid();
         }
 
-        if (Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G)) //Shows the ground truth of the current object
         {
             VisualizeGrountTruth();
         }
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(KeyCode.Y)) //Logs the distance between the views
         {
             UnityEngine.Debug.Log(_vm.GetDistance(_vm.GetCurrentViewIndex(), _compareViewWith).ToString());
         }
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.M)) //Shows the view sphere representation
         {
             _vm.BuildSphere(Vector3.zero);
         }

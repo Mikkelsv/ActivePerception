@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+/// <summary>
+/// Main interface to the different components of the simulated environments
+/// Simplifies the view of the machine learning agent.
+/// </summary>
 public class SystemInterface {
 
     private GameObject _depthCameraObject;
@@ -75,6 +78,7 @@ public class SystemInterface {
 
     public void Reset()
     {
+        //Resets the agent and environment on done reconstructions
         if (_evaluationReset)
         {
             DeterministicReset();
@@ -87,6 +91,7 @@ public class SystemInterface {
 
     private void StochasticReset()
     {
+        //Resets the environment in a random manner
         _ogm.ClearGrid();
         _som.PrepareRandomStudyObject();
         _vm.Reset();
@@ -96,6 +101,7 @@ public class SystemInterface {
 
     private void DeterministicReset()
     {
+        //Resets the environment in a deterministic manner, used when evaluating multiple models
         _ogm.ClearGrid();
         _som.PrepareNextStudyObject();
         _vm.Reset();
@@ -105,6 +111,7 @@ public class SystemInterface {
 
     public void RenderView(int viewIndex)
     {
+        //Redners the current view of the index
         SetView(viewIndex);
         _currentRendering = _drm.GetDepthRendering();
         HashSet<Vector3> pointCloud = _pcm.CreatePointSet(_currentRendering);
@@ -119,11 +126,14 @@ public class SystemInterface {
     }
     public bool GetDoneOnAccuracy()
     {
+        //Determines if the learning environment is done reconstructing
         return _rm.DetermineDone();
     }
 
     public float[] CollectObservations()
     {
+        //Collects the observations(input) for the learning model agent
+        //Input on the format: occupancyarray(32x32x32), currentView, visitedviews + properties for the reward computations
 
         float[] distanceAndCount = new float[]
         {

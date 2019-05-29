@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// Manages the reward of the learning environment
+/// </summary>
 public class RewardManager {
     private GroundTruthGenerator _gtg;
     private OccupancyGridManager _ogm;
@@ -100,10 +103,10 @@ public class RewardManager {
 
     private int EvaluateGrid()
     {
+        //Counts how many of the grids voxels that corresponds with the GT
         int[] grid = _ogm.GetPointGrid();
         int[] gt = _gtg._grids[_som.CurrentObject()];
         int c = 0;
-        //Parallel.For(0, _ogm.gridCountCubed, i =>
         for(int i=0;i<_ogm.gridCountCubed; i++)
         {
             if (grid[i] > 0 && gt[i] > 0)

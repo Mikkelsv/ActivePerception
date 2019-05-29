@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
+/// <summary>
+/// Implements the mlagents Agent interface. Interface for to the simulated environment from the Python learning environment.
+/// </summary>
 public class NbvAgent : Agent {
 
     [SerializeField]

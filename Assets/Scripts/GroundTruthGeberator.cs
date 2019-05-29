@@ -5,6 +5,10 @@ using System.IO;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// Generates, prunes and further handles the GroundTruth
+/// Stores the generated ground truth in the determined paths
+/// </summary>
 public class GroundTruthGenerator
 {
     private readonly string _basePath = "TrainingFiles/OccupancyGrids/saved_occupancy_grids"; //for running in environment
@@ -59,9 +63,10 @@ public class GroundTruthGenerator
     {
         if (document)
         {
-            return GenerateWithDocumentation();
+            //return GenerateWithDocumentation();
         }
 
+        //Generates the GT for all the objects in the objectfolder
         int[][] grids = new int[_som.Count()][];
         for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
         {
@@ -82,72 +87,74 @@ public class GroundTruthGenerator
         return grids;
     }
 
-    private int[][] GenerateWithDocumentation()
-    {
-        int[][] grids = new int[_som.Count()][];
+    //private int[][] GenerateWithDocumentation()
+    //{
+    //    //Adds tallies on the generation, not need anymore
+    //    int[][] grids = new int[_som.Count()][];
 
 
-        int[][] talliesPoints = new int[_som.Count()][];
-        int[][] talliesReducedPoints = new int[_som.Count()][];
-        int[][] talliesRemovedPoints = new int[_som.Count()][];
+    //    int[][] talliesPoints = new int[_som.Count()][];
+    //    int[][] talliesReducedPoints = new int[_som.Count()][];
+    //    int[][] talliesRemovedPoints = new int[_som.Count()][];
 
-        int[][] talliesViews = new int[_som.Count()][];
-        int[][] talliesReducedViews = new int[_som.Count()][];
-        int[][] talliesRemovedViews = new int[_som.Count()][];
+    //    int[][] talliesViews = new int[_som.Count()][];
+    //    int[][] talliesReducedViews = new int[_som.Count()][];
+    //    int[][] talliesRemovedViews = new int[_som.Count()][];
 
-        int[] pointsRemovedGrid;
-        int[] viewsRemovedGrid;
+    //    int[] pointsRemovedGrid;
+    //    int[] viewsRemovedGrid;
 
-        for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
-        {
-            _som.PrepareStudyObject(objectIndex);
-            _ogm.ClearGrid();
-            RenderAllViews();
-            int[] pointGrid = _ogm.GetPointGrid();
-            int[] viewGrid = _ogm.GetViewGrid();
+    //    for (int objectIndex = 0; objectIndex < _som.Count(); objectIndex++)
+    //    {
+    //        _som.PrepareStudyObject(objectIndex);
+    //        _ogm.ClearGrid();
+    //        RenderAllViews();
+    //        int[] pointGrid = _ogm.GetPointGrid();
+    //        int[] viewGrid = _ogm.GetViewGrid();
 
-            int[] tallyPoints = TallyGrid(pointGrid, 2000);
-            int[] tallyViews = TallyGrid(viewGrid, _vm.Count());
+    //        int[] tallyPoints = TallyGrid(pointGrid, 2000);
+    //        int[] tallyViews = TallyGrid(viewGrid, _vm.Count());
 
-            pointsRemovedGrid = new int[pointGrid.Length];
-            viewsRemovedGrid = new int[viewGrid.Length];
+    //        pointsRemovedGrid = new int[pointGrid.Length];
+    //        viewsRemovedGrid = new int[viewGrid.Length];
 
-            ReduceGrid(viewGrid, pointGrid, viewsRemovedGrid, pointsRemovedGrid);
+    //        ReduceGrid(viewGrid, pointGrid, viewsRemovedGrid, pointsRemovedGrid);
 
-            int[] tallyReducedPoints = TallyGrid(pointGrid, 2000);
-            int[] tallyReducedViews = TallyGrid(viewGrid, _vm.Count());
+    //        int[] tallyReducedPoints = TallyGrid(pointGrid, 2000);
+    //        int[] tallyReducedViews = TallyGrid(viewGrid, _vm.Count());
 
-            int[] tallyRemovedPoints = TallyGrid(pointsRemovedGrid, pointRequirement);
-            int[] tallyRemovedViews = TallyGrid(viewsRemovedGrid, viewRequirement);
+    //        int[] tallyRemovedPoints = TallyGrid(pointsRemovedGrid, pointRequirement);
+    //        int[] tallyRemovedViews = TallyGrid(viewsRemovedGrid, viewRequirement);
 
-            talliesPoints[objectIndex] = tallyPoints;
-            talliesReducedPoints[objectIndex] = tallyReducedPoints;
-            talliesRemovedPoints[objectIndex] = tallyRemovedPoints;
+    //        talliesPoints[objectIndex] = tallyPoints;
+    //        talliesReducedPoints[objectIndex] = tallyReducedPoints;
+    //        talliesRemovedPoints[objectIndex] = tallyRemovedPoints;
 
-            talliesViews[objectIndex] = tallyViews;
-            talliesReducedViews[objectIndex] = tallyReducedViews;
-            talliesRemovedViews[objectIndex] = tallyRemovedViews;
+    //        talliesViews[objectIndex] = tallyViews;
+    //        talliesReducedViews[objectIndex] = tallyReducedViews;
+    //        talliesRemovedViews[objectIndex] = tallyRemovedViews;
 
-            grids[objectIndex] = viewGrid;
-        }
+    //        grids[objectIndex] = viewGrid;
+    //    }
 
-        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_points_raw.csv", talliesPoints);
-        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_points_reduced.csv", talliesReducedPoints);
-        WriteIntsToFile("TrainingFiles/Tallies/tally_of_removed_points.csv", talliesRemovedPoints);
+    //    WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_points_raw.csv", talliesPoints);
+    //    WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_points_reduced.csv", talliesReducedPoints);
+    //    WriteIntsToFile("TrainingFiles/Tallies/tally_of_removed_points.csv", talliesRemovedPoints);
 
-        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_views_raw.csv", talliesViews);
-        WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_views_reduced.csv", talliesReducedViews);
-        WriteIntsToFile("TrainingFiles/Tallies/tally_of_removed_views.csv", talliesRemovedViews);
+    //    WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_views_raw.csv", talliesViews);
+    //    WriteIntsToFile("TrainingFiles/Tallies/tally_of_ground_truth_views_reduced.csv", talliesReducedViews);
+    //    WriteIntsToFile("TrainingFiles/Tallies/tally_of_removed_views.csv", talliesRemovedViews);
 
-        _grids = grids;
-        _ogm.ClearGrid();
-        CountGrids();
-        Debug.Log("Generated grids and tallies of " + _som.Count() + " objects");
-        return grids;
-    }
+    //    _grids = grids;
+    //    _ogm.ClearGrid();
+    //    CountGrids();
+    //    Debug.Log("Generated grids and tallies of " + _som.Count() + " objects");
+    //    return grids;
+    //}
 
     private void CountGrids()
     {
+        //Counts the grids to store the amount of single points
         gridCount = new int[_som.Count()];
         requiredCount = new int[_som.Count()];
 

@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+/// <summary>
+/// Manages the view sphere and the position of the virtual camera
+/// </summary>
 public class ViewManager {
 
     private int _viewLayers;
@@ -250,6 +252,7 @@ public class ViewManager {
 
     private float[][] GenerateViewNeighbourhood()
     {
+        //Generates the angular distance between the different views so its not computed excessively.
         float[][] distances = new float[_viewCount][];
         for(int v1 = 0; v1<_viewCount; v1++)
         {

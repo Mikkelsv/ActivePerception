@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System;
 
+/// <summary>
+/// Manages the point cloud and the PC generation from the depth image.
+/// </summary>
 public class PointCloudManager
 {
     private Vector3[] _viewportArray;
-
-    //private float[] _angleArray;
 
     private float _depthSawOff;
 
@@ -23,7 +24,6 @@ public class PointCloudManager
     {
         float frustumAngle = depthCamera.fieldOfView / 2f;
         _viewportArray = CreateViewPortArray(rTex, frustumAngle);
-        //_angleArray = CreateViewPortAngles(rTex, frustumAngle);
         _depthSawOff = depthSawOff;
         _depthCamera = depthCamera;
 
@@ -36,6 +36,7 @@ public class PointCloudManager
 
     private Vector3[] CreateViewPortArray(RenderTexture rTex, float frustumAngle)
     {
+        //Precomputes the vector for every pixel in the viewport
         int h = rTex.height;
         int w = rTex.width;
         Debug.Log(String.Format("Depth Resolution: {0}, {0}", h, w));
@@ -44,9 +45,7 @@ public class PointCloudManager
         {
             for (int i = 0; i < h; i++)
             {
-                //float y = Mathf.Tan((j * 2f / w - 1f) * frustumAngle * Mathf.Deg2Rad);
                 float y = (j * 2f / w - 1f) * Mathf.Tan(frustumAngle * Mathf.Deg2Rad);
-                //float x = Mathf.Tan((i * 2f / h - 1f) * frustumAngle * Mathf.Deg2Rad);
                 float x = (i * 2f / h - 1f) * Mathf.Tan(frustumAngle * Mathf.Deg2Rad);
 
                 float z = 1.0f;
@@ -78,14 +77,14 @@ public class PointCloudManager
 
     public HashSet<Vector3> CreatePointSet(Texture2D tex)
     {
+        //Computes an unordered pointcloud from the depth image(texture)
         int w = tex.width;
         int h = tex.height;
 
         Color[] colors = tex.GetPixels();
 
         Matrix4x4 cameraRotationMatrix = GetCameraRotationMatrix(_depthCamera);
-        Vector3 cameraOfsett = _depthCamera.transform.position; //account for camera position
-        //cameraOfsett -= cameraOfsett.normalized * _depthCamera.nearClipPlane; //account for nearplane
+        Vector3 cameraOfsett = _depthCamera.transform.position;
 
         HashSet<Vector3> pointSet = new HashSet<Vector3>();
 
@@ -111,8 +110,6 @@ public class PointCloudManager
             }
 
         }
-        //Debug.Log(min.ToString("F6"));
-        //Debug.Log(max.ToString("F6"));
         return pointSet;
     }
 

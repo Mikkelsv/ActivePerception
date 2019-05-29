@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Manages the 3d model objects that is to be studied
+/// </summary>
 public class StudyObjectMamanger
 {
 

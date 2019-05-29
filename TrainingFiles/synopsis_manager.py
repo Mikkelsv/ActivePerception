@@ -46,7 +46,7 @@ class SynopsisManager:
         a.append("{} generations, {} batches, {} episodes, {} tests".format(
             self.t.num_generations, self.t.num_batches, self.t.batch_size, self.t.num_tests))
         a.append("\t - In total {} training episodes".format(self.t.num_episodes))
-        
+
         a.append("Reward alphas:")
         a.append("\t Accuracy: {:.2f}".format(self.t.alpha_accuracy))
         a.append("\t Distance: {:.2f}".format(self.t.alpha_distance))

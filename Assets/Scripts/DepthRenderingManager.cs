@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Manages the rending of the depth image, using a RenderTexture and the computed depth shader
+/// </summary>
 public class DepthRenderingManager
 {
     private RenderTexture _renderTexture;
