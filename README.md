@@ -71,7 +71,8 @@ The main functions and properties called are:
 * **Reset** - Resets the environment, though not necessary as its automatically resets within the environment  
 
 See Unities [Python API page](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Python-API.md) for further information.
-The environment either interacts through an Executeable of the Unity Solution or through Unity itself. Using an executeable gives up to 40% better performance.
+
+The **Env** object is either generated from an executeable of the Unity Solution or through Unity itself. Using an executeable is preferred as it gives up to 40% better performance.
 
 
 ## Authors
