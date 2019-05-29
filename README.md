@@ -61,7 +61,7 @@ All the essential components of the simulated environments used by the **SystemI
 The **Trainer** interacts with the simulated environment trough a **Env**-object created by mlagents.
 The main functions and properties called are:
 * **Step**(actions) - Passed the actions to apply onto the environment. Actions are on the format of a binary list of the candidate views, where 1 indicate which view to be selected.
-* **Vector_observations** - Array of the collected observations from the NbvAgent. The list are (concatenated) on the format:
+* **Vector_observations** - Array of the collected observations from the NbvAgent. The array consisting of concatenated 32973 when using 100 candidate views:
   * **Occupancy grid** - 32768 indices, binary format (32x32x32)
   * **Current View** - 100 indices, binary format
   * **visited Views** - 100 indices, binary format
