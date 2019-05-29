@@ -6,6 +6,13 @@ import datetime
 class SynopsisManager:
 
     def __init__(self, trainer, model_manager, run_name="defaultRun", max_step=15):
+        """
+        Holds and manages the prints and summaries of the training/evaluation
+        :param trainer: The trainer object
+        :param model_manager: The manager of the nerual network model
+        :param run_name: The name of the current model/run
+        :param max_step: Max steps of the evaluations
+        """
         self.t = trainer
         self.t.set_synopsis_manager(self)
         self.mm = model_manager
@@ -39,12 +46,7 @@ class SynopsisManager:
         a.append("{} generations, {} batches, {} episodes, {} tests".format(
             self.t.num_generations, self.t.num_batches, self.t.batch_size, self.t.num_tests))
         a.append("\t - In total {} training episodes".format(self.t.num_episodes))
-        if self.t.replay:
-            a.append("ReplayMemory - {} buffer size, {} batch training size".format(
-                self.t.buffer_size, self.t.batch_training_size))
-        else:
-            a.append("No replay - {} buffer size, {} batch training size".format(
-                self.t.buffer_size, self.t.batch_training_size))
+        
         a.append("Reward alphas:")
         a.append("\t Accuracy: {:.2f}".format(self.t.alpha_accuracy))
         a.append("\t Distance: {:.2f}".format(self.t.alpha_distance))

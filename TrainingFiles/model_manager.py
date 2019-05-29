@@ -1,12 +1,21 @@
 import tensorflow as tf
-
 tf.logging.set_verbosity(tf.logging.ERROR)
 
 
 class ModelManager:
 
-    def __init__(self, load=False, num_input=32, num_views=100, num_output=121, learning_rate=0.001,
+    def __init__(self, load=False, num_input=32, num_views=100, num_output=100, learning_rate=0.001,
                  model_name="default_model", variation=0):
+        """
+        Manages the neural network model
+        :param load: If loading the model or generating new one
+        :param num_input: Number of inputs into the neural network
+        :param num_views: Number of candidate views
+        :param num_output: Number of outputs
+        :param learning_rate: The intial learning rate
+        :param model_name: Name of the model
+        :param variation: Which architecture variation, main architecture defaults 0
+        """
         self.learning_rate = learning_rate
         self.learning_decay = 0.995
         self.num_input = num_input
@@ -20,9 +29,9 @@ class ModelManager:
 
         if load:
             self.model = self.load_model(model_name)
-        else:
+        else: #What type of architecture the model should have
             if variation == 0:
-                self.model = self.generate_conv_model()
+                self.model = self.generate_main_architecture_model()
             elif variation == 1:
                 self.model = self.generate_first_variation_model()
             elif variation == 2:
@@ -45,8 +54,11 @@ class ModelManager:
         a.append("Activation Function: {}".format(self.activation_function))
         return a
 
-    def generate_conv_model(self):
-
+    def generate_main_architecture_model(self):
+        """
+        Generates the main architecture neural network
+        :return: The neural network model
+        """
         inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
         c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
@@ -67,7 +79,10 @@ class ModelManager:
         return self.model
 
     def generate_first_variation_model(self):
-
+        """
+        Generates the first architecture variation
+        :return: The neural network model
+        """
         inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
         c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
@@ -91,7 +106,10 @@ class ModelManager:
         return self.model
 
     def generate_second_variation_model(self):
-
+        """
+        Generates the second architecture variation
+        :return: The neural network model
+        """
         inputs = tf.keras.layers.Input(shape=(32, 32, 32, 1), name="observations")
         c1 = tf.keras.layers.Conv3D(32, 5, 2, name="conv_layer_1")(inputs)
         c2 = tf.keras.layers.Conv3D(32, 3, 1, name="conv_layer_2")(c1)
@@ -158,7 +176,7 @@ class ModelManager:
 
     def load_model(self, model_name=""):
         if model_name == "":
-            model_name = self.model_name
+            model_name = self.folder + self.model_name + ".h5"
         loaded_model = tf.keras.models.load_model(model_name)
         self.model = loaded_model
 
@@ -207,6 +225,9 @@ class ModelManager:
 
 
 if __name__ == "__main__":
+    """
+        Tests generation, training and storing of simple model.
+    """
     print(tf.VERSION)
     print(tf.keras.__version__)
     import numpy as np
@@ -214,19 +235,19 @@ if __name__ == "__main__":
     print(tf.test.is_gpu_available())
 
     num_inputs = 32 * 32 * 32
-    num_views = 242
+    num_views = 200
 
     mm = ModelManager(model_name="generated_test_model")
 
     obs = np.random.randint(2, size=num_inputs).reshape((1, 32, 32, 32, 1))
-    views = np.random.randint(2, size=num_views).reshape((1, 242, 1))
+    views = np.random.randint(2, size=num_views).reshape((1, 200, 1))
 
     p = mm.model.predict([obs, views])
     pmean = np.mean(p)
     p2std = np.std(p)
 
     obs2 = np.random.randint(1, size=num_inputs).reshape((1, 32, 32, 32, 1))
-    views2 = np.random.randint(1, size=num_views).reshape((1, 242, 1))
+    views2 = np.random.randint(1, size=num_views).reshape((1, 200, 1))
 
     p2 = mm.model.predict([obs2, views2])
     p2mean = np.mean(p2)

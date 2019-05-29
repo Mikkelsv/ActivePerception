@@ -9,31 +9,38 @@ import numpy as np
 class Supervisor:
 
     def __init__(self):
-        self.use_executable = True
-        self.load_model = False
+        """
+        The supervisor for initiating training sessions
+        Implemented to be able to start multiple sessions in succession.
+        """
+        self.use_executable = True  # If using a unity executable or connecting to Unity itself
+        self.load_model = False  # Whether to load an existing model or generate new ones
 
         # REBUILD ENVIRONMENT FOR LEARNING
         self.env_name = "Env/ActivePerceptionTraining"
 
         self.max_step = 15
-        self.num_generations = 100  # 500
-        self.num_batches = 100  # 100
+        self.num_generations = 2  # 500 default
+        self.num_batches = 2  # 100 default
         self.batch_size = 1
-        self.test_size = 20  # 20
-        self.evaluation_size = 100  # 100
+        self.test_size = 2  # 20 default
+        self.evaluation_size = 2  # 100 default
 
+        # Some default training values
         self.alpha_views = -0.4
         self.alpha_steps = 0.2
         self.learning_rate = 0.001
-
-        self.exp_acc = 1
+        self.exp_acc = 0.5
         self.exp_dist = 1
 
     def run(self):
-        self.execute_session("testingModel100", 1, 0.5, 1.0, 1.0, 0.5, 0)
+        self.execute_session("testRunModel", 1, 0.5, 1.0, 1.0, 0.5, 0)
         # self.run_multiple_variations()
 
     def run_multiple_variations(self):
+        """
+        Runs all the models generated from fetch_selected_runs
+        """
         runs = self.fetch_selected_runs()
         print("-Commensing learning of {} models-".format(len(runs)))
 
@@ -48,6 +55,16 @@ class Supervisor:
                 self.execute_session(model_name, acc, exp_acc, dist, exp_dist, steps, t)
 
     def execute_session(self, model_name, alpha_acc, exp_acc, alpha_dist, exp_dist, alpha_steps, t):
+        """
+        Executes a single training session of a model
+        :param model_name: Name of the model
+        :param alpha_acc: Coverage reward
+        :param exp_acc: Coverage exponential reward
+        :param alpha_dist: Distance reward
+        :param exp_dist: Distance Exponential Reward
+        :param alpha_steps: Step Reward
+        :param t: Which architecture to be used
+        """
         print("\n==================== New Session {} ============================".format(model_name))
         print("acc: {} - {}, dist: {} - {}, steps {}, views: {}, LR: {}\n"
               .format(alpha_acc, exp_acc, alpha_dist, exp_dist, alpha_steps, self.alpha_views, self.learning_rate))

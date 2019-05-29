@@ -1,34 +1,43 @@
-from mlagents.envs import UnityEnvironment
 import numpy as np
-
-from memory import Memory
-from synopsis_manager import SynopsisManager
-
 import random
 import time
+
+from synopsis_manager import SynopsisManager
+
+
 
 
 class Trainer:
 
-    def __init__(self, model_manager, env, max_step):
+    def __init__(self, model_manager, env, max_step=15):
+        """
+        Main object handling everything regarding training the model
+        Note function train_model, which traines the neural network stored in the model_manager
+        :param model_manager: Object managing the neural network model
+        :param env: The unity environment
+        :param max_step: The maximum number of steps for each run
+        """
         self.model_manager = model_manager
         self.model = model_manager.model
         self.env = env
-        self.exploration = 0.9
+        self.use_top_n = True
+        self.top_n_actions = 3
+
+        # Training variables
+        self.exploration = 0.9  # How often select a random prediction
         self.exploration_decay = 0.999
         self.exploration_minimum = 0.5
         self.gamma = 0.0  # Future reward discount
-        self.top_n_actions = 3
 
-        # Reward variables
+        # Default, most promising reward values
         self.alpha_accuracy = 1.0
-        self.alpha_accuracy_exponent = 1.0
-        self.alpha_distance = 0.0
+        self.alpha_accuracy_exponent = 0.5
+        self.alpha_distance = 1.0
         self.alpha_distance_exponent = 1.0
-        self.alpha_steps = 0.0
+        self.alpha_steps = 0.5
         self.mean_steps = 10
         self.normalize_reward_alphas()
-        self.alpha_views = -0.3
+        self.alpha_views = -0.4
 
         # Setup environment dependant variables
         self.default_action = 31
@@ -43,14 +52,14 @@ class Trainer:
         self.views_shape = (self.num_views, 1)
 
         # Memory specifics
-        self.replay = False
-        self.buffer_size = 100
-        self.batch_training_size = 32
-        buffer_filling_rate = 0.2
-        self.fill_memory_runs = int(self.buffer_size / 10 * buffer_filling_rate)
+        # self.replay = False
+        # self.buffer_size = 100
+        # self.batch_training_size = 32
+        # buffer_filling_rate = 0.2
+        # self.fill_memory_runs = int(self.buffer_size / 10 * buffer_filling_rate)
 
-        # Init Memory
-        input_shape = (self.observation_shape, self.views_shape)
+        # Init Memory - Deprecated as the model trains the episodes instantly, no stored batches
+        # input_shape = (self.observation_shape, self.views_shape)
         # self.memory = Memory(input_shape, self.num_actions, self.buffer_size, replay=self.replay)
 
         # Runtime variables
@@ -72,6 +81,7 @@ class Trainer:
         self.duration_environment = [0, 0]
         self.duration_selecting_action = [0, 0]
 
+        # Initiate global storage
         self.sm: SynopsisManager = None
         self.generation_reward = []
         self.loss = []
@@ -84,7 +94,7 @@ class Trainer:
 
     def train(self, num_generations=1, num_batches=1, batch_size=1, num_tests=10):
         """
-            Trains the trainer using environment and model
+            Trains the model of the model_manager using environment and model
         :param num_generations: Number of generations
         :param num_batches: Number of training batches in each generation
         :param batch_size: Number of episodes in each batch
@@ -114,14 +124,6 @@ class Trainer:
             episode += 1
             self.run_episode()
 
-            # if episode % self.batch_size == 0:
-            # Train model on batch
-            #   now = time.time()
-            #  o, v, a = self.memory.get_random_batch(self.batch_training_size)
-            # loss = self.model.train_on_batch([o, v], a)
-            # self.update_time_keeper(self.duration_training, time.time() - now)
-            # self.loss.append(loss)
-
             if episode % self.generation_size == 0:
                 # Fetch Loss from Generation
                 self.evaluate_generation(generation)
@@ -143,7 +145,7 @@ class Trainer:
         """
             Resets and runs a single episode in the trainer environment
         :param stochastic: Determine action randomly
-        :param train: Whether to train or test
+        :param train: Whether to train or test the model
         :return: Steps in episode, Distances, Accuracies and Mean Reward of episode
         """
         observations = np.empty(0).reshape((0,) + self.observation_shape)
@@ -156,7 +158,7 @@ class Trainer:
         distances = []
 
         env_info = self.env.step(self.default_action)[self.default_brain]
-        while True:
+        while True:  # Runs till the reconstruction finishes
             steps += 1
 
             observation = env_info.vector_observations
@@ -166,7 +168,7 @@ class Trainer:
             observations = np.vstack([observations, observation])
             views = np.vstack([views, view])
 
-            action_indexed, prediction = self.get_action([observation, view], train, stochastic)
+            action_indexed, prediction = self.get_action([observation, view], train)
             predictions = np.vstack([predictions, prediction])
             action_indexes.append(action_indexed)
 
@@ -178,27 +180,33 @@ class Trainer:
             reward = env_info.vector_observations[0, -3:]
             rewards.append(reward)
 
-            # Fetch next scene
-
-            # If end of episode
+            # If end of reconstruction episode
             if env_info.local_done[0]:
-                # Update Memory
+                # Compute correct predictions(rewards)
                 rewards = self.compute_rewards(rewards)
                 mean_reward = np.mean(rewards)
                 predictions_corrected, discounted_rewards = self.get_corrected_predictions(predictions,
                                                                                            action_indexes, rewards)
                 if train:
-                    # self.memory.add(observations, views, predictions_corrected)
                     now = time.time()
                     loss = self.model.train_on_batch([observations, views], predictions_corrected)
                     self.update_time_keeper(self.duration_training, time.time() - now)
+
+                    # Append Losses
                     self.loss.append(loss[0])
                     self.accuracy.append(loss[1])
                 return action_indexes, steps, distances, accuracies, discounted_rewards, mean_reward
 
-    def get_action(self, observation, training, stochastic):
+    def get_action(self, observation, training):
+        """
+        Returns the predicted action/output of the model amanger using the observations
+        Dependent on wheter using top n actions or not, and if training
+        :param observation: the input of the neural policy network
+        :param training: if allowing random exploration
+        :return: the selected candidate view index, output of predictions
+        """
         predictions = self.model.predict(observation)[0]
-        if (not training) and False:
+        if (not training) and not self.use_top_n:
             action_index = np.asarray(predictions).argmax()
         elif training and random.random() < self.exploration:  # Either training or filling memory
             action_index = np.random.randint(0, self.num_actions)
@@ -210,6 +218,13 @@ class Trainer:
         return action_index, predictions
 
     def get_corrected_predictions(self, predictions, action_indexes, rewards):
+        """
+        Recomputes the predictions using future reward formula, casted through sigmoid function to match network output
+        :param predictions: set of original output
+        :param action_indexes: selected candidate views during episode
+        :param rewards: list of rewards from the selected views
+        :return: new predictions, and discounted rewards
+        """
         # Compute true action prediction derived from discounted reward
         prior = 0
         discounted_rewards = np.empty(len(rewards))
@@ -221,8 +236,9 @@ class Trainer:
                 prior = new_r
         else:
             discounted_rewards = rewards
+
+        # Normalize reward using sigmoid function
         discounted_activated_rewards = self.sigmoid(np.array(discounted_rewards))
-        # discounted_activated_rewards = discounted_rewards
 
         # Update chosen action prediction to match reward
         for i in range(len(predictions)):
@@ -233,6 +249,7 @@ class Trainer:
     def reshape_input(self, observations):
         grid = observations[0, :self.gCubed].reshape((-1, 32, 32, 32, 1))
         views = observations[0, self.gCubed:self.gCubed + self.num_views].reshape((-1, self.num_views, 1))
+
         # Account for added rewards
         distance = observations[0, -2 - 3]
         accuracy = observations[0, -1 - 3]
@@ -259,13 +276,12 @@ class Trainer:
 
         return computed_rewards
 
-    def fill_memory(self):
-        for i in range(self.fill_memory_runs):
-            print("\rFilling buffer - {}/{} episodes".format(i + 1, self.fill_memory_runs), end="")
-            self.run_episode(stochastic=True)
-        print("\n")
-
     def evaluate_model(self, num_runs):
+        """
+        Evaluates the trained model over num_runs episodes
+        :param num_runs: Number of episodes to evaluate model
+        :return: Properties from the evaluated run
+        """
         rewards = []
         sum_distances = np.zeros(num_runs)
         episode_steps = np.zeros(num_runs)
@@ -306,6 +322,10 @@ class Trainer:
                           .format(generation_number, avg_reward, dur, avg_steps, avg_distance, max_acc))
 
     def evaluate_solution(self, num_runs):
+        """
+        Uses the evaluate model function and calls the synopsis manager to print the evaluation
+        :param num_runs: Number of episodes to evaluate model
+        """
         if num_runs:
             actions, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc = self.evaluate_model(num_runs)
             self.sm.print_evaluation(num_runs, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc, actions)
@@ -325,11 +345,6 @@ class Trainer:
         self.generation_time_stamp = generation_end_time
         return dur
 
-    @staticmethod
-    def update_time_keeper(keeper, duration):
-        keeper[0] += duration
-        keeper[1] += 1
-
     def normalize_reward_alphas(self):
         alphas = np.array([self.alpha_accuracy, self.alpha_distance, self.alpha_steps])
         alphas = alphas / np.sum(alphas)
@@ -345,3 +360,8 @@ class Trainer:
 
         self.alpha_accuracy_exponent = acc_exponent
         self.alpha_distance_exponent = dist_exponent
+
+    @staticmethod
+    def update_time_keeper(keeper, duration):
+        keeper[0] += duration
+        keeper[1] += 1
