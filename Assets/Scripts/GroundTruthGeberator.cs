@@ -227,7 +227,7 @@ public class GroundTruthGenerator
     {
         for (int i = 0; i < viewGrid.Length; i++)
         {
-            if (viewGrid[i] <= viewRequirement && pointGrid[i] <= pointRequirement && viewGrid[i] > 0)
+            if (viewGrid[i] <= viewRequirement || pointGrid[i] <= pointRequirement && viewGrid[i] > 0)
             {
                 viewGrid[i] = 0;
             }
@@ -238,7 +238,7 @@ public class GroundTruthGenerator
     {
         for(int i=0; i<viewGrid.Length; i++)
         {
-            if (viewGrid[i] < viewRequirement && pointGrid[i] < pointRequirement && viewGrid[i]>0)
+            if (viewGrid[i] < viewRequirement || pointGrid[i] < pointRequirement && viewGrid[i]>0)
             {
                 removedViewsGrid[i] = viewGrid[i];
                 removedPointsGrid[i] = pointGrid[i];
