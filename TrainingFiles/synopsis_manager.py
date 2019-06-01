@@ -21,6 +21,7 @@ class SynopsisManager:
         self.folder = "Summaries/"
         self.file_path = ""
         self.name = ""
+        self.actions_path = ""
         self.max_step = max_step
 
         self.summary = []
@@ -37,6 +38,11 @@ class SynopsisManager:
         self.file_path = self.name + ".txt"
         f = open(self.file_path, "w+")
         f.write("{}".format(self.run_name))
+        f.close()
+
+        self.name = self.folder + "_".join([self.run_name, "actions", suffix])
+        self.actions_path = self.name + ".txt"
+        f = open(self.actions_path, "w+")
         f.close()
 
     def print_training_config(self):
@@ -167,7 +173,7 @@ class SynopsisManager:
                                                               datetime.datetime.now().strftime("%y%m%d_%H%M%S"))
         f = open(p, "w")
         for i in range(len(self.t.generation_loss)):
-            f.write("{},{}\n".format(self.t.generation_loss[i],self.t.generation_acc[i]))
+            f.write("{},{}\n".format(self.t.generation_loss[i], self.t.generation_acc[i]))
 
     def plot_evaluation_summary(self, dist, acc, views):
         plt.figure(figsize=(12, 12))
@@ -194,6 +200,13 @@ class SynopsisManager:
         plt.savefig(self.name + "_evaluation")
         print("[Evaluation plotted]")
         plt.close()
+
+    def write_actions(self, indexes):
+        f = open(self.actions_path, "a")
+        for actions in indexes:
+            s = ','.join(str(e) for e in actions)
+            f.write(s + "\n")
+        f.close()
 
     @staticmethod
     def get_time_keeper_average(keeper):

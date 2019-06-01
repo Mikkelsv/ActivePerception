@@ -1,7 +1,7 @@
-5/30/2019 4:36:32 PM
+6/1/2019 10:49:01 AM
  
 Log
-100 views created
+50 views created
 
 Log
 120 prepared
@@ -13,5 +13,5 @@ Log
 LowResSphere used as point cloud representation object
 
 Log
-Loaded grids of 120 objects from OccupancyGrids/saved_occupancy_grids.txt
+Loaded grids of 120 objects from OccupancyGrids/saved_occupancy_grids_50.txt
 

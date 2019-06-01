@@ -30,7 +30,7 @@ public class SystemInterface {
     //View Sphere Settings
     private int _viewGridLayers = 4;
     private float _sphereRadius = 1.8f;
-    private int _numberViews = 50;
+    private int _numberViews = 100;
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;

@@ -277,4 +277,34 @@ public class ViewManager {
     {
         return _revisited;
     }
+
+    public void VisualizePath()
+    {
+        GameObject parent = new GameObject();
+        //parent.transform.rotation = Quaternion.Euler(0, 180, 0);
+        int[] v = { 24, 14, 27, 23, 8, 18, 21, 9 };
+        for (int i = 0; i < v.Length - 1; i++)
+        {
+            Vector3 v1 = _views[v[i]];
+            Vector3 v2 = _views[v[i+1]];
+            CreateLine(v1, v2, 0.02f, parent);
+        }
+    }
+
+    public void CreateLine(Vector3 from, Vector3 to, float width, GameObject parent)
+    {
+        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+        go.transform.parent = parent.transform;
+        float length = 0.5f * Vector3.Distance(from, to);
+
+        Vector3 pos = 0.5f * (from + to);
+        Vector3 look = to - from;
+        Quaternion rotation = Quaternion.LookRotation(look, Vector3.right) * Quaternion.Euler(90, 0, 0);
+
+        go.transform.localPosition = pos;
+        go.transform.localScale = new Vector3(width, length, width);
+        
+        go.transform.rotation = rotation;
+
+    }
 }

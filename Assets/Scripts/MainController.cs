@@ -21,6 +21,9 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private int _compareViewWith;
 
+    [SerializeField]
+    private int _setObject;
+
     private Vector3 _objectPosition = new Vector3(0, 0, 0);
 
     //Depth Camera Settings
@@ -32,7 +35,7 @@ public class MainController : MonoBehaviour
     //View Sphere Settings
     private int _viewGridLayers = 4;
     private float _sphereRadius = 1.8f;
-    private int _numberViews = 100;
+    private int _numberViews = 50;
 
     //Occupancy Grid Settings
     private int _occupancyGridCount = 32;
@@ -137,6 +140,14 @@ public class MainController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M)) //Shows the view sphere representation
         {
             _vm.BuildSphere(Vector3.zero);
+        }
+        if (Input.GetKeyDown(KeyCode.N)) //Shows the view sphere representation
+        {
+            _vm.VisualizePath();
+        }
+        if (Input.GetKeyDown(KeyCode.P)) //Shows the view sphere representation
+        {
+            _som.PrepareStudyObject(_setObject);
         }
     }
 

@@ -13,7 +13,7 @@ class Supervisor:
         The supervisor for initiating training sessions
         Implemented to be able to start multiple sessions in succession.
         """
-        self.use_executable = False  # If using a unity executable or connecting to Unity itself
+        self.use_executable = True  # If using a unity executable or connecting to Unity itself
         self.load_model = False  # Whether to load an existing model or generate new ones
 
         # REBUILD ENVIRONMENT FOR LEARNING

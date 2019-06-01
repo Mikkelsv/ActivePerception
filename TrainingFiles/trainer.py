@@ -328,6 +328,7 @@ class Trainer:
         """
         if num_runs:
             actions, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc = self.evaluate_model(num_runs)
+            self.sm.write_actions(actions)
             self.sm.print_evaluation(num_runs, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc, actions)
 
     def get_model(self):
@@ -365,3 +366,5 @@ class Trainer:
     def update_time_keeper(keeper, duration):
         keeper[0] += duration
         keeper[1] += 1
+
+
