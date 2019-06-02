@@ -2,13 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="386a71cb-eee3-40f9-ac94-3db3646d210c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../Assets/Scripts/SystemInterface.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/OtherScripts/illustrate_coverage.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/UnitySDK.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learning_supervisor.py" beforeDir="false" afterPath="$PROJECT_DIR$/learning_supervisor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/synopsis_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/synopsis_manager.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testing_supervisor.py" beforeDir="false" afterPath="$PROJECT_DIR$/testing_supervisor.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trainer.py" beforeDir="false" afterPath="$PROJECT_DIR$/trainer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../UnitySDK.log" beforeDir="false" afterPath="$PROJECT_DIR$/../UnitySDK.log" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,7 +17,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="272">
@@ -45,8 +44,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/trainer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="963">
-              <caret line="330" column="42" lean-forward="true" selection-start-line="330" selection-start-column="42" selection-end-line="330" selection-end-column="42" />
+            <state relative-caret-position="989">
+              <caret line="330" column="34" selection-start-line="330" selection-start-column="20" selection-end-line="330" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -54,11 +53,41 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1000">
-              <caret line="206" column="49" lean-forward="true" selection-start-line="206" selection-start-column="49" selection-end-line="206" selection-end-column="49" />
+            <state relative-caret-position="402">
+              <caret line="165" column="8" lean-forward="true" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="55" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/OtherScripts/illustrate_loss.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/OtherScripts/illustrate_coverage.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="561">
+              <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#15#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/OtherScripts/plot_tallies.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="18" lean-forward="true" selection-start-column="18" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -133,6 +162,7 @@
         <option value="$PROJECT_DIR$/trainer.py" />
         <option value="$PROJECT_DIR$/synopsis_manager.py" />
         <option value="$PROJECT_DIR$/testing_supervisor.py" />
+        <option value="$PROJECT_DIR$/OtherScripts/illustrate_coverage.py" />
       </list>
     </option>
   </component>
@@ -154,6 +184,11 @@
               <item name="TrainingFiles" type="b2602c69:ProjectViewProjectNode" />
               <item name="TrainingFiles" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="TrainingFiles" type="b2602c69:ProjectViewProjectNode" />
+              <item name="TrainingFiles" type="462c0819:PsiDirectoryNode" />
+              <item name="OtherScripts" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -163,6 +198,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="Python" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -182,8 +218,8 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.testing_supervisor">
-    <configuration name="evaluate_results" type="PythonConfigurationType" factoryName="Python" temporary="true">
+  <component name="RunManager" selected="Python.illustrate_coverage">
+    <configuration name="illustrate_coverage" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="TrainingFiles" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -191,11 +227,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/OtherScripts" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/evaluate_results.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/OtherScripts/illustrate_coverage.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -290,11 +326,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.illustrate_coverage" />
         <item itemvalue="Python.testing_supervisor" />
         <item itemvalue="Python.learning_supervisor" />
         <item itemvalue="Python.model_manager" />
         <item itemvalue="Python.illustrate_loss" />
-        <item itemvalue="Python.evaluate_results" />
       </list>
     </recent_temporary>
   </component>
@@ -315,7 +351,7 @@
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.033386327" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.09896661" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -331,7 +367,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info active="true" anchor="right" x="1292" y="485" width="1256" height="436" id="Run" order="3" visible="true" weight="0.48767886" />
-      <window_info anchor="right" id="Debug" order="4" weight="0.2555644" />
+      <window_info anchor="right" id="Debug" order="4" weight="0.34538952" />
     </layout>
     <layout-to-restore>
       <window_info content_ui="combo" id="Project" order="0" weight="0.14228936" />
@@ -402,9 +438,19 @@
           <option name="timeStamp" value="68" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/trainer.py</url>
-          <line>172</line>
-          <option name="timeStamp" value="182" />
+          <url>file://$PROJECT_DIR$/OtherScripts/illustrate_coverage.py</url>
+          <line>24</line>
+          <option name="timeStamp" value="191" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/OtherScripts/illustrate_coverage.py</url>
+          <line>18</line>
+          <option name="timeStamp" value="192" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/OtherScripts/illustrate_coverage.py</url>
+          <line>40</line>
+          <option name="timeStamp" value="194" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -524,6 +570,16 @@
     <entry file="file://$PROJECT_DIR$/evaluate_results.py" />
     <entry file="file://$PROJECT_DIR$/illustrate_loss.py" />
     <entry file="file://$PROJECT_DIR$/learn_active_perception.py" />
+    <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="16" column="23" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#42#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/model_manager.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="442">
@@ -531,20 +587,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1000">
-          <caret line="206" column="49" lean-forward="true" selection-start-line="206" selection-start-column="49" selection-end-line="206" selection-end-column="49" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/trainer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="963">
-          <caret line="330" column="42" lean-forward="true" selection-start-line="330" selection-start-column="42" selection-end-line="330" selection-end-column="42" />
+        <state relative-caret-position="989">
+          <caret line="330" column="34" selection-start-line="330" selection-start-column="20" selection-end-line="330" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -558,12 +604,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/learning_supervisor.py">
+    <entry file="file://$PROJECT_DIR$/OtherScripts/plot_tallies.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="23" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="23" />
+        <state>
+          <caret column="18" lean-forward="true" selection-start-column="18" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OtherScripts/illustrate_loss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="15" lean-forward="true" selection-start-column="15" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/synopsis_manager.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="402">
+          <caret line="165" column="8" lean-forward="true" selection-start-line="165" selection-start-column="8" selection-end-line="165" selection-end-column="55" />
           <folding>
-            <element signature="e#0#42#0" expanded="true" />
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/OtherScripts/illustrate_coverage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="561">
+          <caret line="33" column="8" selection-start-line="33" selection-start-column="8" selection-end-line="33" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>

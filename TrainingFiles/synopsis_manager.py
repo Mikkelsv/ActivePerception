@@ -22,6 +22,7 @@ class SynopsisManager:
         self.file_path = ""
         self.name = ""
         self.actions_path = ""
+        self.coverage_path = ""
         self.max_step = max_step
 
         self.summary = []
@@ -40,9 +41,14 @@ class SynopsisManager:
         f.write("{}".format(self.run_name))
         f.close()
 
-        self.name = self.folder + "_".join([self.run_name, "actions", suffix])
-        self.actions_path = self.name + ".txt"
+        name = self.folder + "_".join([self.run_name, "actions", suffix])
+        self.actions_path = name + ".txt"
         f = open(self.actions_path, "w+")
+        f.close()
+
+        name = self.folder + "_".join([self.run_name, "coverage", suffix])
+        self.coverage_path = name + ".txt"
+        f = open(self.coverage_path, "w+")
         f.close()
 
     def print_training_config(self):
@@ -205,6 +211,13 @@ class SynopsisManager:
         f = open(self.actions_path, "a")
         for actions in indexes:
             s = ','.join(str(e) for e in actions)
+            f.write(s + "\n")
+        f.close()
+
+    def write_coverage(self, coverages):
+        f = open(self.coverage_path, "a")
+        for coverage in coverages:
+            s = ','.join(str(e) for e in coverage)
             f.write(s + "\n")
         f.close()
 

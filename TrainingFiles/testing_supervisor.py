@@ -60,6 +60,7 @@ class Tester:
             model_name = "evaluation_" + model_name.split("_", 1)[1]
         else:
             model_name = "eval_" + model_name
+        model_name = "eval_coverage_progression"
 
         # Evaluating the model
         trainer = Trainer(model_manager, env, self.max_step)

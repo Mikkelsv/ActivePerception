@@ -5,8 +5,6 @@ import time
 from synopsis_manager import SynopsisManager
 
 
-
-
 class Trainer:
 
     def __init__(self, model_manager, env, max_step=15):
@@ -308,11 +306,11 @@ class Trainer:
         avg_distance = np.mean(sum_distances)
         avg_accuracy = np.mean(max_accuracies)
         mean_reward = np.mean(mean_rewards)
-        return actions, mean_reward, avg_steps, avg_distance, avg_accuracy, cumsum_distances, avg_accuracies
+        return actions, mean_reward, avg_steps, avg_distance, avg_accuracy, cumsum_distances, avg_accuracies, agg_accuracies
 
     def evaluate_generation(self, generation_number):
         if self.num_tests:
-            actions, avg_reward, avg_steps, avg_distance, max_acc, cumsum_dist, avg_acc = self.evaluate_model(
+            actions, avg_reward, avg_steps, avg_distance, max_acc, cumsum_dist, avg_acc, agg_acc = self.evaluate_model(
                 self.num_tests)
 
             dur = self._get_generation_duration()
@@ -327,8 +325,10 @@ class Trainer:
         :param num_runs: Number of episodes to evaluate model
         """
         if num_runs:
-            actions, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc = self.evaluate_model(num_runs)
+            actions, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc, agg_acc = self.evaluate_model(
+                num_runs)
             self.sm.write_actions(actions)
+            self.sm.write_coverage(agg_acc)
             self.sm.print_evaluation(num_runs, avg_reward, avg_steps, avg_dist, max_acc, cumsum_dist, avg_acc, actions)
 
     def get_model(self):
@@ -366,5 +366,3 @@ class Trainer:
     def update_time_keeper(keeper, duration):
         keeper[0] += duration
         keeper[1] += 1
-
-
